@@ -1,0 +1,41 @@
+{
+  "name": "sanity-plugin-tree-input",
+  "version": "0.1.0-next.0",
+  "author": "Sanity <hello@sanity.io>",
+  "license": "MIT",
+  "main": "lib/TreeInput.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanity-io/sanity-plugin-tree-input.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanity-io/sanity-plugin-tree-input/issues"
+  },
+  "homepage": "https://github.com/sanity-io/sanity-plugin-tree-input#readme",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-sortable-tree": "^0.3.14",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-sanity": "^5.1.0",
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.3"
+  },
+  "type": "module",
+  "dependencies": {
+    "@sanity/base": ">= 2.5.0",
+    "@sanity/form-builder": ">= 2.21.0",
+    "@sanity/icons": ">= 1.0.0",
+    "@sanity/ui": ">= 0.33.9",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-sortable-tree": "^2.8.0"
+  }
+}
