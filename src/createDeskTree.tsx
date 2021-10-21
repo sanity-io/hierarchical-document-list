@@ -1,9 +1,9 @@
 import React from 'react'
 import S from '@sanity/desk-tool/structure-builder'
 import TreeDeskStructure from './TreeDeskStructure'
-import Callout from './Callout'
-import {getDeskFilter} from './getDeskQuery'
-import {TreeDeskStructureProps} from './types'
+import Callout from './components/Callout'
+import {getDeskFilter} from './utils/getDeskQuery'
+import {TreeDeskStructureProps} from './types/types'
 
 interface TreeProps extends TreeDeskStructureProps {
   /**

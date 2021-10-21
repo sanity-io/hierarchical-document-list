@@ -1,8 +1,8 @@
 import {SanityDocument} from '@sanity/client'
 import React from 'react'
 import {TreeItem} from 'react-sortable-tree'
-import TreeEntry from '../TreeEntry'
-import {SanityTreeItem} from '../types'
+import DocumentInTree from '../components/DocumentInTree'
+import {SanityTreeItem} from '../types/types'
 
 export const treeToData = (tree: TreeItem[]): SanityTreeItem[] => tree.map((entry) => ({
   _key: entry._key,
@@ -13,7 +13,7 @@ export const treeToData = (tree: TreeItem[]): SanityTreeItem[] => tree.map((entr
 
 export const dataToTree = (data: SanityTreeItem[]): TreeItem[] => data.map((item) => ({
   ...item,
-  title: () => <TreeEntry item={item} />,
+  title: () => <DocumentInTree item={item} />,
   children: Array.isArray(item.children) ? dataToTree(item.children) : undefined
 }))
 

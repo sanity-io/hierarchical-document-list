@@ -1,4 +1,4 @@
-import {TreeDeskStructureProps} from './types'
+import {TreeDeskStructureProps} from '../types/types'
 
 export function getDeskFilter(props: TreeDeskStructureProps): string {
   const typeFilter = props.documentType ? `_type == ${props.documentType}` : ''

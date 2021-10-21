@@ -2,10 +2,10 @@ import {Button, Flex, Heading, Spinner, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
 import 'react-sortable-tree/style.css?raw'
-import Callout from './Callout'
-import getCommonTreeProps from './getCommonTreeProps'
-import {TreeDeskStructureProps} from './types'
-import useTreeDeskData from './useTreeDeskData'
+import Callout from './components/Callout'
+import getCommonTreeProps from './utils/getCommonTreeProps'
+import {TreeDeskStructureProps} from './types/types'
+import useTreeDeskData from './utils/useTreeDeskData'
 
 const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options}) => {
   const {

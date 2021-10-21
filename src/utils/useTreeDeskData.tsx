@@ -4,8 +4,8 @@ import React from 'react'
 import {ReactSortableTreeProps, TreeItem} from 'react-sortable-tree'
 import 'react-sortable-tree/style.css?raw'
 import getDeskQuery from './getDeskQuery'
-import {SanityTreeItem, TreeDeskStructureProps} from './types'
-import {dataToTree, documentToNode, flatTree, treeToData} from './utils/treeData'
+import {SanityTreeItem, TreeDeskStructureProps} from '../types/types'
+import {dataToTree, documentToNode, flatTree, treeToData} from './treeData'
 
 interface FetchData {
   mainTree?: SanityTreeItem[]

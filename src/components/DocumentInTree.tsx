@@ -5,14 +5,14 @@ import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
 import 'react-sortable-tree/style.css?raw'
-import {SanityTreeItem} from './types'
+import {SanityTreeItem} from '../types/types'
 
 /**
  * Renders a preview for each referenced document.
  * Nested inside TreeNode.tsx
  * @TODO: make it occupy all of the space available.
  */
-const TreeEntry: React.FC<{item: SanityTreeItem}> = (props) => {
+const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
   const {node, nodeDocType} = props.item
   const {navigateIntent, routerPanesState} = usePaneRouter()
 
@@ -41,4 +41,4 @@ const TreeEntry: React.FC<{item: SanityTreeItem}> = (props) => {
   )
 }
 
-export default TreeEntry
+export default DocumentInTree

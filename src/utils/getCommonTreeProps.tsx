@@ -1,7 +1,7 @@
 import {Box} from '@sanity/ui'
 import {ReactSortableTreeProps} from 'react-sortable-tree'
-import Callout from './Callout'
-import TreeNode from './TreeNode'
+import Callout from '../components/Callout'
+import TreeNode from '../components/TreeNode'
 
 export default function getCommonTreeProps({
   placeholder
