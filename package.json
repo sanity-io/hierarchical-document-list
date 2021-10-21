@@ -3,7 +3,7 @@
   "version": "0.1.0-next.0",
   "author": "Sanity <hello@sanity.io>",
   "license": "MIT",
-  "main": "lib/TreeInput.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sanity-io/sanity-plugin-tree-input.git"
@@ -34,6 +34,7 @@
     "@sanity/form-builder": ">= 2.21.0",
     "@sanity/icons": ">= 1.0.0",
     "@sanity/ui": ">= 0.33.9",
+    "@sanity/desk-tool": ">= 2.21.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-sortable-tree": "^2.8.0"
