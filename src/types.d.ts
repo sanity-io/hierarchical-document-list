@@ -1,7 +1,5 @@
 import type {SanityDocument} from '@sanity/client'
 
-declare module 'part:@sanity/*'
-
 interface SanityReference {
   _type: 'reference'
   _ref: string
@@ -9,7 +7,8 @@ interface SanityReference {
 
 export interface SanityTreeItem {
   _key: string
-  node?: SanityReference
+  node: SanityReference
+  nodeDocType: string
   children?: SanityTreeItem[]
 }
 

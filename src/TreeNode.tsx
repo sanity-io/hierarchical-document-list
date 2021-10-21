@@ -1,11 +1,7 @@
 import {DragHandleIcon} from '@sanity/icons'
 import {Button, Card, Inline, Spinner} from '@sanity/ui'
 import React from 'react'
-import {isDescendant, NodeRenderer} from 'react-sortable-tree'
-
-function classnames(...classes: unknown[]) {
-  return classes.filter(Boolean).join(' ')
-}
+import {NodeRenderer} from 'react-sortable-tree'
 
 /**
  * Customization of react-sortable-tree's default node.
@@ -14,7 +10,7 @@ function classnames(...classes: unknown[]) {
  *  - https://github.com/frontend-collective/react-sortable-tree/blob/master/src/node-renderer-default.js
  */
 const TreeNode: NodeRenderer = (props) => {
-  const {node, path, treeIndex, canDrop, canDrag = false} = props
+  const {node, path, treeIndex, canDrag = false} = props
   const nodeTitle = node.title
   const Handle = React.useMemo(() => {
     if (!canDrag) {
@@ -29,7 +25,7 @@ const TreeNode: NodeRenderer = (props) => {
     // Show the handle used to initiate a drag-and-drop
     return props.connectDragSource(
       <div>
-        <Button mode="bleed">
+        <Button mode="bleed" padding={0}>
           <DragHandleIcon />
         </Button>
       </div>,
@@ -39,8 +35,6 @@ const TreeNode: NodeRenderer = (props) => {
     )
   }, [canDrag, node, typeof node.children === 'function'])
 
-  const isDraggedDescendant = props.draggedNode && isDescendant(props.draggedNode, node)
-  const isLandingPadActive = !props.didDrop && props.isDragging
   return (
     <Card padding={2} height="fill">
       {props.toggleChildrenVisibility &&
@@ -58,23 +52,12 @@ const TreeNode: NodeRenderer = (props) => {
             }
           />
 
-          {node.expanded && !props.isDragging && (
-            <div>Scaffold Spacer</div>
-          )}
+          {node.expanded && !props.isDragging && <div>Scaffold Spacer</div>}
         </div>
       )}
 
       {props.connectDragPreview(
-        <div
-          className={classnames(
-            'rst__row',
-            isLandingPadActive && 'rst__rowLandingPad',
-            isLandingPadActive && !canDrop && 'rst__rowCancelPad'
-          )}
-          style={{
-            opacity: isDraggedDescendant ? 0.5 : 1
-          }}
-        >
+        <div>
           <Inline space={1}>
             {Handle}
 

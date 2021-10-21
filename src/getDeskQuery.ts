@@ -8,7 +8,7 @@ export function getDeskFilter(props: TreeDeskStructureProps): string {
 
 export default function getDeskQuery(props: TreeDeskStructureProps): string {
   return /* groq */ `{
-    "treeDoc": *[_id == "${props.treeDocId}"][0],
+    "mainTree": *[_id == "${props.treeDocId}"][0].tree,
     "allItems": *[${getDeskFilter(props)}] {
       _id,
       _type,
