@@ -30,10 +30,10 @@ export default function createDeskTree(props: TreeProps) {
   const mainList = props.documentType
     ? S.documentTypeList(props.documentType).serialize()
     : S.documentList()
-      .id(props.treeDocId)
-      .filter(getDeskFilter(props))
-      .params(props.params || {})
-      .serialize()
+        .id(props.treeDocId)
+        .filter(getDeskFilter(props))
+        .params(props.params || {})
+        .serialize()
 
   return Object.assign(
     mainList,

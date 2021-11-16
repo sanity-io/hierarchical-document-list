@@ -17,5 +17,10 @@ module.exports = {
     browser: true,
     es2017: true,
     node: true
+  },
+  rules: {
+    'max-len': [1, {ignoreComments: true}],
+    'implicit-arrow-linebreak': [1],
+    indent: [0]
   }
 }

@@ -40,21 +40,22 @@ const TreeNode: NodeRenderer = (props) => {
       {props.toggleChildrenVisibility &&
         node.children &&
         (node.children.length > 0 || typeof node.children === 'function') && (
-        <div>
-          <button
-            type="button"
-            aria-label={node.expanded ? 'Collapse' : 'Expand'}
-            onClick={() => props.toggleChildrenVisibility?.({
-              node,
-              path,
-              treeIndex
-            })
-            }
-          />
+          <div>
+            <button
+              type="button"
+              aria-label={node.expanded ? 'Collapse' : 'Expand'}
+              onClick={() =>
+                props.toggleChildrenVisibility?.({
+                  node,
+                  path,
+                  treeIndex
+                })
+              }
+            />
 
-          {node.expanded && !props.isDragging && <div>Scaffold Spacer</div>}
-        </div>
-      )}
+            {node.expanded && !props.isDragging && <div>Scaffold Spacer</div>}
+          </div>
+        )}
 
       {props.connectDragPreview(
         <div>
@@ -63,10 +64,10 @@ const TreeNode: NodeRenderer = (props) => {
 
             {typeof nodeTitle === 'function'
               ? nodeTitle({
-                node,
-                path,
-                treeIndex
-              })
+                  node,
+                  path,
+                  treeIndex
+                })
               : nodeTitle}
           </Inline>
         </div>

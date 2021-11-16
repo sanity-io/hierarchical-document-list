@@ -4,18 +4,20 @@ import {TreeItem} from 'react-sortable-tree'
 import DocumentInTree from '../components/DocumentInTree'
 import {SanityTreeItem} from '../types/types'
 
-export const treeToData = (tree: TreeItem[]): SanityTreeItem[] => tree.map((entry) => ({
-  _key: entry._key,
-  node: entry.node,
-  nodeDocType: entry.nodeDocType,
-  children: Array.isArray(entry.children) ? treeToData(entry.children) : undefined
-}))
+export const treeToData = (tree: TreeItem[]): SanityTreeItem[] =>
+  tree.map((entry) => ({
+    _key: entry._key,
+    node: entry.node,
+    nodeDocType: entry.nodeDocType,
+    children: Array.isArray(entry.children) ? treeToData(entry.children) : undefined
+  }))
 
-export const dataToTree = (data: SanityTreeItem[]): TreeItem[] => data.map((item) => ({
-  ...item,
-  title: () => <DocumentInTree item={item} />,
-  children: Array.isArray(item.children) ? dataToTree(item.children) : undefined
-}))
+export const dataToTree = (data: SanityTreeItem[]): TreeItem[] =>
+  data.map((item) => ({
+    ...item,
+    title: () => <DocumentInTree item={item} />,
+    children: Array.isArray(item.children) ? dataToTree(item.children) : undefined
+  }))
 
 export const documentToNode = (doc: SanityDocument): SanityTreeItem => {
   return {
