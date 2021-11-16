@@ -1,5 +1,5 @@
 import {CollapseIcon, DragHandleIcon, ExpandIcon} from '@sanity/icons'
-import {Button, Flex, Inline, Spinner} from '@sanity/ui'
+import {Box, Button, Inline, Spinner} from '@sanity/ui'
 import React from 'react'
 import {NodeRenderer} from 'react-sortable-tree'
 
@@ -36,11 +36,18 @@ const TreeNode: NodeRenderer = (props) => {
   }, [canDrag, node, typeof node.children === 'function'])
 
   return (
-    <Flex align="center" gap={2}>
+    <Box style={{position: 'relative'}}>
       {props.toggleChildrenVisibility &&
         node.children &&
         (node.children.length > 0 || typeof node.children === 'function') && (
-          <>
+          <div
+            style={{
+              position: 'absolute',
+              left: '-1.5em',
+              top: '50%',
+              transform: 'translateY(-50%)'
+            }}
+          >
             <Button
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
               icon={node.expanded ? CollapseIcon : ExpandIcon}
@@ -56,11 +63,7 @@ const TreeNode: NodeRenderer = (props) => {
                 })
               }
             />
-          </>
-
-          /* {node.expanded && !props.isDragging && (
-              <div style={{width: '200px', marginTop: '200px'}} className="rst__lineChildren"></div>
-            )} */
+          </div>
         )}
 
       {props.connectDragPreview(
@@ -78,7 +81,7 @@ const TreeNode: NodeRenderer = (props) => {
           </Inline>
         </div>
       )}
-    </Flex>
+    </Box>
   )
 }
 

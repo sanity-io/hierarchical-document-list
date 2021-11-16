@@ -2,6 +2,7 @@ import {Box} from '@sanity/ui'
 import {ReactSortableTreeProps} from 'react-sortable-tree'
 import Callout from '../components/Callout'
 import TreeNode from '../components/TreeNode'
+import TreeNodeRenderer from '../components/TreeNodeRenderer'
 
 export default function getCommonTreeProps({
   placeholder
@@ -19,7 +20,10 @@ export default function getCommonTreeProps({
         <Box padding={3}>
           <Callout {...placeholder} tone="default" />
         </Box>
-      )
+      ),
+      treeNodeRenderer: TreeNodeRenderer,
+      scaffoldBlockPxWidth: 20,
+      rowHeight: 50
     }
   }
 }
