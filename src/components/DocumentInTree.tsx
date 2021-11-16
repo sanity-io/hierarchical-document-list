@@ -4,7 +4,6 @@ import {Button, Card, Flex} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
-import 'react-sortable-tree/style.css?raw'
 import {SanityTreeItem} from '../types/types'
 
 /**
@@ -29,12 +28,16 @@ const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
 
   return (
     <Card tone={isActive ? 'primary' : 'default'} padding={1} radius={2}>
-      <Flex gap={2} justify="space-between" width="100%">
+      <Flex gap={3} justify="space-between" align="center" width="100%">
         <Preview layout="default" type={schemaType} value={{_ref: node?._ref}} />
         <Button
           icon={ChevronRightIcon}
           onClick={() => navigateIntent('edit', {type: nodeDocType, id: node?._ref})}
-          mode="bleed"
+          mode="ghost"
+          fontSize={1}
+          padding={2}
+          aria-label={`Open document of type ${nodeDocType} (id: ${node?._ref})`}
+          style={{cursor: 'pointer'}}
         />
       </Flex>
     </Card>

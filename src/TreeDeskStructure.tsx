@@ -1,7 +1,6 @@
 import {Button, Flex, Heading, Spinner, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
-import 'react-sortable-tree/style.css?raw'
 import Callout from './components/Callout'
 import getCommonTreeProps from './utils/getCommonTreeProps'
 import {TreeDeskStructureProps} from './types/types'
@@ -32,7 +31,7 @@ const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options
       )}
       {state === 'loaded' && !hasItems && <Callout tone="primary" title="No items added yet" />}
       {state === 'loaded' && hasItems && Array.isArray(mainTree) && (
-        <Stack space={4}>
+        <Stack space={4} padding={3}>
           <div style={{minHeight: '400px'}}>
             <SortableTree
               onChange={handleMainTreeChange}

@@ -1,5 +1,5 @@
-import {DragHandleIcon} from '@sanity/icons'
-import {Button, Card, Inline, Spinner} from '@sanity/ui'
+import {CollapseIcon, DragHandleIcon, ExpandIcon} from '@sanity/icons'
+import {Button, Flex, Inline, Spinner} from '@sanity/ui'
 import React from 'react'
 import {NodeRenderer} from 'react-sortable-tree'
 
@@ -36,14 +36,18 @@ const TreeNode: NodeRenderer = (props) => {
   }, [canDrag, node, typeof node.children === 'function'])
 
   return (
-    <Card padding={2} height="fill">
+    <Flex align="center" gap={2}>
       {props.toggleChildrenVisibility &&
         node.children &&
         (node.children.length > 0 || typeof node.children === 'function') && (
-          <div>
-            <button
-              type="button"
+          <>
+            <Button
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
+              icon={node.expanded ? CollapseIcon : ExpandIcon}
+              mode="bleed"
+              tone="primary"
+              fontSize={0}
+              padding={2}
               onClick={() =>
                 props.toggleChildrenVisibility?.({
                   node,
@@ -52,9 +56,11 @@ const TreeNode: NodeRenderer = (props) => {
                 })
               }
             />
+          </>
 
-            {node.expanded && !props.isDragging && <div>Scaffold Spacer</div>}
-          </div>
+          /* {node.expanded && !props.isDragging && (
+              <div style={{width: '200px', marginTop: '200px'}} className="rst__lineChildren"></div>
+            )} */
         )}
 
       {props.connectDragPreview(
@@ -72,7 +78,7 @@ const TreeNode: NodeRenderer = (props) => {
           </Inline>
         </div>
       )}
-    </Card>
+    </Flex>
   )
 }
 
