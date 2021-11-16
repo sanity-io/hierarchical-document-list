@@ -31,8 +31,8 @@ const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options
       )}
       {state === 'loaded' && !hasItems && <Callout tone="primary" title="No items added yet" />}
       {state === 'loaded' && hasItems && Array.isArray(mainTree) && (
-        <Stack space={4} padding={3}>
-          <div style={{minHeight: '400px'}}>
+        <Stack space={4} paddingTop={4}>
+          <div style={{minHeight: '200px'}}>
             <SortableTree
               onChange={handleMainTreeChange}
               treeData={mainTree}
@@ -44,10 +44,10 @@ const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options
             />
           </div>
           <Stack space={2} padding={3}>
-            <Heading size={1} muted as="h2">
+            <Heading size={1} as="h2">
               Items not added
             </Heading>
-            <Text size={2} muted>
+            <Text size={1} muted>
               Drag them into the list above to add to the hieararchy.
             </Text>
           </Stack>

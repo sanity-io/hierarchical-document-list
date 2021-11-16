@@ -25,7 +25,7 @@ const TreeNode: NodeRenderer = (props) => {
     // Show the handle used to initiate a drag-and-drop
     return props.connectDragSource(
       <div>
-        <Button mode="bleed" padding={0}>
+        <Button mode="bleed" padding={0} style={{cursor: 'grab'}}>
           <DragHandleIcon />
         </Button>
       </div>,
