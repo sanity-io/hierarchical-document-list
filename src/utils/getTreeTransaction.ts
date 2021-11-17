@@ -1,22 +1,17 @@
 import {SanityClient, Transaction} from '@sanity/client'
-import sanityClient from 'part:@sanity/base/client'
 import {diffPatch} from 'sanity-diff-patch'
 import {SanityTreeItem} from '../types/types'
-
-const client = sanityClient.withConfig({
-  apiVersion: '2021-09-01'
-}) as SanityClient
 
 export default function getTreeTransaction({
   treeDocId,
   prevTree,
   nextTree,
-  transactionId
+  client
 }: {
   prevTree: SanityTreeItem[] | undefined
   nextTree: SanityTreeItem[]
   treeDocId: string
-  transactionId: string
+  client: SanityClient
 }): Transaction {
   const prevDoc = {
     _id: treeDocId,
@@ -28,7 +23,5 @@ export default function getTreeTransaction({
   }
   const patch = diffPatch(prevDoc, nextDoc)
 
-  return client
-    .transaction([{patch: {id: treeDocId, setIfMissing: {tree: []}}}, ...patch])
-    .transactionId(transactionId)
+  return client.transaction([{patch: {id: treeDocId, setIfMissing: {tree: []}}}, ...patch])
 }
