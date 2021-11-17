@@ -5,6 +5,8 @@ import {ReactSortableTreeProps, TreeItem} from 'react-sortable-tree'
 import getDeskQuery from './getDeskQuery'
 import {SanityTreeItem, TreeDeskStructureProps} from '../types/types'
 import {dataToTree, documentToNode, flatTree, treeToData} from './treeData'
+import getTreeTransaction from './getTreeTransaction'
+import {nanoid} from 'nanoid'
 
 interface FetchData {
   mainTree?: SanityTreeItem[]
@@ -38,6 +40,7 @@ const getUnaddedItems = (data: FetchData): SanityTreeItem[] => {
 export default function useTreeDeskData(options: TreeDeskStructureProps) {
   const [data, setData] = React.useState<StateData>({})
   const [state, setState] = React.useState<State>('loading')
+  const [localTransactions, setLocalTransactions] = React.useState<string[]>([])
 
   const loadData = React.useCallback(async () => {
     try {
@@ -91,13 +94,19 @@ export default function useTreeDeskData(options: TreeDeskStructureProps) {
     if (JSON.stringify(storeableData) === JSON.stringify(currentlyStored)) {
       return
     }
+
+    // 2.1. Save the current transaction's ID to local state so that we can ignore it when it comes back from our listener
+    const transactionId = nanoid()
+    setLocalTransactions([transactionId, ...localTransactions])
+
     try {
-      await client
-        .patch(options.treeDocId)
-        .set({
-          tree: storeableData
-        })
-        .commit({returnDocuments: false})
+      const transaction = getTreeTransaction({
+        prevTree: currentlyStored,
+        nextTree: storeableData,
+        treeDocId: options.treeDocId,
+        transactionId
+      })
+      await transaction.commit({returnDocuments: false})
     } catch (error) {
       // If the patch didn't work, rollback the changes
       setData({
