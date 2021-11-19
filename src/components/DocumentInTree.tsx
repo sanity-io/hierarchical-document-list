@@ -45,6 +45,7 @@ const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
       radius={2}
       data-as="a"
       data-ui="PaneItem"
+      style={{flex: 1, maxWidth: '600px'}}
     >
       <Preview layout="default" type={schemaType} value={{_ref: node?._ref}} />
     </Card>

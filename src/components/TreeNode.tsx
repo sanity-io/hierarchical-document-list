@@ -1,5 +1,5 @@
 import {CollapseIcon, DragHandleIcon, ExpandIcon} from '@sanity/icons'
-import {Box, Button, Inline, Spinner} from '@sanity/ui'
+import {Box, Button, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import {NodeRenderer} from 'react-sortable-tree'
 
@@ -68,9 +68,8 @@ const TreeNode: NodeRenderer = (props) => {
 
       {props.connectDragPreview(
         <div>
-          <Inline space={1}>
+          <Flex gap={1} align="center">
             {Handle}
-
             {typeof nodeTitle === 'function'
               ? nodeTitle({
                   node,
@@ -78,7 +77,7 @@ const TreeNode: NodeRenderer = (props) => {
                   treeIndex
                 })
               : nodeTitle}
-          </Inline>
+          </Flex>
         </div>
       )}
     </Box>
