@@ -15,6 +15,7 @@ export const treeToData = (tree: TreeItem[]): SanityTreeItem[] =>
 export const dataToTree = (data: SanityTreeItem[]): TreeItem[] =>
   data.map((item) => ({
     ...item,
+    expanded: true,
     title: () => <DocumentInTree item={item} />,
     children: Array.isArray(item.children) ? dataToTree(item.children) : undefined
   }))
