@@ -13,7 +13,7 @@ import {SanityTreeItem} from '../types/types'
  */
 const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
   const {node, nodeDocType} = props.item
-  const {navigateIntent, routerPanesState} = usePaneRouter()
+  const {navigateIntent, routerPanesState, ChildLink} = usePaneRouter()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
@@ -22,24 +22,31 @@ const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
 
   const schemaType = React.useMemo(() => schema.get(nodeDocType), [nodeDocType])
 
+  const LinkComponent = React.useMemo(
+    () =>
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      React.forwardRef(function LinkComponentInner(linkProps: any, ref: any) {
+        return <ChildLink {...linkProps} childId={node._ref} ref={ref} />
+      }),
+    [ChildLink, node._ref]
+  )
+
   if (!node?._ref) {
     return null
   }
 
   return (
-    <Card tone={isActive ? 'primary' : 'default'} padding={1} radius={2}>
-      <Flex gap={3} justify="space-between" align="center" width="100%">
-        <Preview layout="default" type={schemaType} value={{_ref: node?._ref}} />
-        <Button
-          icon={ChevronRightIcon}
-          onClick={() => navigateIntent('edit', {type: nodeDocType, id: node?._ref})}
-          mode="ghost"
-          fontSize={1}
-          padding={2}
-          aria-label={`Open document of type ${nodeDocType} (id: ${node?._ref})`}
-          style={{cursor: 'pointer'}}
-        />
-      </Flex>
+    // Loosely copied from @sanity/desk-tool's PaneItem.tsx
+    <Card
+      __unstable_focusRing
+      as={LinkComponent}
+      tone={isActive ? 'primary' : 'default'}
+      padding={2}
+      radius={2}
+      data-as="a"
+      data-ui="PaneItem"
+    >
+      <Preview layout="default" type={schemaType} value={{_ref: node?._ref}} />
     </Card>
   )
 }
