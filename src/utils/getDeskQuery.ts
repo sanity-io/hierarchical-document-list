@@ -1,9 +1,17 @@
 import {TreeDeskStructureProps} from '../types/types'
 
 export function getDeskFilter(props: TreeDeskStructureProps): string {
-  const typeFilter = props.documentType ? `_type == ${props.documentType}` : ''
+  const filterParts: string[] = ['!(_id in path("drafts.**"))']
 
-  return `${typeFilter} ${!!typeFilter && !!props.filter ? '&&' : ''} ${props.filter || ''}`
+  if (props.documentType) {
+    filterParts.push(`_type == ${props.documentType}`)
+  }
+
+  if (props.filter) {
+    filterParts.push(props.filter)
+  }
+
+  return filterParts.join(' && ')
 }
 
 export default function getDeskQuery(props: TreeDeskStructureProps): string {
