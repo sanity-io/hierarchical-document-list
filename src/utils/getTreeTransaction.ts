@@ -6,12 +6,14 @@ export default function getTreeTransaction({
   treeDocId,
   prevTree,
   nextTree,
-  client
+  client,
+  transactionId
 }: {
   prevTree: SanityTreeItem[] | undefined
   nextTree: SanityTreeItem[]
   treeDocId: string
   client: SanityClient
+  transactionId: string
 }): Transaction {
   const prevDoc = {
     _id: treeDocId,
@@ -23,5 +25,7 @@ export default function getTreeTransaction({
   }
   const patch = diffPatch(prevDoc, nextDoc)
 
-  return client.transaction([{patch: {id: treeDocId, setIfMissing: {tree: []}}}, ...patch])
+  return client
+    .transaction([{patch: {id: treeDocId, setIfMissing: {tree: []}}}, ...patch])
+    .transactionId(transactionId)
 }

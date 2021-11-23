@@ -37,10 +37,13 @@
     "@sanity/form-builder": ">= 2.21.0",
     "@sanity/icons": ">= 1.0.0",
     "@sanity/ui": ">= 0.33.9",
+    "@xstate/react": "^1.6.3",
+    "nanoid": "^3.1.30",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-sortable-tree": "^2.8.0",
     "rxjs": "^6.6.7",
-    "sanity-diff-patch": "^1.0.9"
+    "sanity-diff-patch": "^1.0.9",
+    "xstate": "^4.26.1"
   }
 }

@@ -1,10 +1,11 @@
-import {SanityClient, SanityDocument} from '@sanity/client'
+import {SanityClient, SanityDocument, ListenEvent} from '@sanity/client'
+import {useMachine} from '@xstate/react'
+import {nanoid} from 'nanoid'
 import sanityClient from 'part:@sanity/base/client'
-import React from 'react'
-import {ReactSortableTreeProps, TreeItem} from 'react-sortable-tree'
-import {asyncScheduler} from 'rxjs'
-import {throttleTime} from 'rxjs/operators'
+import {TreeItem} from 'react-sortable-tree'
+import {assign} from 'xstate'
 import {SanityTreeItem, TreeDeskStructureProps} from '../types/types'
+import {treeDeskMachine} from '././treeDesk.machine'
 import getDeskQuery from './getDeskQuery'
 import getTreeTransaction from './getTreeTransaction'
 import {dataToTree, documentToNode, flatTree, treeToData} from './treeData'
@@ -13,15 +14,6 @@ interface FetchData {
   mainTree?: SanityTreeItem[]
   allItems?: SanityDocument[]
 }
-
-// What FetchData gets transformed into by loadData
-interface StateData {
-  mainTree?: TreeItem[]
-  allItems?: SanityDocument[]
-  unaddedItems?: TreeItem[]
-}
-
-type State = 'loading' | 'loaded' | 'error'
 
 const client = sanityClient.withConfig({
   apiVersion: '2021-09-01'
@@ -39,113 +31,141 @@ const getUnaddedItems = (data: FetchData): SanityTreeItem[] => {
 }
 
 export default function useTreeDeskData(options: TreeDeskStructureProps) {
-  const [data, setData] = React.useState<StateData>({})
-  const [state, setState] = React.useState<State>('loading')
-
-  const loadData = React.useCallback(async () => {
-    try {
-      const newData = await client.fetch<FetchData>(
-        getDeskQuery(options),
-        options.params as Record<string, unknown>
-      )
-
-      if (!Array.isArray(newData.mainTree)) {
-        const newTreeDoc = await client.create({
+  const [state, send] = useMachine(treeDeskMachine, {
+    context: {
+      treeDocId: options.treeDocId,
+      filter: options.filter,
+      params: options.params
+    },
+    services: {
+      loadData: (context) => client.fetch<FetchData>(getDeskQuery(context), context.params || {}),
+      createTreeDocument: (context) =>
+        client.create({
           _type: 'tree.document',
-          _id: options.treeDocId,
+          _id: context.treeDocId,
           tree: []
-        })
-        newData.mainTree = newTreeDoc.tree
-      }
-
-      if (!Array.isArray(newData.mainTree) || !newData.allItems?.length) {
-        setState('error')
-        return
-      }
-
-      setData({
-        ...newData,
-        mainTree: dataToTree(newData.mainTree),
-        unaddedItems: dataToTree(getUnaddedItems(newData))
-      })
-      setState('loaded')
-    } catch (error) {
-      setState('error')
-    }
-  }, [options])
-
-  React.useEffect(() => {
-    loadData()
-  }, [])
-
-  React.useEffect(() => {
-    const listener = client
-      .listen(
-        '*[_id == $treeDocId][0]',
-        {treeDocId: options.treeDocId},
-        {
-          visibility: 'query'
+        }),
+      subscribeListener: (context) => (callback) => {
+        const listener = client
+          .listen(
+            '*[_id == $treeDocId][0]',
+            {treeDocId: context.treeDocId},
+            {
+              visibility: 'query'
+            }
+          )
+          .subscribe((data) =>
+            callback({
+              type: 'HANDLE_LISTENER',
+              data
+            })
+          )
+        return () => {
+          listener.unsubscribe()
         }
-      )
-      .pipe(throttleTime(1000, asyncScheduler, {trailing: true}))
-      .subscribe(loadData)
-    return () => {
-      listener.unsubscribe()
-    }
-  }, [options])
+      },
+      persistChanges: async (context, event) => {
+        console.log('persistChanges', {context, event})
+        if (!Array.isArray(event.newTree)) {
+          return
+        }
+        const prevTree = context.mainTree
+        const nextTree = event.newTree as TreeItem[]
 
-  const handleMainTreeChange: ReactSortableTreeProps['onChange'] = async (nextTree) => {
-    const prevTree = data.mainTree
+        const transactionId = nanoid()
+        // 1. Update local state for immediate feedback
+        send({
+          type: 'UPDATE_MAIN_TREE',
+          data: {
+            mainTree: nextTree,
+            transactionId
+          }
+        })
 
-    // 1. Update local state for immediate feedback
-    setData({
-      ...data,
-      mainTree: nextTree
-    })
+        // 2. Patch the ToC document, only if data has changed
+        const storeableData = treeToData(nextTree)
+        const currentlyStored = prevTree ? treeToData(prevTree) : undefined
 
-    // 2. Patch the ToC document, only if data has changed
-    const storeableData = treeToData(nextTree)
-    const currentlyStored = prevTree ? treeToData(prevTree) : undefined
+        if (JSON.stringify(storeableData) === JSON.stringify(currentlyStored)) {
+          return
+        }
 
-    if (JSON.stringify(storeableData) === JSON.stringify(currentlyStored)) {
-      return
-    }
+        try {
+          const transaction = getTreeTransaction({
+            prevTree: currentlyStored,
+            nextTree: storeableData,
+            treeDocId: options.treeDocId,
+            client,
+            transactionId
+          })
+          await transaction.commit({returnDocuments: false})
+        } catch (error) {
+          // If the patch didn't work, rollback the changes
+          send({
+            type: 'UPDATE_MAIN_TREE',
+            data: {
+              mainTree: prevTree
+            }
+          })
+          throw new Error("Couldn't update tree")
+        }
+      }
+    },
+    actions: {
+      setLoadedData: assign((context, event) => {
+        // event.data doesn't necessarily hold both mainTree & allItems
+        const mainTree =
+          (Array.isArray(event.data.mainTree)
+            ? dataToTree(event.data.mainTree)
+            : context.mainTree) || []
+        const allItems = event.data.allItems || context.allItems
+        const localTransactions = context.localTransactions
+        if (typeof event.data.transactionId === 'string') {
+          localTransactions.push(event.data.transactionId)
+        }
+        return {
+          mainTree,
+          allItems,
+          unaddedItems: event.data.mainTree
+            ? dataToTree(getUnaddedItems({allItems, mainTree: event.data.mainTree}))
+            : context.mainTree,
+          localTransactions
+        }
+      }),
+      handleListener: (context, event) => {
+        const data = event.data as ListenEvent<unknown>
+        if (data.type !== 'mutation') {
+          return
+        }
 
-    try {
-      const transaction = getTreeTransaction({
-        prevTree: currentlyStored,
-        nextTree: storeableData,
-        treeDocId: options.treeDocId,
-        client
+        if (
+          data.result?._id === context.treeDocId &&
+          Array.isArray((data.result as SanityDocument).tree) &&
+          !context.localTransactions.includes(data.transactionId)
+        ) {
+          send({
+            type: 'UPDATE_MAIN_TREE',
+            data: {
+              mainTree: (data.result as SanityDocument).tree
+            }
+          })
+        }
+      },
+
+      // Return a flat version of unaddedItems as we don't want them to be nested
+      handleUnaddedTreeChange: assign({
+        unaddedItems: (context, event) => {
+          return Array.isArray(event.newTree) ? flatTree(event.newTree) : context.unaddedItems
+        }
       })
-      await transaction.commit({returnDocuments: false})
-    } catch (error) {
-      // If the patch didn't work, rollback the changes
-      setData({
-        ...data,
-        mainTree: prevTree
-      })
-      // @TODO: error toast
+    },
+    guards: {
+      treeIsValid: (_context, event) => Array.isArray(event.data.mainTree)
     }
-  }
-
-  const handleUnaddedTreeChange: ReactSortableTreeProps['onChange'] = (newTree) => {
-    setData({
-      ...data,
-      unaddedItems: flatTree(newTree)
-    })
-  }
-
-  const retryFetching = () => {
-    setState('loading')
-    loadData()
-  }
+  })
 
   return {
-    handleMainTreeChange,
-    handleUnaddedTreeChange,
-    retryFetching,
-    data,
-    state
+    state,
+    send
   }
 }

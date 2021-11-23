@@ -1,4 +1,4 @@
-import {Button, Flex, Heading, Spinner, Stack, Text} from '@sanity/ui'
+import {Button, Flex, Heading, Spinner, Stack, Text, useToast} from '@sanity/ui'
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
 import Callout from './components/Callout'
@@ -7,33 +7,55 @@ import getCommonTreeProps, {getTreeHeight} from './utils/getCommonTreeProps'
 import useTreeDeskData from './utils/useTreeDeskData'
 
 const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options}) => {
-  const {
-    data: {mainTree, allItems, unaddedItems},
-    handleMainTreeChange,
-    handleUnaddedTreeChange,
-    state,
-    retryFetching
-  } = useTreeDeskData(options)
+  const {state, send} = useTreeDeskData(options)
+  const toast = useToast()
+
+  const {mainTree, allItems, unaddedItems} = state.context
 
   const hasItems = Boolean(mainTree?.length || allItems?.length)
+
+  const persistError = state.matches('loaded.persistError')
+  React.useEffect(() => {
+    if (persistError) {
+      toast.push({
+        title: 'Error saving changes',
+        status: 'error',
+        description: 'Please try again'
+      })
+    }
+  }, [persistError])
+
   return (
     <div style={{height: '100%'}}>
-      {state === 'loading' && (
+      {state.value === 'loading' && (
         <Flex padding={4} height="fill" align="center" justify="center">
           <Spinner size={3} muted />
         </Flex>
       )}
-      {state === 'error' && (
+      {state.value === 'creatingDocument' && (
+        <Flex padding={4} height="fill" align="center" justify="center">
+          <Spinner size={3} muted />
+          <Text>Setting up documents...</Text>
+        </Flex>
+      )}
+      {state.value === 'error' && (
         <Callout title="Something went wrong">
-          <Button text="Retry" mode="bleed" onClick={retryFetching} />
+          <Button text="Retry" mode="bleed" onClick={() => send('RETRY_LOAD')} />
         </Callout>
       )}
-      {state === 'loaded' && !hasItems && <Callout tone="primary" title="No items added yet" />}
-      {state === 'loaded' && hasItems && Array.isArray(mainTree) && (
+      {state.matches('loaded') && !hasItems && (
+        <Callout tone="primary" title="No items added yet" />
+      )}
+      {state.matches('loaded') && hasItems && Array.isArray(mainTree) && (
         <Stack space={4} paddingTop={4}>
           <div style={{minHeight: getTreeHeight(mainTree)}}>
             <SortableTree
-              onChange={handleMainTreeChange}
+              onChange={(newTree) =>
+                send({
+                  type: 'HANDLE_MAIN_TREE_CHANGE',
+                  newTree
+                })
+              }
               treeData={mainTree}
               {...getCommonTreeProps({
                 placeholder: {
@@ -53,7 +75,12 @@ const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options
 
           <div style={{minHeight: getTreeHeight(unaddedItems)}}>
             <SortableTree
-              onChange={handleUnaddedTreeChange}
+              onChange={(newTree) =>
+                send({
+                  type: 'HANDLE_UNADDED_TREE_CHANGE',
+                  newTree
+                })
+              }
               treeData={unaddedItems || []}
               maxDepth={1}
               {...getCommonTreeProps({
