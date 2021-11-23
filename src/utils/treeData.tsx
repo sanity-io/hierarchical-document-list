@@ -43,11 +43,10 @@ export interface FetchData {
   allItems?: SanityDocument[]
 }
 
-export const getUnaddedItems = (
-  data: FetchData & {
-    mainTree?: (SanityTreeItem | TreeItem)[]
-  }
-): SanityTreeItem[] => {
+export const getUnaddedItems = (data: {
+  allItems?: FetchData['allItems']
+  mainTree?: (SanityTreeItem | TreeItem)[]
+}): SanityTreeItem[] => {
   if (!data.mainTree || !data.allItems?.length) {
     return []
   }

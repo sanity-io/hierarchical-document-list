@@ -55,7 +55,7 @@ export const treeDeskMachine = createMachine({
     },
     creatingDocument: {
       invoke: {
-        src: 'createDocument',
+        src: 'createTreeDocument',
         onDone: {
           target: 'loaded',
           actions: 'setLoadedData'

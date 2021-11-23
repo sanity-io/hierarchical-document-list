@@ -23,12 +23,21 @@ export default function useTreeDeskData(options: TreeDeskStructureProps) {
     },
     services: {
       loadData: (context) => client.fetch<FetchData>(getDeskQuery(context), context.params || {}),
-      createTreeDocument: (context) =>
-        client.create({
+      createTreeDocument: async (context) => {
+        const newDoc = await client.create({
           _type: 'tree.document',
           _id: context.treeDocId,
           tree: []
-        }),
+        })
+
+        if (!newDoc?._id) {
+          throw new Error("Tree doc couldn't be created")
+        }
+
+        return {
+          mainTree: newDoc?.tree || []
+        }
+      },
       subscribeListener: (context) => (callback) => {
         const listener = client
           .listen(
@@ -108,9 +117,7 @@ export default function useTreeDeskData(options: TreeDeskStructureProps) {
         return {
           mainTree,
           allItems,
-          unaddedItems: data.mainTree
-            ? dataToTree(getUnaddedItems({allItems, mainTree: data.mainTree}))
-            : context.mainTree
+          unaddedItems: dataToTree(getUnaddedItems({allItems, mainTree}))
         }
       }),
       setMainTree: assign((context, event) => {
