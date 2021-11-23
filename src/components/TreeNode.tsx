@@ -1,13 +1,39 @@
 import {CollapseIcon, DragHandleIcon, ExpandIcon} from '@sanity/icons'
 import {Box, Button, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
-import {NodeRenderer} from 'react-sortable-tree'
+import {NodeRenderer, isDescendant} from 'react-sortable-tree'
+import styled from 'styled-components'
+import {cyan, red, gray} from '@sanity/color'
+
+const Root = styled.div`
+  // Adapted from react-sortable-tree/style.css
+  &[data-landing='true'] > *,
+  &[data-cancel='true'] > * {
+    opacity: 0 !important;
+  }
+  &[data-landing='true']::before,
+  &[data-cancel='true']::before {
+    background-color: ${cyan[50].hex};
+    border: 2px dashed ${gray[400].hex};
+    border-radius: 3px;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  &[data-cancel='true']::before {
+    background-color: ${red[50].hex};
+  }
+`
 
 /**
  * Customization of react-sortable-tree's default node.
  * Created in order to use Sanity UI for styles.
- * @TODO: finish porting over styles from default renderer
- *  - https://github.com/frontend-collective/react-sortable-tree/blob/master/src/node-renderer-default.js
+ * Reference: https://github.com/frontend-collective/react-sortable-tree/blob/master/src/node-renderer-default.js
  */
 const TreeNode: NodeRenderer = (props) => {
   const {node, path, treeIndex, canDrag = false} = props
@@ -34,6 +60,9 @@ const TreeNode: NodeRenderer = (props) => {
       }
     )
   }, [canDrag, node, typeof node.children === 'function'])
+
+  const isDraggedDescendant = props.draggedNode && isDescendant(props.draggedNode, node)
+  const isLandingPadActive = !props.didDrop && props.isDragging
 
   return (
     <Box style={{position: 'relative'}}>
@@ -68,16 +97,24 @@ const TreeNode: NodeRenderer = (props) => {
 
       {props.connectDragPreview(
         <div>
-          <Flex gap={1} align="center">
-            {Handle}
-            {typeof nodeTitle === 'function'
-              ? nodeTitle({
-                  node,
-                  path,
-                  treeIndex
-                })
-              : nodeTitle}
-          </Flex>
+          <Root
+            data-landing={isLandingPadActive}
+            data-cancel={isLandingPadActive && !props.canDrop}
+            style={{
+              opacity: isDraggedDescendant ? 0.5 : 1
+            }}
+          >
+            <Flex gap={1} align="center">
+              {Handle}
+              {typeof nodeTitle === 'function'
+                ? nodeTitle({
+                    node,
+                    path,
+                    treeIndex
+                  })
+                : nodeTitle}
+            </Flex>
+          </Root>
         </div>
       )}
     </Box>
