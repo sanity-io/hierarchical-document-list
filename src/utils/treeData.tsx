@@ -37,3 +37,23 @@ export const flatTree = (tree: TreeItem[]): TreeItem[] => {
     return [...flattened, node, ...(Array.isArray(children) ? flatTree(children) : [])]
   }, [] as TreeItem[])
 }
+
+export interface FetchData {
+  mainTree?: SanityTreeItem[]
+  allItems?: SanityDocument[]
+}
+
+export const getUnaddedItems = (
+  data: FetchData & {
+    mainTree?: (SanityTreeItem | TreeItem)[]
+  }
+): SanityTreeItem[] => {
+  if (!data.mainTree || !data.allItems?.length) {
+    return []
+  }
+
+  const stringifiedTree = JSON.stringify(data.mainTree)
+  return data.allItems
+    .filter((item) => item._id && !stringifiedTree.includes(item._id))
+    .map(documentToNode)
+}

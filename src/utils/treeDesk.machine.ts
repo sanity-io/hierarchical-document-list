@@ -1,7 +1,21 @@
 import {SanityDocument} from '@sanity/client'
 import {TreeItem} from 'react-sortable-tree'
 import {createMachine} from 'xstate'
-import {TreeDeskStructureProps} from '../types/types'
+import {SanityTreeItem, TreeDeskStructureProps} from '../types/types'
+
+export interface SetLoadedDataEvent {
+  data: {
+    mainTree?: SanityTreeItem[]
+    allItems?: SanityDocument[]
+  }
+}
+
+export interface SetMainTreeEvent {
+  data: {
+    mainTree: TreeItem[]
+    transactionId?: string
+  }
+}
 
 export const treeDeskMachine = createMachine({
   initial: 'loading',
@@ -60,7 +74,7 @@ export const treeDeskMachine = createMachine({
           actions: 'handleListener'
         },
         UPDATE_MAIN_TREE: {
-          actions: 'setLoadedData',
+          actions: 'setMainTree',
           cond: 'treeIsValid'
         },
         HANDLE_MAIN_TREE_CHANGE: {

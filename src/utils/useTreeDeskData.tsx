@@ -1,34 +1,18 @@
-import {SanityClient, SanityDocument, ListenEvent} from '@sanity/client'
+import {ListenEvent, SanityClient, SanityDocument} from '@sanity/client'
 import {useMachine} from '@xstate/react'
 import {nanoid} from 'nanoid'
 import sanityClient from 'part:@sanity/base/client'
 import {TreeItem} from 'react-sortable-tree'
 import {assign} from 'xstate'
-import {SanityTreeItem, TreeDeskStructureProps} from '../types/types'
-import {treeDeskMachine} from '././treeDesk.machine'
+import {TreeDeskStructureProps} from '../types/types'
+import {SetLoadedDataEvent, SetMainTreeEvent, treeDeskMachine} from '././treeDesk.machine'
 import getDeskQuery from './getDeskQuery'
 import getTreeTransaction from './getTreeTransaction'
-import {dataToTree, documentToNode, flatTree, treeToData} from './treeData'
-
-interface FetchData {
-  mainTree?: SanityTreeItem[]
-  allItems?: SanityDocument[]
-}
+import {dataToTree, FetchData, flatTree, getUnaddedItems, treeToData} from './treeData'
 
 const client = sanityClient.withConfig({
   apiVersion: '2021-09-01'
 }) as SanityClient
-
-const getUnaddedItems = (data: FetchData): SanityTreeItem[] => {
-  if (!data.mainTree || !data.allItems?.length) {
-    return []
-  }
-
-  const stringifiedTree = JSON.stringify(data.mainTree)
-  return data.allItems
-    .filter((item) => item._id && !stringifiedTree.includes(item._id))
-    .map(documentToNode)
-}
 
 export default function useTreeDeskData(options: TreeDeskStructureProps) {
   const [state, send] = useMachine(treeDeskMachine, {
@@ -113,21 +97,33 @@ export default function useTreeDeskData(options: TreeDeskStructureProps) {
     },
     actions: {
       setLoadedData: assign((context, event) => {
+        console.log('setLoadedData', {context, event})
+        const {data} = event as unknown as SetLoadedDataEvent
         // event.data doesn't necessarily hold both mainTree & allItems
         const mainTree =
-          (Array.isArray(event.data.mainTree)
-            ? dataToTree(event.data.mainTree)
+          (Array.isArray(data.mainTree) && data.mainTree.length
+            ? dataToTree(data.mainTree)
             : context.mainTree) || []
-        const allItems = event.data.allItems || context.allItems
-        const localTransactions = context.localTransactions
-        if (typeof event.data.transactionId === 'string') {
-          localTransactions.push(event.data.transactionId)
-        }
+        const allItems = data.allItems || context.allItems
         return {
           mainTree,
           allItems,
-          unaddedItems: event.data.mainTree
-            ? dataToTree(getUnaddedItems({allItems, mainTree: event.data.mainTree}))
+          unaddedItems: data.mainTree
+            ? dataToTree(getUnaddedItems({allItems, mainTree: data.mainTree}))
+            : context.mainTree
+        }
+      }),
+      setMainTree: assign((context, event) => {
+        console.log('setMainTree', {context, event})
+        const {data} = event as unknown as SetMainTreeEvent
+        const localTransactions = context.localTransactions
+        if (typeof data.transactionId === 'string') {
+          localTransactions.push(data.transactionId)
+        }
+        return {
+          mainTree: data.mainTree,
+          unaddedItems: data.mainTree
+            ? dataToTree(getUnaddedItems({allItems: context.allItems, mainTree: data.mainTree}))
             : context.mainTree,
           localTransactions
         }
