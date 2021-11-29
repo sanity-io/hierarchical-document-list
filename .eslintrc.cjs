@@ -19,8 +19,8 @@ module.exports = {
     node: true
   },
   rules: {
-    'max-len': [1, {ignoreComments: true}],
-    'implicit-arrow-linebreak': [1],
+    'max-len': [0],
+    'implicit-arrow-linebreak': [0],
     indent: [0]
   }
 }
