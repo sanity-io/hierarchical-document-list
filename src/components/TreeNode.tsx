@@ -1,9 +1,9 @@
-import {CollapseIcon, DragHandleIcon, ExpandIcon} from '@sanity/icons'
+import {cyan, gray, red} from '@sanity/color'
+import {ChevronDownIcon, ChevronUpIcon, DragHandleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
-import {NodeRenderer, isDescendant} from 'react-sortable-tree'
+import {isDescendant, NodeRenderer} from 'react-sortable-tree'
 import styled from 'styled-components'
-import {cyan, red, gray} from '@sanity/color'
 
 const Root = styled.div`
   // Adapted from react-sortable-tree/style.css
@@ -79,7 +79,7 @@ const TreeNode: NodeRenderer = (props) => {
           >
             <Button
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
-              icon={node.expanded ? CollapseIcon : ExpandIcon}
+              icon={node.expanded ? ChevronUpIcon : ChevronDownIcon}
               mode="bleed"
               tone="primary"
               fontSize={0}
