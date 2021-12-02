@@ -6,20 +6,9 @@ import TreeNodeRenderer from '../components/TreeNodeRenderer'
 
 const ROW_HEIGHT = 50
 
-function getExpandedItemCount(tree: TreeItem[]): number {
-  return tree.reduce((count, curItem) => {
-    return (
-      count +
-      1 +
-      (Array.isArray(curItem.children) && curItem.expanded
-        ? getExpandedItemCount(curItem.children)
-        : 0)
-    )
-  }, 1)
-}
-
 export function getTreeHeight(tree: TreeItem[] | undefined): string {
-  return `${ROW_HEIGHT * getExpandedItemCount(tree || [])}px`
+  // prettier-ignore
+  return `${50 + (ROW_HEIGHT * (tree || [1])?.length)}px`
 }
 
 export default function getCommonTreeProps({

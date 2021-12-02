@@ -1,6 +1,5 @@
 import {usePaneRouter} from '@sanity/desk-tool'
-import {ChevronRightIcon} from '@sanity/icons'
-import {Button, Card, Flex} from '@sanity/ui'
+import {Card} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
@@ -9,11 +8,10 @@ import {SanityTreeItem} from '../types/types'
 /**
  * Renders a preview for each referenced document.
  * Nested inside TreeNode.tsx
- * @TODO: make it occupy all of the space available.
  */
 const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
   const {node, nodeDocType} = props.item
-  const {navigateIntent, routerPanesState, ChildLink} = usePaneRouter()
+  const {routerPanesState, ChildLink} = usePaneRouter()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active

@@ -1,37 +1,44 @@
-import type {SanityDocument} from '@sanity/client'
+import {ArraySchemaType} from '@sanity/types'
 
 interface SanityReference {
   _type: 'reference'
   _ref: string
+  _weak?: boolean
 }
 
 export interface SanityTreeItem {
   _key: string
+  _type: 'hierarchy.node' | string
   node: SanityReference
   nodeDocType: string
-  children?: SanityTreeItem[]
+  /**
+   * _key of parent node
+   */
+  parent?: string
 }
 
-export interface TreeDoc extends SanityDocument {
-  tree: SanityTreeItem[]
+export interface TreeInputOptions {
+  /**
+   * The reference field
+   * @docs https://www.sanity.io/docs/reference-type
+   */
+  referenceField: {
+    to: {type: string}[]
+    options?: {
+      /**
+       * Static filter to apply to tree document queries.
+       */
+      filter?: string
+      filterParams?: Record<string, unknown>
+    }
+  }
+  /**
+   * How deep should editors be allowed to nest items.
+   */
+  maxDepth?: number
 }
 
-export interface TreeDeskStructureProps {
-  /**
-   * _id of the document that will hold the tree data.
-   */
-  treeDocId: string
-  /**
-   * GROQ filter that should return documents
-   * Example: _type in ["category", "post"]
-   */
-  filter?: string
-  /**
-   * If only using one document type, add it here to get proper menu items.
-   */
-  documentType?: string
-  /**
-   * Parameters to be added to the GROQ query.
-   */
-  params?: Record<string, unknown>
+export interface TreeFieldSchema
+  extends Omit<ArraySchemaType, 'of' | 'type' | 'inputComponent' | 'jsonType'> {
+  options: ArraySchemaType['options'] & TreeInputOptions
 }

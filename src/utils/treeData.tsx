@@ -1,32 +1,36 @@
 import {SanityDocument} from '@sanity/client'
 import React from 'react'
-import {TreeItem} from 'react-sortable-tree'
+import {getTreeFromFlatData, TreeItem} from 'react-sortable-tree'
 import DocumentInTree from '../components/DocumentInTree'
 import {SanityTreeItem} from '../types/types'
 
-export const treeToData = (tree: TreeItem[]): SanityTreeItem[] =>
-  tree.map((entry) => ({
-    _key: entry._key,
-    node: entry.node,
-    nodeDocType: entry.nodeDocType,
-    children: Array.isArray(entry.children) ? treeToData(entry.children) : undefined
-  }))
-
-export const dataToTree = (data: SanityTreeItem[]): TreeItem[] =>
-  data.map((item) => ({
+export const dataToTree = (data: SanityTreeItem[]): TreeItem[] => {
+  const itemsWithTitle = data.map((item) => ({
     ...item,
+    // if parent: undefined, the tree won't be constructed
+    parent: item.parent || null,
     expanded: true,
     title: () => <DocumentInTree item={item} />,
-    children: Array.isArray(item.children) ? dataToTree(item.children) : undefined
+    children: []
   }))
+  return getTreeFromFlatData({
+    flatData: itemsWithTitle,
+    getKey: (item) => item._key,
+    getParentKey: (item) => item.parent,
+    // without rootKey, the tree won't be constructed
+    rootKey: null as any
+  })
+}
 
 export const documentToNode = (doc: SanityDocument): SanityTreeItem => {
   return {
     _key: doc._id,
+    _type: 'hierarchy.node',
     nodeDocType: doc._type,
     node: {
       _ref: doc._id,
-      _type: 'reference'
+      _type: 'reference',
+      _weak: true
     }
   }
 }
@@ -44,14 +48,18 @@ export interface FetchData {
 }
 
 export const getUnaddedItems = (data: {
-  allItems?: FetchData['allItems']
-  mainTree?: (SanityTreeItem | TreeItem)[]
+  allItems?: SanityDocument[]
+  tree?: (SanityTreeItem | TreeItem)[]
 }): SanityTreeItem[] => {
-  if (!data.mainTree || !data.allItems?.length) {
+  if (!data.allItems?.length) {
     return []
   }
 
-  const stringifiedTree = JSON.stringify(data.mainTree)
+  if (!data.tree) {
+    return data.allItems.map(documentToNode)
+  }
+
+  const stringifiedTree = JSON.stringify(data.tree)
   return data.allItems
     .filter((item) => item._id && !stringifiedTree.includes(item._id))
     .map(documentToNode)

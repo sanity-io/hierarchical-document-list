@@ -24,7 +24,8 @@ const TreeNodeRenderer: TreeRenderer = (props) => {
     <div style={props.style}>
       <div
         style={{
-          paddingLeft: `${BASE_LEFT_PADDING + scaffoldBlockPxWidth * scaffoldBlockCount}px`
+          // prettier-ignore
+          paddingLeft: `${BASE_LEFT_PADDING + (scaffoldBlockPxWidth * scaffoldBlockCount)}px`
         }}
       >
         {React.Children.map(children, (child) =>
