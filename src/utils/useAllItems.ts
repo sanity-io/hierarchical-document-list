@@ -1,5 +1,4 @@
 import {MutationEvent, SanityClient, SanityDocument} from '@sanity/client'
-import {nanoid} from 'nanoid'
 import sanityClient from 'part:@sanity/base/client'
 import React from 'react'
 import {TreeInputOptions} from '../types/types'
@@ -47,7 +46,7 @@ function allItemsReducer(state: SanityDocument[], action: ACTIONTYPE) {
       {
         _id: action.item._id,
         _type: action.item._type
-      }
+      } as SanityDocument
     ]
   }
   if (action.type === 'removeItem') {
@@ -58,10 +57,7 @@ function allItemsReducer(state: SanityDocument[], action: ACTIONTYPE) {
     return [...state.slice(0, idx), ...state.slice(idx + 1)]
   }
   if (action.type === 'setInitialData') {
-    return action.items.map((item) => ({
-      ...item,
-      _key: item._key || nanoid()
-    }))
+    return action.items
   }
   return state
 }
