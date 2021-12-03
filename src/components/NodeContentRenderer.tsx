@@ -35,7 +35,7 @@ const Root = styled.div`
  * Created in order to use Sanity UI for styles.
  * Reference: https://github.com/frontend-collective/react-sortable-tree/blob/master/src/node-renderer-default.js
  */
-const TreeNode: NodeRenderer = (props) => {
+const NodeContentRenderer: NodeRenderer = (props) => {
   const {node, path, treeIndex, canDrag = false} = props
   const nodeTitle = node.title
   const Handle = React.useMemo(() => {
@@ -121,4 +121,4 @@ const TreeNode: NodeRenderer = (props) => {
   )
 }
 
-export default TreeNode
+export default NodeContentRenderer

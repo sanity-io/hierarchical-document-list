@@ -1,7 +1,7 @@
 import {SanityDocument} from '@sanity/client'
 import React from 'react'
 import {getTreeFromFlatData, TreeItem} from 'react-sortable-tree'
-import DocumentInTree from '../components/DocumentInTree'
+import DocumentInNode from '../components/DocumentInNode'
 import {SanityTreeItem} from '../types/types'
 
 export const dataToTree = (data: SanityTreeItem[]): TreeItem[] => {
@@ -10,7 +10,7 @@ export const dataToTree = (data: SanityTreeItem[]): TreeItem[] => {
     // if parent: undefined, the tree won't be constructed
     parent: item.parent || null,
     expanded: true,
-    title: () => <DocumentInTree item={item} />,
+    title: () => <DocumentInNode item={item} />,
     children: []
   }))
   return getTreeFromFlatData({

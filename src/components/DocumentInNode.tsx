@@ -9,7 +9,7 @@ import {SanityTreeItem} from '../types/types'
  * Renders a preview for each referenced document.
  * Nested inside TreeNode.tsx
  */
-const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
+const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
   const {node, nodeDocType} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
 
@@ -50,4 +50,4 @@ const DocumentInTree: React.FC<{item: SanityTreeItem}> = (props) => {
   )
 }
 
-export default DocumentInTree
+export default DocumentInNode
