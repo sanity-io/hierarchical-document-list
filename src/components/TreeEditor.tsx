@@ -1,8 +1,7 @@
-import {Heading, Spinner, Stack, Text} from '@sanity/ui'
+import {Spinner, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import SortableTree, {FullTree, NodeData, OnMovePreviousAndNextLocation} from 'react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types/types'
-import flatDataToTree from '../utils/flatDataToTree'
 import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import getTreePatch from '../utils/getTreePatch'
 import {dataToEditorTree, getUnaddedItems} from '../utils/treeData'
@@ -48,10 +47,10 @@ const TreeEditor: React.FC<{
           })}
         />
       </div>
-      <Stack space={2} padding={3}>
-        <Heading size={1} as="h2">
+      <Stack space={2}>
+        <Text size={2} as="h2">
           Items not added
-        </Heading>
+        </Text>
         <Text size={1} muted>
           Drag them into the list above to add to the hieararchy.
         </Text>
