@@ -2,9 +2,10 @@ import {Heading, Spinner, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import SortableTree, {FullTree, NodeData, OnMovePreviousAndNextLocation} from 'react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types/types'
+import flatDataToTree from '../utils/flatDataToTree'
 import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import getTreePatch from '../utils/getTreePatch'
-import {dataToTree, getUnaddedItems} from '../utils/treeData'
+import {dataToEditorTree, getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
 import useTreeWithVisibility from '../utils/useTreeWithVisibility'
 
@@ -21,7 +22,7 @@ const TreeEditor: React.FC<{
   const unaddedItems = getUnaddedItems({tree, allItems})
   const {treeData, handleVisibilityToggle} = useTreeWithVisibility(tree)
 
-  console.log({allItems, unaddedItems, tree, treeData})
+  // console.log({allItems, unaddedItems, tree, treeData, frontEnd: flatDataToTree(tree)})
 
   function handleMovedNode(data: NodeData & FullTree & OnMovePreviousAndNextLocation) {
     const patch = getTreePatch(data)
@@ -62,7 +63,7 @@ const TreeEditor: React.FC<{
             onChange={() => {
               // Do nothing. unaddedTree will reflect whatever meaningful changes happen to this tree
             }}
-            treeData={dataToTree(unaddedItems)}
+            treeData={dataToEditorTree(unaddedItems)}
             maxDepth={1}
             {...getCommonTreeProps({
               placeholder: {

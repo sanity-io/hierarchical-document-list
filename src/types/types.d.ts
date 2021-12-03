@@ -14,7 +14,7 @@ export interface SanityTreeItem {
   /**
    * _key of parent node
    */
-  parent?: string
+  parent?: string | null
 }
 
 export interface TreeInputOptions {

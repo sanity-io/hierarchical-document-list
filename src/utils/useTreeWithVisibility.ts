@@ -1,7 +1,7 @@
 import React from 'react'
 import {OnVisibilityToggleData, TreeItem} from 'react-sortable-tree'
 import {SanityTreeItem} from '../types/types'
-import {dataToTree} from './treeData'
+import {dataToEditorTree} from './treeData'
 
 type VisibilityMap = {
   [_key: string]: boolean
@@ -31,7 +31,7 @@ export default function useTreeWithVisibility(tree: SanityTreeItem[]): {
   }))
 
   return {
-    treeData: dataToTree(treeWithExpanded),
+    treeData: dataToEditorTree(treeWithExpanded),
     handleVisibilityToggle
   }
 }

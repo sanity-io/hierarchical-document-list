@@ -1,25 +1,18 @@
 import {SanityDocument} from '@sanity/client'
 import React from 'react'
-import {getTreeFromFlatData, TreeItem} from 'react-sortable-tree'
+import {TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import {SanityTreeItem} from '../types/types'
+import flatDataToTree from './flatDataToTree'
 
-export const dataToTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
+export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
   const itemsWithTitle = data.map((item) => ({
     ...item,
-    // if parent: undefined, the tree won't be constructed
-    parent: item.parent || null,
     expanded: item.expanded,
     title: () => <DocumentInNode item={item} />,
     children: []
   }))
-  return getTreeFromFlatData({
-    flatData: itemsWithTitle,
-    getKey: (item) => item._key,
-    getParentKey: (item) => item.parent,
-    // without rootKey, the tree won't be constructed
-    rootKey: null as any
-  })
+  return flatDataToTree(itemsWithTitle)
 }
 
 export const documentToNode = (doc: SanityDocument): SanityTreeItem => {
