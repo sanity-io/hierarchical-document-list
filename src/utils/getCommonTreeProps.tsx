@@ -29,7 +29,6 @@ export default function getCommonTreeProps({
         </Box>
       ),
       treeNodeRenderer: TreeNodeRenderer,
-      scaffoldBlockPxWidth: 20,
       rowHeight: ROW_HEIGHT
     }
   }

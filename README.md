@@ -1,8 +1,10 @@
 TODO:
 
 - [x] Form field wrapper on it to make presence, titles and descriptions work
-- [ ] Larger indent
+- [x] Larger indent
 - [ ] Real-time changes to `allItems`
+- [ ] Collapse/expand
+  - Will require new local state
 - [ ] Clearer drop target on empty lists
   - Instead of using Callouts, use a dropzone with dashed borders
 - [ ] Handle focus
