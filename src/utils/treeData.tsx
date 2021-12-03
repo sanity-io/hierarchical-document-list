@@ -63,3 +63,13 @@ export const getUnaddedItems = (data: {
     .filter((item) => item._id && !data.tree.some((treeItem) => treeItem.node._ref === item._id))
     .map(documentToNode)
 }
+
+export function normalizeNodeForStorage(item: TreeItem): SanityTreeItem {
+  return {
+    _key: item._key,
+    _type: item._type || 'hierarchy.node',
+    node: item.node,
+    parent: item.parent,
+    nodeDocType: item.nodeDocType
+  }
+}

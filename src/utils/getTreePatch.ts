@@ -6,11 +6,13 @@ import {
 } from 'react-sortable-tree'
 import PatchEvent from '@sanity/form-builder/PatchEvent'
 import * as Patch from '@sanity/form-builder/lib/patch/patches'
+import {normalizeNodeForStorage} from './treeData'
 
 export default function getTreePatch(
   data: NodeData & FullTree & OnMovePreviousAndNextLocation
 ): unknown {
-  const {node, nextParentNode, nextTreeIndex, treeData: nextTree} = data
+  const {nextParentNode, nextTreeIndex, treeData: nextTree} = data
+  const node = normalizeNodeForStorage(data.node)
   const keyPath = {_key: node._key}
 
   // nextPath will be `null` if the item was removed from the tree
@@ -38,7 +40,6 @@ export default function getTreePatch(
   const adjescentSibling = nextFlatTree
     .slice(nextTreeIndex + 1)
     .find((item) => !item.path.includes(node._key))
-  console.log('MIDDLE', adjescentSibling)
   if (adjescentSibling?.node?._key) {
     insertionPatch = Patch.insert([node], 'before', [{_key: adjescentSibling?.node?._key}])
   } else {
@@ -46,6 +47,7 @@ export default function getTreePatch(
   }
 
   return PatchEvent.from(
+    Patch.setIfMissing([]),
     // Unset the moved node
     Patch.unset([keyPath]),
     // Add it to where in the tree it should appear
