@@ -3,13 +3,14 @@ TODO:
 - [x] Form field wrapper on it to make presence, titles and descriptions work
 - [x] Larger indent
 - [x] Real-time changes to `allItems`
+- [x] Clearer drop target on empty lists
+  - Instead of using Callouts, use a dropzone with dashed borders
 - [ ] Collapse/expand
   - Will require new local state
-- [ ] Clearer drop target on empty lists
-  - Instead of using Callouts, use a dropzone with dashed borders
+- [ ] Handle replacing parents
 - [ ] Handle focus
 - [ ] Custom diff component
-- [ ] Navigate to documents. I plan to use Rico & Bjoerge's work on Refs. in Place to open panes to the right for each category
+- [ ] Navigate to documents. I plan to use our work on Refs. in Place to open panes to the right for each category
 - [ ] Add a button to create new documents that match the GROQ filter, also following RiP's work :slightly_smiling_face:
   - Refer to Refs. in Place - how is it doing it?
 - [ ] Deal with drafts in `allItems`

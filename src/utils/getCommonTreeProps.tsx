@@ -1,7 +1,6 @@
-import {Box} from '@sanity/ui'
 import {ReactSortableTreeProps, TreeItem} from 'react-sortable-tree'
-import Callout from '../components/Callout'
 import NodeContentRenderer from '../components/NodeContentRenderer'
+import PlaceholderDropzone from '../components/PlaceholderDropzone'
 import TreeNodeRenderer from '../components/TreeNodeRenderer'
 
 const ROW_HEIGHT = 50
@@ -23,11 +22,7 @@ export default function getCommonTreeProps({
     dndType: 'sanityDocument',
     theme: {
       nodeContentRenderer: NodeContentRenderer,
-      placeholderRenderer: () => (
-        <Box padding={3}>
-          <Callout {...placeholder} tone="default" />
-        </Box>
-      ),
+      placeholderRenderer: (props) => <PlaceholderDropzone {...placeholder} {...props} />,
       treeNodeRenderer: TreeNodeRenderer,
       rowHeight: ROW_HEIGHT
     }
