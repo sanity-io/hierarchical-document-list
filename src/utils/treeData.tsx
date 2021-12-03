@@ -49,7 +49,7 @@ export interface FetchData {
 
 export const getUnaddedItems = (data: {
   allItems?: SanityDocument[]
-  tree?: (SanityTreeItem | TreeItem)[]
+  tree: SanityTreeItem[]
 }): SanityTreeItem[] => {
   if (!data.allItems?.length) {
     return []
@@ -59,8 +59,7 @@ export const getUnaddedItems = (data: {
     return data.allItems.map(documentToNode)
   }
 
-  const stringifiedTree = JSON.stringify(data.tree)
   return data.allItems
-    .filter((item) => item._id && !stringifiedTree.includes(item._id))
+    .filter((item) => item._id && !data.tree.some((treeItem) => treeItem.node._ref === item._id))
     .map(documentToNode)
 }
