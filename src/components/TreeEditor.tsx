@@ -52,7 +52,8 @@ const TreeEditor: React.FC<{
           Items not added
         </Text>
         <Text size={1} muted>
-          Drag them into the list above to add to the hieararchy.
+          Drag them into the list above to add to the hieararchy. Unpublished documents won't show
+          up in this list.
         </Text>
       </Stack>
 

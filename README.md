@@ -1,29 +1,28 @@
 TODO:
 
-- [x] Form field wrapper on it to make presence, titles and descriptions work
-- [x] Larger indent
-- [x] Real-time changes to `allItems`
-- [x] Clearer drop target on empty lists
-  - Instead of using Callouts, use a dropzone with dashed borders
-- [x] Collapse/expand
-  - Will require new local state
-- [x] Utility function for reconstructing tree
-- [ ] Utility for getting a node's parents, children and siblings?
-- [ ] Navigate to documents. I plan to use our work on Refs. in Place to open panes to the right for each category
-- [ ] GROQ helper functions
+- [ ] Navigate to documents for editing them
 - [ ] Handle replacing parents
 - [ ] Handle focus
+  - Or improve this behavior by following Desk structure's conventions
 - [ ] Add a button to create new documents that match the GROQ filter, also following RiP's work
   - Refer to Refs. in Place - how is it doing it?
 - [ ] Deal with drafts in `allItems`
-  - they're currently being ignored, but we could potentially add a new list of "Draft documents - Publish them before adding to this list~
+  - [ ] Clarify that only published documents will show up in tree
+  - they're currently being ignored, but we could potentially add a new list of "Draft documents - Publish them before adding to this list"
 - [ ] React-sortable-tree is throwing weird errors sometimes
 - [ ] Improve dropping response times
+- [ ] Improve overall UX
+  - Button to add unadded item to the bottom of the list, w/o drag 'n dropping?
 
 Low priority:
 
 - [ ] Is it feasible to animate the changes on drag?
 - [ ] Custom diff component
+- [ ] Utility for getting a node's parents, children and siblings?
+  - Useful for extracting breadcrumbs in a front-end, for example
+- [ ] GROQ helper functions
+  - get the `_ref` of the parent of a given entry, picked by its `_ref`
+  - get the children of a given entry, picked by its `_ref`
 
 Check if fixed:
 
