@@ -6,6 +6,7 @@ import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import getTreePatch from '../utils/getTreePatch'
 import {dataToTree, getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
+import useTreeWithVisibility from '../utils/useTreeWithVisibility'
 
 /**
  * The loaded tree users interact with
@@ -18,8 +19,9 @@ const TreeEditor: React.FC<{
   const {tree} = props
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
   const unaddedItems = getUnaddedItems({tree, allItems})
+  const {treeData, handleVisibilityToggle} = useTreeWithVisibility(tree)
 
-  console.log({allItems, unaddedItems, tree})
+  console.log({allItems, unaddedItems, tree, treeData})
 
   function handleMovedNode(data: NodeData & FullTree & OnMovePreviousAndNextLocation) {
     const patch = getTreePatch(data)
@@ -35,8 +37,9 @@ const TreeEditor: React.FC<{
           onChange={() => {
             // Do nothing. onMoveNode will do all the work
           }}
+          onVisibilityToggle={handleVisibilityToggle}
           onMoveNode={handleMovedNode}
-          treeData={dataToTree(tree)}
+          treeData={treeData}
           {...getCommonTreeProps({
             placeholder: {
               title: 'Add items by dragging them here'

@@ -4,12 +4,12 @@ import {getTreeFromFlatData, TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import {SanityTreeItem} from '../types/types'
 
-export const dataToTree = (data: SanityTreeItem[]): TreeItem[] => {
+export const dataToTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
   const itemsWithTitle = data.map((item) => ({
     ...item,
     // if parent: undefined, the tree won't be constructed
     parent: item.parent || null,
-    expanded: true,
+    expanded: item.expanded,
     title: () => <DocumentInNode item={item} />,
     children: []
   }))
