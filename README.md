@@ -1,6 +1,7 @@
 TODO:
 
-- [ ] Navigate to documents for editing them
+- [x] Navigate to documents for editing them
+  - [ ] Fix "This reference has been removed since you opened it."
 - [ ] Handle replacing parents
 - [ ] Handle focus
   - Or improve this behavior by following Desk structure's conventions

@@ -24,7 +24,18 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
     () =>
       // eslint-disable-next-line @typescript-eslint/no-shadow
       React.forwardRef(function LinkComponentInner(linkProps: any, ref: any) {
-        return <ChildLink {...linkProps} childId={node._ref} ref={ref} />
+        return (
+          <ChildLink
+            {...linkProps}
+            childId={node._ref}
+            ref={ref}
+            childParameters={{
+              type: nodeDocType,
+              // @TODO: replace this with proper parentRefPath
+              parentRefPath: 'test'
+            }}
+          />
+        )
       }),
     [ChildLink, node._ref]
   )
