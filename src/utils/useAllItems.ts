@@ -39,9 +39,16 @@ function allItemsReducer(state: SanityDocument[], action: ACTIONTYPE) {
   if (action.type === 'addOrEditItem' && action.item?._id) {
     const idx = state.findIndex((item) => item._id === action.item._id)
     if (idx >= 0) {
-      return [...state.slice(0, idx), action.item, ...state.slice(idx + 1)]
+      // If document already exists in State, DocumentInNode's <Preview> will auto update these changes
+      return state
     }
-    return [...state, action.item]
+    return [
+      ...state,
+      {
+        _id: action.item._id,
+        _type: action.item._type
+      }
+    ]
   }
   if (action.type === 'removeItem') {
     const idx = state.findIndex((item) => item._id === action.itemId)

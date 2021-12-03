@@ -2,7 +2,7 @@ TODO:
 
 - [x] Form field wrapper on it to make presence, titles and descriptions work
 - [x] Larger indent
-- [ ] Real-time changes to `allItems`
+- [x] Real-time changes to `allItems`
 - [ ] Collapse/expand
   - Will require new local state
 - [ ] Clearer drop target on empty lists
