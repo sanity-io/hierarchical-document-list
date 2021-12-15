@@ -4,6 +4,7 @@ import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
 import {SanityTreeItem} from '../types/types'
+import useTreeContext from '../utils/useTreeContext'
 
 /**
  * Renders a preview for each referenced document.
@@ -11,7 +12,8 @@ import {SanityTreeItem} from '../types/types'
  */
 const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
   const {node, nodeDocType} = props.item
-  const {routerPanesState, ChildLink} = usePaneRouter()
+  const {routerPanesState, ChildLink, navigateIntent} = usePaneRouter()
+  const {placement} = useTreeContext()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
@@ -24,6 +26,20 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
     () =>
       // eslint-disable-next-line @typescript-eslint/no-shadow
       React.forwardRef(function LinkComponentInner(linkProps: any, ref: any) {
+        if (placement === 'tree') {
+          // @TODO: produce proper href for tree link
+          return (
+            <a
+              onClick={() =>
+                navigateIntent('edit', {
+                  type: nodeDocType,
+                  id: node._ref
+                })
+              }
+            />
+          )
+        }
+
         return (
           <ChildLink
             {...linkProps}
@@ -37,7 +53,7 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
           />
         )
       }),
-    [ChildLink, node._ref]
+    [ChildLink, node._ref, placement]
   )
 
   if (!node?._ref) {
