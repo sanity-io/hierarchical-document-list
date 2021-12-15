@@ -35,7 +35,7 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
               onClick={() =>
                 navigateIntent('edit', {
                   type: nodeDocType,
-                  id: node._ref
+                  id: node?._ref
                 })
               }
             />
@@ -45,7 +45,7 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
         return (
           <ChildLink
             {...linkProps}
-            childId={node._ref}
+            childId={node?._ref}
             ref={ref}
             childParameters={{
               type: nodeDocType,
@@ -55,7 +55,7 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
           />
         )
       }),
-    [ChildLink, node._ref, placement]
+    [ChildLink, node?._ref, placement]
   )
 
   if (!node?._ref) {

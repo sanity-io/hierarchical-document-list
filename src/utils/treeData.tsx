@@ -8,12 +8,14 @@ import {SanityTreeItem} from '../types/types'
 import flatDataToTree from './flatDataToTree'
 
 export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
-  const itemsWithTitle = data.map((item) => ({
-    ...item,
-    expanded: item.expanded,
-    title: () => <DocumentInNode item={item} />,
-    children: []
-  }))
+  const itemsWithTitle = data
+    .filter((item) => item?.node?._ref)
+    .map((item) => ({
+      ...item,
+      expanded: item.expanded,
+      title: () => <DocumentInNode item={item} />,
+      children: []
+    }))
   return flatDataToTree(itemsWithTitle)
 }
 
@@ -46,7 +48,7 @@ export const getUnaddedItems = (data: {
   allItems?: SanityDocument[]
   tree: SanityTreeItem[]
 }): SanityTreeItem[] => {
-  if (!data.allItems?.length) {
+  if (!data?.allItems?.length) {
     return []
   }
 
@@ -55,7 +57,7 @@ export const getUnaddedItems = (data: {
   }
 
   return data.allItems
-    .filter((item) => item._id && !data.tree.some((treeItem) => treeItem.node._ref === item._id))
+    .filter((item) => item._id && !data.tree.some((treeItem) => treeItem?.node?._ref === item._id))
     .map(documentToNode)
 }
 
