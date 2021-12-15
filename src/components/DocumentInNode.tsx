@@ -30,6 +30,8 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
           // @TODO: produce proper href for tree link
           return (
             <a
+              {...linkProps}
+              ref={ref}
               onClick={() =>
                 navigateIntent('edit', {
                   type: nodeDocType,
