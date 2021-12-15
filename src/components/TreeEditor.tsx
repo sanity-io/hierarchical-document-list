@@ -15,17 +15,15 @@ const TreeEditor: React.FC<{
   tree: SanityTreeItem[]
   onChange: (patch: unknown) => void
   options: TreeInputOptions
+  patchPrefix?: string
 }> = (props) => {
   const {tree} = props
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
   const unaddedItems = getUnaddedItems({tree, allItems})
   const {treeData, handleVisibilityToggle} = useTreeWithVisibility(tree)
 
-  // console.log({allItems, unaddedItems, tree, treeData, frontEnd: flatDataToTree(tree)})
-
   function handleMovedNode(data: NodeData & FullTree & OnMovePreviousAndNextLocation) {
-    const patch = getTreePatch(data)
-    console.info({patch})
+    const patch = getTreePatch(data, props.patchPrefix)
     props.onChange(patch)
   }
 

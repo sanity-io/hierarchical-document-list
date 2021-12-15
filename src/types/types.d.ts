@@ -42,3 +42,10 @@ export interface TreeFieldSchema
   extends Omit<ArraySchemaType, 'of' | 'type' | 'inputComponent' | 'jsonType'> {
   options: ArraySchemaType['options'] & TreeInputOptions
 }
+
+export interface TreeDeskStructureProps extends TreeInputOptions {
+  /**
+   * _id of the document that will hold the tree data.
+   */
+  treeDocId: string
+}

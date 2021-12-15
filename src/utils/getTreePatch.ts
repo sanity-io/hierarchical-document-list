@@ -9,7 +9,8 @@ import * as Patch from '@sanity/form-builder/lib/patch/patches'
 import {normalizeNodeForStorage} from './treeData'
 
 export default function getTreePatch(
-  data: NodeData & FullTree & OnMovePreviousAndNextLocation
+  data: NodeData & FullTree & OnMovePreviousAndNextLocation,
+  prefix?: string
 ): unknown {
   const {nextParentNode, nextTreeIndex, treeData: nextTree} = data
   const node = normalizeNodeForStorage(data.node)
@@ -24,19 +25,10 @@ export default function getTreePatch(
     treeData: nextTree,
     getNodeKey: (t) => t.node._key
   })
-  console.log({data, flatTree: nextFlatTree})
 
   let insertionPatch
-  // if (nextTreeIndex === 0) {
-  //   console.log('BEFORE')
-  //   // If node is moved to the top, add it to the top of the array
-  //   insertionPatch = Patch.insert([node], 'before', [0])
-  // } else if (nextTreeIndex + 1 === nextFlatTree.length) {
-  //   console.log('AFTER')
-  //   // Likewise, if moved to the bottom, append to the end
-  //   insertionPatch = Patch.insert([node], 'after', [-1])
-  // } else {
-  // If moved somewhere in the middle, let's try to minimize syncing inconsistencies by placing it before what would be its following adjescent node
+
+  // Let's try to minimize syncing inconsistencies by placing it before what would be its following adjescent node
   const adjescentSibling = nextFlatTree
     .slice(nextTreeIndex + 1)
     .find((item) => !item.path.includes(node._key))
@@ -46,7 +38,7 @@ export default function getTreePatch(
     insertionPatch = Patch.insert([node], 'after', [nextTreeIndex])
   }
 
-  return PatchEvent.from(
+  const patches = [
     Patch.setIfMissing([]),
     // Unset the moved node
     Patch.unset([keyPath]),
@@ -57,5 +49,10 @@ export default function getTreePatch(
         Patch.set(nextParentNode._key, [keyPath, 'parent'])
       : // Else remove the parent key entirely
         Patch.unset([keyPath, 'parent'])
-  )
+  ]
+
+  if (prefix) {
+    return PatchEvent.from(patches.map((patch) => Patch.prefixPath(patch, prefix)))
+  }
+  return PatchEvent.from(patches)
 }
