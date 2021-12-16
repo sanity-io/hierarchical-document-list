@@ -12,7 +12,7 @@ import useTreeContext from '../utils/useTreeContext'
  */
 const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
   const {node, nodeDocType} = props.item
-  const {routerPanesState, ChildLink, navigateIntent} = usePaneRouter()
+  const {routerPanesState, ChildLink} = usePaneRouter()
   const {placement} = useTreeContext()
 
   const isActive = React.useMemo(() => {
@@ -25,36 +25,18 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
   const LinkComponent = React.useMemo(
     () =>
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      React.forwardRef(function LinkComponentInner(linkProps: any, ref: any) {
-        if (placement === 'tree') {
-          // @TODO: produce proper href for tree link
-          return (
-            <a
-              {...linkProps}
-              ref={ref}
-              onClick={() =>
-                navigateIntent('edit', {
-                  type: nodeDocType,
-                  id: node?._ref
-                })
-              }
-            />
-          )
-        }
-
-        return (
-          <ChildLink
-            {...linkProps}
-            childId={node?._ref}
-            ref={ref}
-            childParameters={{
-              type: nodeDocType,
-              // @TODO: replace this with proper parentRefPath
-              parentRefPath: 'test'
-            }}
-          />
-        )
-      }),
+      React.forwardRef((linkProps: any, ref: any) => (
+        <ChildLink
+          {...linkProps}
+          childId={node?._ref}
+          ref={ref}
+          childParameters={{
+            type: nodeDocType,
+            // @TODO: replace this with proper parentRefPath
+            parentRefPath: 'test'
+          }}
+        />
+      )),
     [ChildLink, node?._ref, placement]
   )
 
