@@ -27,6 +27,8 @@ const TreeEditor: React.FC<{
     props.onChange(patch)
   }
 
+  const dndId = React.useMemo(() => `sanityTree-${Math.random().toFixed(5)}`, [])
+
   return (
     <Stack space={4} paddingTop={4}>
       <div style={{minHeight: getTreeHeight(tree)}}>
@@ -41,7 +43,8 @@ const TreeEditor: React.FC<{
           {...getCommonTreeProps({
             placeholder: {
               title: 'Add items by dragging them here'
-            }
+            },
+            dndType: dndId
           })}
         />
       </div>
@@ -55,7 +58,7 @@ const TreeEditor: React.FC<{
         </Text>
       </Stack>
 
-      {allItemsStatus ? (
+      {allItemsStatus === 'success' ? (
         <div style={{minHeight: getTreeHeight(unaddedItems)}}>
           <SortableTree
             onChange={() => {
@@ -66,7 +69,8 @@ const TreeEditor: React.FC<{
             {...getCommonTreeProps({
               placeholder: {
                 title: 'Drag items here to remove from hierarchy'
-              }
+              },
+              dndType: dndId
             })}
           />
         </div>

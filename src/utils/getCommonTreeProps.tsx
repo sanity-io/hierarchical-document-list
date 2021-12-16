@@ -11,15 +11,17 @@ export function getTreeHeight(tree: TreeItem[] | undefined): string {
 }
 
 export default function getCommonTreeProps({
-  placeholder
+  placeholder,
+  dndType
 }: {
   placeholder: {
     title: string
     subtitle?: string
   }
+  dndType: string
 }): Partial<ReactSortableTreeProps> {
   return {
-    dndType: 'sanityDocument',
+    dndType,
     theme: {
       nodeContentRenderer: NodeContentRenderer,
       placeholderRenderer: (props) => <PlaceholderDropzone {...placeholder} {...props} />,
