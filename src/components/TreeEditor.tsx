@@ -7,6 +7,7 @@ import getTreePatch from '../utils/getTreePatch'
 import {dataToEditorTree, getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
 import useTreeWithVisibility from '../utils/useTreeWithVisibility'
+import TreeEditorErrorBoundary from './TreeEditorErrorBoundary'
 
 /**
  * The loaded tree users interact with
@@ -30,54 +31,56 @@ const TreeEditor: React.FC<{
   const dndId = React.useMemo(() => `sanityTree-${Math.random().toFixed(5)}`, [])
 
   return (
-    <Stack space={4} paddingTop={4}>
-      <div style={{minHeight: getTreeHeight(tree)}}>
-        <SortableTree
-          maxDepth={props.options.maxDepth}
-          onChange={() => {
-            // Do nothing. onMoveNode will do all the work
-          }}
-          onVisibilityToggle={handleVisibilityToggle}
-          onMoveNode={handleMovedNode}
-          treeData={treeData}
-          {...getCommonTreeProps({
-            placeholder: {
-              title: 'Add items by dragging them here'
-            },
-            dndType: dndId
-          })}
-        />
-      </div>
-      <Stack space={2}>
-        <Text size={2} as="h2">
-          Items not added
-        </Text>
-        <Text size={1} muted>
-          Drag them into the list above to add to the hieararchy. Unpublished documents won't show
-          up in this list.
-        </Text>
-      </Stack>
-
-      {allItemsStatus === 'success' ? (
-        <div style={{minHeight: getTreeHeight(unaddedItems)}}>
+    <TreeEditorErrorBoundary>
+      <Stack space={4} paddingTop={4}>
+        <div style={{minHeight: getTreeHeight(tree)}}>
           <SortableTree
+            maxDepth={props.options.maxDepth}
             onChange={() => {
-              // Do nothing. unaddedTree will reflect whatever meaningful changes happen to this tree
+              // Do nothing. onMoveNode will do all the work
             }}
-            treeData={dataToEditorTree(unaddedItems)}
-            maxDepth={1}
+            onVisibilityToggle={handleVisibilityToggle}
+            onMoveNode={handleMovedNode}
+            treeData={treeData}
             {...getCommonTreeProps({
               placeholder: {
-                title: 'Drag items here to remove from hierarchy'
+                title: 'Add items by dragging them here'
               },
               dndType: dndId
             })}
           />
         </div>
-      ) : (
-        <Spinner size={3} muted />
-      )}
-    </Stack>
+        <Stack space={2}>
+          <Text size={2} as="h2">
+            Items not added
+          </Text>
+          <Text size={1} muted>
+            Drag them into the list above to add to the hieararchy. Unpublished documents won't show
+            up in this list.
+          </Text>
+        </Stack>
+
+        {allItemsStatus === 'success' ? (
+          <div style={{minHeight: getTreeHeight(unaddedItems)}}>
+            <SortableTree
+              onChange={() => {
+                // Do nothing. unaddedTree will reflect whatever meaningful changes happen to this tree
+              }}
+              treeData={dataToEditorTree(unaddedItems)}
+              maxDepth={1}
+              {...getCommonTreeProps({
+                placeholder: {
+                  title: 'Drag items here to remove from hierarchy'
+                },
+                dndType: dndId
+              })}
+            />
+          </div>
+        ) : (
+          <Spinner size={3} muted />
+        )}
+      </Stack>
+    </TreeEditorErrorBoundary>
   )
 }
 
