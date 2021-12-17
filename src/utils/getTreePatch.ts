@@ -2,11 +2,25 @@ import {
   FullTree,
   getFlatDataFromTree,
   NodeData,
-  OnMovePreviousAndNextLocation
+  OnMovePreviousAndNextLocation,
+  TreeItem
 } from 'react-sortable-tree'
 import PatchEvent from '@sanity/form-builder/PatchEvent'
 import * as Patch from '@sanity/form-builder/lib/patch/patches'
 import {normalizeNodeForStorage} from './treeData'
+
+function getChildrenPaths(node: TreeItem): string[] {
+  if (!Array.isArray(node.children)) {
+    return []
+  }
+
+  return node.children
+    .reduce(
+      (keyPaths, child) => [...keyPaths, child._key, ...getChildrenPaths(child)],
+      [] as string[]
+    )
+    .filter(Boolean)
+}
 
 export default function getTreePatch(
   data: NodeData & FullTree & OnMovePreviousAndNextLocation,
@@ -18,7 +32,11 @@ export default function getTreePatch(
 
   // nextPath will be `null` if the item was removed from the tree
   if (!Array.isArray(data.nextPath)) {
-    return PatchEvent.from(Patch.unset([keyPath]))
+    const children = getChildrenPaths(data.node)
+    return PatchEvent.from([
+      Patch.unset([keyPath]),
+      ...children.map((path) => Patch.unset([{_key: path}]))
+    ])
   }
 
   const nextFlatTree = getFlatDataFromTree({
