@@ -29,13 +29,23 @@ export default function getTreePatch(
   let insertionPatch
 
   // Let's try to minimize syncing inconsistencies by placing it before what would be its following adjescent node
-  const adjescentSibling = nextFlatTree
+  const followingSibling = nextFlatTree
     .slice(nextTreeIndex + 1)
     .find((item) => !item.path.includes(node._key))
-  if (adjescentSibling?.node?._key) {
-    insertionPatch = Patch.insert([node], 'before', [{_key: adjescentSibling?.node?._key}])
+  if (followingSibling?.node?._key) {
+    insertionPatch = Patch.insert([node], 'before', [{_key: followingSibling.node._key}])
   } else {
-    insertionPatch = Patch.insert([node], 'after', [nextTreeIndex])
+    // Or after the sibling right before it
+    const leadingSibling = nextFlatTree
+      .slice(0, nextTreeIndex)
+      .reverse()
+      .find((item) => !item.path.includes(node._key))
+
+    /* eslint-disable */
+    insertionPatch = Patch.insert([node], 'after', [
+      leadingSibling?.node?._key ? {_key: leadingSibling.node._key} : nextTreeIndex
+    ])
+    /* eslint-enable */
   }
 
   const patches = [
