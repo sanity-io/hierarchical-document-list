@@ -1,5 +1,5 @@
 import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
-import {Box} from '@sanity/ui'
+import {Box, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import TreeEditor from './components/TreeEditor'
 import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
@@ -15,7 +15,7 @@ const TREE_FIELD_KEY = 'tree'
 const TREE_DOC_TYPE = 'hierarchy.tree'
 
 const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => {
-  const {published} = useEditState(props.options.treeDocId, TREE_DOC_TYPE)
+  const {published, draft} = useEditState(props.options.treeDocId, TREE_DOC_TYPE)
   const {patch}: any = useDocumentOperation(props.options.treeDocId, TREE_DOC_TYPE)
 
   const value = (published?.[TREE_FIELD_KEY] || []) as SanityTreeItem[]
@@ -25,7 +25,28 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
     [patch]
   )
 
-  // @TODO: handle drafts by warning users when they exist and displaying a Live Sync badge when they don't
+  React.useEffect(() => {
+    if (!published?._id) {
+      // If no published document, create it
+      patch.execute([{setIfMissing: {[TREE_FIELD_KEY]: []}}])
+    }
+  }, [published?._id])
+
+  if (draft?._id && !published?._id) {
+    // @TODO: handle drafts by warning users when they exist and displaying a Live Sync badge when they don't
+  }
+
+  if (draft?._id) {
+    // @TODO: Warning to delete draft
+  }
+
+  if (!published?._id) {
+    return (
+      <Flex padding={5} align={'center'} justify={'center'}>
+        <Spinner width={4} muted />
+      </Flex>
+    )
+  }
 
   return (
     <TreeContext.Provider value={{placement: 'tree'}}>
@@ -36,6 +57,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
           onChange={handleChange}
           patchPrefix={TREE_FIELD_KEY}
         />
+        {/* @TODO: LiveSync badge */}
       </Box>
     </TreeContext.Provider>
   )

@@ -1,4 +1,4 @@
-import {Spinner, Stack, Text} from '@sanity/ui'
+import {Flex, Spinner, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import SortableTree, {FullTree, NodeData, OnMovePreviousAndNextLocation} from 'react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types/types'
@@ -77,7 +77,9 @@ const TreeEditor: React.FC<{
             />
           </div>
         ) : (
-          <Spinner size={3} muted />
+          <Flex padding={4} align={'center'} justify={'center'}>
+            <Spinner size={3} muted />
+          </Flex>
         )}
       </Stack>
     </TreeEditorErrorBoundary>
