@@ -1,100 +1,69 @@
-import {Button, Flex, Heading, Spinner, Stack, Text, useToast} from '@sanity/ui'
+import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
+import {Box, Card, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
-import SortableTree from 'react-sortable-tree'
-import Callout from './components/Callout'
-import {TreeDeskStructureProps} from './types/types'
-import getCommonTreeProps, {getTreeHeight} from './utils/getCommonTreeProps'
-import useTreeDeskData from './utils/useTreeDeskData'
+import LiveEditNotice from './components/LiveEditNotice'
+import TreeEditor from './components/TreeEditor'
+import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
+import {toGradient} from './utils/gradientPatchAdapter'
+import {TreeContext} from './utils/useTreeContext'
 
-const TreeDeskStructure: React.FC<{options: TreeDeskStructureProps}> = ({options}) => {
-  const {state, send} = useTreeDeskData(options)
-  const toast = useToast()
-
-  const {mainTree, allItems, unaddedItems} = state.context
-
-  const hasItems = Boolean(mainTree?.length || allItems?.length)
-
-  const persistError = state.matches('loaded.persistError')
-  React.useEffect(() => {
-    if (persistError) {
-      toast.push({
-        title: 'Error saving changes',
-        status: 'error',
-        description: 'Please try again'
-      })
-    }
-  }, [persistError])
-
-  return (
-    <div style={{height: '100%'}}>
-      {state.value === 'loading' && (
-        <Flex padding={4} height="fill" align="center" justify="center">
-          <Spinner size={3} muted />
-        </Flex>
-      )}
-      {state.value === 'creatingDocument' && (
-        <Flex padding={4} height="fill" align="center" justify="center">
-          <Spinner size={3} muted />
-          <Text>Setting up documents...</Text>
-        </Flex>
-      )}
-      {state.value === 'error' && (
-        <Callout title="Something went wrong">
-          <Button text="Retry" mode="bleed" onClick={() => send('RETRY_LOAD')} />
-        </Callout>
-      )}
-      {state.matches('loaded') && !hasItems && (
-        <Callout tone="primary" title="No items added yet" />
-      )}
-      {state.matches('loaded') && hasItems && Array.isArray(mainTree) && (
-        <Stack space={4} paddingTop={4}>
-          <div style={{minHeight: getTreeHeight(mainTree)}}>
-            <SortableTree
-              onChange={(newTree) =>
-                send({
-                  type: 'HANDLE_MAIN_TREE_CHANGE',
-                  newTree
-                })
-              }
-              treeData={mainTree}
-              {...getCommonTreeProps({
-                placeholder: {
-                  title: 'Add items by dragging them here'
-                }
-              })}
-            />
-          </div>
-          <Stack space={2} padding={3}>
-            <Heading size={1} as="h2">
-              Items not added
-            </Heading>
-            <Text size={1} muted>
-              Drag them into the list above to add to the hieararchy.
-            </Text>
-          </Stack>
-
-          <div style={{minHeight: getTreeHeight(unaddedItems)}}>
-            <SortableTree
-              onChange={(newTree) =>
-                send({
-                  type: 'HANDLE_UNADDED_TREE_CHANGE',
-                  newTree
-                })
-              }
-              treeData={unaddedItems || []}
-              maxDepth={1}
-              {...getCommonTreeProps({
-                placeholder: {
-                  title: 'Drag items here to remove from hierarchy'
-                }
-              })}
-            />
-          </div>
-        </Stack>
-      )}
-    </div>
-  )
+interface ComponentProps {
+  options: TreeDeskStructureProps
 }
 
-// Create the default export to import into our schema
+// @TODO: decide on exposing this to users and letting them create their own tree schemas
+const TREE_FIELD_KEY = 'tree'
+const TREE_DOC_TYPE = 'hierarchy.tree'
+
+const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => {
+  const {published, draft} = useEditState(props.options.treeDocId, TREE_DOC_TYPE)
+  const {patch}: any = useDocumentOperation(props.options.treeDocId, TREE_DOC_TYPE)
+
+  const value = (published?.[TREE_FIELD_KEY] || []) as SanityTreeItem[]
+
+  const handleChange = React.useCallback(
+    (patchEvent) => patch.execute(toGradient(patchEvent.patches)),
+    [patch]
+  )
+
+  React.useEffect(() => {
+    if (!published?._id && patch?.excute && !patch?.disabled) {
+      // If no published document, create it
+      patch.execute([{setIfMissing: {[TREE_FIELD_KEY]: []}}])
+    }
+  }, [published?._id, patch])
+
+  if (draft?._id && !published?._id) {
+    // @TODO: handle drafts by warning users when they exist and displaying a Live Sync badge when they don't
+  }
+
+  if (draft?._id) {
+    // @TODO: Warning to delete draft
+  }
+
+  if (!published?._id) {
+    return (
+      <Flex padding={5} align={'center'} justify={'center'}>
+        <Spinner width={4} muted />
+      </Flex>
+    )
+  }
+
+  return (
+    <TreeContext.Provider value={{placement: 'tree'}}>
+      <Box paddingX={4} paddingY={2} style={{minHeight: '100%'}}>
+        <TreeEditor
+          options={props.options}
+          tree={value}
+          onChange={handleChange}
+          patchPrefix={TREE_FIELD_KEY}
+        />
+      </Box>
+      <Card padding={3} style={{position: 'sticky', left: 0, bottom: 0}} borderTop={true}>
+        <LiveEditNotice lastPublished={published._updatedAt} />
+      </Card>
+    </TreeContext.Provider>
+  )
+})
+
 export default TreeDeskStructure

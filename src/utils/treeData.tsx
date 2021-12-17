@@ -1,32 +1,33 @@
 import {SanityDocument} from '@sanity/client'
 import React from 'react'
 import {TreeItem} from 'react-sortable-tree'
-import DocumentInTree from '../components/DocumentInTree'
+import {randomKey} from '@sanity/util/content'
+
+import DocumentInNode from '../components/DocumentInNode'
 import {SanityTreeItem} from '../types/types'
+import flatDataToTree from './flatDataToTree'
 
-export const treeToData = (tree: TreeItem[]): SanityTreeItem[] =>
-  tree.map((entry) => ({
-    _key: entry._key,
-    node: entry.node,
-    nodeDocType: entry.nodeDocType,
-    children: Array.isArray(entry.children) ? treeToData(entry.children) : undefined
-  }))
+export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
+  const itemsWithTitle = data
+    .filter((item) => item?.node?._ref)
+    .map((item) => ({
+      ...item,
+      expanded: item.expanded,
+      title: () => <DocumentInNode item={item} />,
+      children: []
+    }))
+  return flatDataToTree(itemsWithTitle)
+}
 
-export const dataToTree = (data: SanityTreeItem[]): TreeItem[] =>
-  data.map((item) => ({
-    ...item,
-    expanded: true,
-    title: () => <DocumentInTree item={item} />,
-    children: Array.isArray(item.children) ? dataToTree(item.children) : undefined
-  }))
-
-export const documentToNode = (doc: SanityDocument): SanityTreeItem => {
+const documentToNode = (doc: SanityDocument): SanityTreeItem => {
   return {
-    _key: doc._id,
+    _key: randomKey(12),
+    _type: 'hierarchy.node',
     nodeDocType: doc._type,
     node: {
       _ref: doc._id,
-      _type: 'reference'
+      _type: 'reference',
+      _weak: true
     }
   }
 }
@@ -44,15 +45,28 @@ export interface FetchData {
 }
 
 export const getUnaddedItems = (data: {
-  allItems?: FetchData['allItems']
-  mainTree?: (SanityTreeItem | TreeItem)[]
+  allItems?: SanityDocument[]
+  tree: SanityTreeItem[]
 }): SanityTreeItem[] => {
-  if (!data.mainTree || !data.allItems?.length) {
+  if (!data?.allItems?.length) {
     return []
   }
 
-  const stringifiedTree = JSON.stringify(data.mainTree)
+  if (!data.tree) {
+    return data.allItems.map(documentToNode)
+  }
+
   return data.allItems
-    .filter((item) => item._id && !stringifiedTree.includes(item._id))
+    .filter((item) => item._id && !data.tree.some((treeItem) => treeItem?.node?._ref === item._id))
     .map(documentToNode)
+}
+
+export function normalizeNodeForStorage(item: TreeItem): SanityTreeItem {
+  return {
+    _key: item._key,
+    _type: item._type || 'hierarchy.node',
+    node: item.node,
+    parent: item.parent,
+    nodeDocType: item.nodeDocType
+  }
 }

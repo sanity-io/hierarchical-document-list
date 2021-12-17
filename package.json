@@ -19,6 +19,7 @@
     "lint": "eslint src"
   },
   "devDependencies": {
+    "@types/assert": "^1.5.6",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-sortable-tree": "^0.3.14",
@@ -38,14 +39,11 @@
     "@sanity/form-builder": ">= 2.21.0",
     "@sanity/icons": ">= 1.0.0",
     "@sanity/ui": ">= 0.33.9",
-    "@xstate/react": "^1.6.3",
-    "nanoid": "^3.1.30",
+    "@types/styled-components": "^5.1.18",
+    "assert": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-sortable-tree": "^2.8.0",
-    "rxjs": "^6.6.7",
-    "sanity-diff-patch": "^1.0.9",
-    "xstate": "^4.26.1"
+    "react-sortable-tree": "^2.8.0"
   },
   "peerDependencies": {
     "styled-components": "^5.2.0"
