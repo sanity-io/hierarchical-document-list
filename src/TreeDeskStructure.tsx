@@ -14,8 +14,8 @@ interface ComponentProps {
 const TREE_FIELD_KEY = 'tree'
 const TREE_DOC_TYPE = 'hierarchy.tree'
 
-const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => {
-  const {published} = useEditState(props.options.treeDocId, TREE_DOC_TYPE)
+const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
+  const {published, ready} = useEditState(props.options.treeDocId, TREE_DOC_TYPE)
   const {patch}: any = useDocumentOperation(props.options.treeDocId, TREE_DOC_TYPE)
 
   const value = (published?.[TREE_FIELD_KEY] || []) as SanityTreeItem[]
@@ -25,6 +25,9 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
     [patch]
   )
 
+  React.useEffect(() => {
+    console.info('Mounting TreeDeskStructure')
+  }, [])
   // @TODO: handle drafts by warning users when they exist and displaying a Live Sync badge when they don't
 
   return (
@@ -39,6 +42,13 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
       </Box>
     </TreeContext.Provider>
   )
-})
+}
 
-export default TreeDeskStructure
+export default React.memo(TreeDeskStructure, (prev, next) => {
+  console.info('PROPS ARE EQUAL')
+  return (
+    prev.options?.treeDocId === next.options?.treeDocId &&
+    JSON.stringify(prev.options?.referenceField?.to) ===
+      JSON.stringify(next.options?.referenceField?.to)
+  )
+})

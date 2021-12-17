@@ -1,4 +1,4 @@
-import {ReactSortableTreeProps, TreeItem} from 'react-sortable-tree'
+import {ReactSortableTreeProps, TreeItem} from '@nosferatu500/react-sortable-tree'
 import NodeContentRenderer from '../components/NodeContentRenderer'
 import PlaceholderDropzone from '../components/PlaceholderDropzone'
 import TreeNodeRenderer from '../components/TreeNodeRenderer'

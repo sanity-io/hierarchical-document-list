@@ -1,6 +1,6 @@
 import {Card, CardTone, Stack, Text} from '@sanity/ui'
 import React from 'react'
-import {PlaceholderRendererProps} from 'react-sortable-tree'
+import {PlaceholderRendererProps} from '@nosferatu500/react-sortable-tree'
 
 const PlaceholderDropzone: React.FC<
   {

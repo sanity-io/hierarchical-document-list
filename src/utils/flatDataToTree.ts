@@ -1,4 +1,4 @@
-import {getTreeFromFlatData} from 'react-sortable-tree'
+import {getTreeFromFlatData} from '@nosferatu500/react-sortable-tree'
 import {SanityTreeItem} from '../types/types'
 
 interface TreeItemWithChildren extends SanityTreeItem {

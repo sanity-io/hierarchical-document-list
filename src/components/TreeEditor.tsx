@@ -1,6 +1,10 @@
 import {Spinner, Stack, Text} from '@sanity/ui'
 import React from 'react'
-import SortableTree, {FullTree, NodeData, OnMovePreviousAndNextLocation} from 'react-sortable-tree'
+import SortableTree, {
+  FullTree,
+  NodeData,
+  OnMovePreviousAndNextLocation
+} from '@nosferatu500/react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types/types'
 import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import getTreePatch from '../utils/getTreePatch'

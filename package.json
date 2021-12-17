@@ -34,6 +34,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@nosferatu500/react-sortable-tree": "^4.0.2",
     "@sanity/base": ">= 2.5.0",
     "@sanity/desk-tool": ">= 2.21.0",
     "@sanity/form-builder": ">= 2.21.0",

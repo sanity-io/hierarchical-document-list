@@ -1,5 +1,5 @@
 import React from 'react'
-import {TreeRenderer} from 'react-sortable-tree'
+import {TreeRenderer} from '@nosferatu500/react-sortable-tree'
 
 /**
  * To prevent expand buttons from overflowing on the left, we add a minimum left padding to all entries

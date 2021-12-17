@@ -1,5 +1,5 @@
 import React from 'react'
-import {OnVisibilityToggleData, TreeItem} from 'react-sortable-tree'
+import {OnVisibilityToggleData, TreeItem} from '@nosferatu500/react-sortable-tree'
 import {SanityTreeItem} from '../types/types'
 import {dataToEditorTree} from './treeData'
 
