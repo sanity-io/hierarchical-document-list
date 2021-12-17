@@ -1,6 +1,7 @@
 import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
-import {Box, Flex, Spinner} from '@sanity/ui'
+import {Box, Card, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
+import LiveEditNotice from './components/LiveEditNotice'
 import TreeEditor from './components/TreeEditor'
 import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
 import {toGradient} from './utils/gradientPatchAdapter'
@@ -26,11 +27,11 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
   )
 
   React.useEffect(() => {
-    if (!published?._id) {
+    if (!published?._id && patch?.excute && !patch?.disabled) {
       // If no published document, create it
       patch.execute([{setIfMissing: {[TREE_FIELD_KEY]: []}}])
     }
-  }, [published?._id])
+  }, [published?._id, patch])
 
   if (draft?._id && !published?._id) {
     // @TODO: handle drafts by warning users when they exist and displaying a Live Sync badge when they don't
@@ -50,15 +51,17 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
 
   return (
     <TreeContext.Provider value={{placement: 'tree'}}>
-      <Box paddingX={4} paddingY={2}>
+      <Box paddingX={4} paddingY={2} style={{minHeight: '100%'}}>
         <TreeEditor
           options={props.options}
           tree={value}
           onChange={handleChange}
           patchPrefix={TREE_FIELD_KEY}
         />
-        {/* @TODO: LiveSync badge */}
       </Box>
+      <Card padding={3} style={{position: 'sticky', left: 0, bottom: 0}} borderTop={true}>
+        <LiveEditNotice lastPublished={published._updatedAt} />
+      </Card>
     </TreeContext.Provider>
   )
 })
