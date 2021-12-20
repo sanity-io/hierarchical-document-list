@@ -47,5 +47,5 @@ export interface TreeDeskStructureProps extends TreeInputOptions {
   /**
    * _id of the document that will hold the tree data.
    */
-  treeDocId: string
+  documentId: string
 }

@@ -6,41 +6,47 @@ import {TreeDeskStructureProps} from './types/types'
 interface TreeProps extends TreeDeskStructureProps {
   /**
    * Visible title above the tree.
+   * Also used as the label in the desk list item.
    */
-  title?: string
+  title: string
 }
 
 const deskTreeValidator = (props: TreeProps): React.FC => {
-  const {treeDocId, referenceField} = props
-  if (typeof treeDocId !== 'string' && !treeDocId) {
-    throw new Error('[hierarchical input] Please add a treeDocId to your tree')
+  const {documentId, referenceField} = props
+  if (typeof documentId !== 'string' && !documentId) {
+    throw new Error('[hierarchical input] Please add a documentId to your tree')
   }
   if (!Array.isArray(referenceField?.to)) {
     throw new Error(
-      `[hierarchical input] Missing valid options.referenceField in createTreeField (treeDocId "${treeDocId}")`
+      `[hierarchical input] Missing valid options.referenceField in createTreeField (documentId "${documentId}")`
     )
   }
   return (deskProps) => <TreeDeskStructure {...deskProps} options={props} />
 }
 
 export default function createDeskTree(props: TreeProps) {
-  const {treeDocId, referenceField} = props
+  const {documentId, referenceField} = props
   const mainList =
     referenceField?.to?.length === 1
       ? S.documentTypeList(referenceField.to[0].type).serialize()
       : S.documentList()
-          .id(treeDocId)
+          .id(documentId)
           .filter(referenceField.options?.filter || '')
           .params(referenceField.options?.filterParams || {})
           .serialize()
 
-  return Object.assign(
-    mainList,
-    {
-      type: 'component',
-      component: deskTreeValidator(props),
-      options: props
-    },
-    props.title ? {title: props.title} : {}
-  )
+  return S.listItem()
+    .id(documentId)
+    .title(props.title || documentId)
+    .child(
+      Object.assign(
+        mainList,
+        {
+          type: 'component',
+          component: deskTreeValidator(props),
+          options: props
+        },
+        props.title ? {title: props.title} : {}
+      )
+    )
 }

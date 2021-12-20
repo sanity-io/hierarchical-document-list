@@ -16,8 +16,8 @@ const TREE_FIELD_KEY = 'tree'
 const TREE_DOC_TYPE = 'hierarchy.tree'
 
 const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => {
-  const {published, draft} = useEditState(props.options.treeDocId, TREE_DOC_TYPE)
-  const {patch}: any = useDocumentOperation(props.options.treeDocId, TREE_DOC_TYPE)
+  const {published, draft} = useEditState(props.options.documentId, TREE_DOC_TYPE)
+  const {patch}: any = useDocumentOperation(props.options.documentId, TREE_DOC_TYPE)
 
   const value = (published?.[TREE_FIELD_KEY] || []) as SanityTreeItem[]
 
