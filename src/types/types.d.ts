@@ -19,19 +19,25 @@ export interface SanityTreeItem {
 
 export interface TreeInputOptions {
   /**
-   * The reference field
-   * @docs https://www.sanity.io/docs/reference-type
+   * What document types this hierarchy can refer to.
+   * Similar to the `to` property of the [reference field](https://www.sanity.io/docs/reference-type).
    */
-  referenceField: {
-    to: {type: string}[]
-    options?: {
-      /**
-       * Static filter to apply to tree document queries.
-       */
-      filter?: string
-      filterParams?: Record<string, unknown>
-    }
+  referenceTo: string[]
+
+  /**
+   * Used to provide fine-grained filtering for documents.
+   */
+  referenceOptions?: {
+    /**
+     * Static filter to apply to tree document queries.
+     */
+    filter?: string
+    /**
+     * Parameters / variables to pass to the GROQ query ran to fetch documents.
+     */
+    filterParams?: Record<string, unknown>
   }
+
   /**
    * How deep should editors be allowed to nest items.
    */

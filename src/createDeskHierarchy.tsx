@@ -12,27 +12,27 @@ interface TreeProps extends TreeDeskStructureProps {
 }
 
 const deskTreeValidator = (props: TreeProps): React.FC => {
-  const {documentId, referenceField} = props
+  const {documentId, referenceTo} = props
   if (typeof documentId !== 'string' && !documentId) {
     throw new Error('[hierarchical input] Please add a documentId to your tree')
   }
-  if (!Array.isArray(referenceField?.to)) {
+  if (!Array.isArray(referenceTo)) {
     throw new Error(
-      `[hierarchical input] Missing valid options.referenceField in createTreeField (documentId "${documentId}")`
+      `[hierarchical input] Missing valid 'referenceTo' in createDeskHierarchy (documentId "${documentId}")`
     )
   }
   return (deskProps) => <TreeDeskStructure {...deskProps} options={props} />
 }
 
 export default function createDeskHierarchy(props: TreeProps) {
-  const {documentId, referenceField} = props
+  const {documentId, referenceTo, referenceOptions} = props
   const mainList =
-    referenceField?.to?.length === 1
-      ? S.documentTypeList(referenceField.to[0].type).serialize()
+    referenceTo?.length === 1
+      ? S.documentTypeList(referenceTo[0]).serialize()
       : S.documentList()
           .id(documentId)
-          .filter(referenceField.options?.filter || '')
-          .params(referenceField.options?.filterParams || {})
+          .filter(referenceOptions?.filter || '')
+          .params(referenceOptions?.filterParams || {})
           .serialize()
 
   return S.listItem()

@@ -13,9 +13,9 @@ export default function createHierarchicalField({
   inputComponent: React.FC<any>
   of: any[]
 } {
-  if (!Array.isArray(options?.referenceField?.to)) {
+  if (!Array.isArray(options?.referenceTo)) {
     throw new Error(
-      `[hierarchical input] Missing valid options.referenceField in createTreeField (field of name "${name}")`
+      `[hierarchical input] Missing valid options.referenceTo in createHierarchicalField (field of name "${name}")`
     )
   }
 
@@ -35,8 +35,8 @@ export default function createHierarchicalField({
             name: 'node',
             type: 'reference',
             weak: true,
-            to: options.referenceField.to,
-            options: options.referenceField.options
+            to: options.referenceTo.map((type) => ({type})),
+            options: options.referenceOptions
           }
         ]
       }

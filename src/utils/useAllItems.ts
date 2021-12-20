@@ -7,22 +7,21 @@ const client = sanityClient.withConfig({
   apiVersion: '2021-09-01'
 }) as SanityClient
 
-function getDeskFilter({referenceField}: TreeInputOptions): {
+function getDeskFilter({referenceTo, referenceOptions}: TreeInputOptions): {
   filter: string
   params: Record<string, unknown>
 } {
-  const {to = [], options} = referenceField
   const filterParts: string[] = ['!(_id in path("drafts.**"))', '_type in $generatedTypes']
 
-  if (options?.filter) {
-    filterParts.push(options.filter)
+  if (referenceOptions?.filter) {
+    filterParts.push(referenceOptions.filter)
   }
 
   return {
     filter: filterParts.join(' && '),
     params: {
-      ...(options?.filterParams || {}),
-      generatedTypes: to.map((schemaType) => schemaType.type)
+      ...(referenceOptions?.filterParams || {}),
+      generatedTypes: referenceTo.map((schemaType) => schemaType)
     }
   }
 }
