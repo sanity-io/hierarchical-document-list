@@ -31,7 +31,15 @@ export default () => {
         documentId: 'main-table-of-contents',
 
         // Document types editors should be able to include in the hierarchy
-        referenceTo: ['site.page', 'site.post', 'docs.article', 'social.youtubeVideo']
+        referenceTo: ['site.page', 'site.post', 'docs.article', 'social.youtubeVideo'],
+
+        // ❓ Optional: provide filters and/or parameters for narrowing which documents can be added
+        referenceOptions: {
+          filter: 'status in $acceptedStatuses',
+          filterParams: {
+            acceptedStatuses: ['published', 'approved']
+          }
+        }
       })
     ])
 }
@@ -39,8 +47,13 @@ export default () => {
 
 ## How it works
 
-- GROQ FILTER FROM REFS
-- LIVE EDIT
+The hierarchical data is stored in the document specified by the `documentId` of your choosing. This makes it easier to implement different hierarchies for the same content according to the context, and also simplifies querying the full structure, as you'll see in [Querying data](#querying-data) below.
+
+Keep in mind that **this document is live-edited**, meaning it has no draft and every change by editors will directly affect its published version.
+
+Instead of manually adding items one-by-one, the plugin will create a [GROQ](https://www.sanity.io/docs/overview-groq) query that matches all documents with a type in `referenceTo`, that also match the optional `referenceOptions.filter`. From these documents, editors are able to drag, nest and re-order them at will from the "Items not added" list.
+
+If a document in the tree doesn't match the filters set, it'll still exist in the tree. This can happen if the document has a new, unfitting value, the configuration changed or it was deleted. Although the tree will still be publishable, editors will get a warning and won't be able to drag these entries around.
 
 ## Querying data
 
