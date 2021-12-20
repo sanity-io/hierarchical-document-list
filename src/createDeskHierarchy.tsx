@@ -24,7 +24,7 @@ const deskTreeValidator = (props: TreeProps): React.FC => {
   return (deskProps) => <TreeDeskStructure {...deskProps} options={props} />
 }
 
-export default function createDeskTree(props: TreeProps) {
+export default function createDeskHierarchy(props: TreeProps) {
   const {documentId, referenceField} = props
   const mainList =
     referenceField?.to?.length === 1

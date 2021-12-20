@@ -48,4 +48,12 @@ export interface TreeDeskStructureProps extends TreeInputOptions {
    * _id of the document that will hold the tree data.
    */
   documentId: string
+  /**
+   * Schema type for your hierarchical documents.
+   */
+  documentType?: string
+  /**
+   * Key for the field representing the hierarchical tree inside the document.
+   */
+  fieldKeyInDocument?: string
 }

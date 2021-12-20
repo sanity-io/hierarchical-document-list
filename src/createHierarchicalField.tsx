@@ -3,10 +3,12 @@ import React from 'react'
 import TreeInputComponent from './TreeInputComponent'
 import {TreeFieldSchema} from './types/types'
 
-export default function createTreeField({name, title, options, ...rest}: TreeFieldSchema): Omit<
-  ArraySchemaType,
-  'type' | 'jsonType' | 'of'
-> & {
+export default function createHierarchicalField({
+  name,
+  title,
+  options,
+  ...rest
+}: TreeFieldSchema): Omit<ArraySchemaType, 'type' | 'jsonType' | 'of'> & {
   type: string
   inputComponent: React.FC<any>
   of: any[]

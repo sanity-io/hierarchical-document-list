@@ -12,14 +12,16 @@ interface ComponentProps {
 }
 
 // @TODO: decide on exposing this to users and letting them create their own tree schemas
-const TREE_FIELD_KEY = 'tree'
-const TREE_DOC_TYPE = 'hierarchy.tree'
+const DEFAULT_TREE_FIELD_KEY = 'tree'
+const DEFAULT_TREE_DOC_TYPE = 'hierarchy.tree'
 
 const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => {
-  const {published, draft} = useEditState(props.options.documentId, TREE_DOC_TYPE)
-  const {patch}: any = useDocumentOperation(props.options.documentId, TREE_DOC_TYPE)
+  const treeDocType = props.options.documentType || DEFAULT_TREE_DOC_TYPE
+  const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_TREE_FIELD_KEY
+  const {published, draft} = useEditState(props.options.documentId, treeDocType)
+  const {patch}: any = useDocumentOperation(props.options.documentId, treeDocType)
 
-  const value = (published?.[TREE_FIELD_KEY] || []) as SanityTreeItem[]
+  const value = (published?.[treeFieldKey] || []) as SanityTreeItem[]
 
   const handleChange = React.useCallback(
     (patchEvent) => patch.execute(toGradient(patchEvent.patches)),
@@ -29,7 +31,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
   React.useEffect(() => {
     if (!published?._id && patch?.excute && !patch?.disabled) {
       // If no published document, create it
-      patch.execute([{setIfMissing: {[TREE_FIELD_KEY]: []}}])
+      patch.execute([{setIfMissing: {[treeFieldKey]: []}}])
     }
   }, [published?._id, patch])
 
@@ -56,7 +58,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
           options={props.options}
           tree={value}
           onChange={handleChange}
-          patchPrefix={TREE_FIELD_KEY}
+          patchPrefix={treeFieldKey}
         />
       </Box>
       <Card padding={3} style={{position: 'sticky', left: 0, bottom: 0}} borderTop={true}>
