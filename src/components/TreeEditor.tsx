@@ -1,12 +1,14 @@
-import {Flex, Spinner, Stack, Text} from '@sanity/ui'
+import {AddCircleIcon} from '@sanity/icons'
+import {Box, Button, Card, Flex, Heading, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import React from 'react'
 import SortableTree, {FullTree, NodeData, OnMovePreviousAndNextLocation} from 'react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types/types'
 import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import getTreePatch from '../utils/getTreePatch'
-import {dataToEditorTree, getUnaddedItems} from '../utils/treeData'
+import {getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
 import useTreeWithVisibility from '../utils/useTreeWithVisibility'
+import DocumentInNode from './DocumentInNode'
 import TreeEditorErrorBoundary from './TreeEditorErrorBoundary'
 
 /**
@@ -33,7 +35,7 @@ const TreeEditor: React.FC<{
   return (
     <TreeEditorErrorBoundary>
       <Stack space={4} paddingTop={4}>
-        <div style={{minHeight: getTreeHeight(tree)}}>
+        <Card style={{minHeight: getTreeHeight(tree)}} borderBottom={true}>
           <SortableTree
             maxDepth={props.options.maxDepth}
             onChange={() => {
@@ -49,33 +51,49 @@ const TreeEditor: React.FC<{
               dndType: dndId
             })}
           />
-        </div>
-        <Stack space={2}>
-          <Text size={2} as="h2">
-            Items not added
-          </Text>
-          <Text size={1} muted>
-            Drag them into the list above to add to the hieararchy. Unpublished documents won't show
-            up in this list.
-          </Text>
-        </Stack>
+        </Card>
 
         {allItemsStatus === 'success' ? (
-          <div style={{minHeight: getTreeHeight(unaddedItems)}}>
-            <SortableTree
-              onChange={() => {
-                // Do nothing. unaddedTree will reflect whatever meaningful changes happen to this tree
-              }}
-              treeData={dataToEditorTree(unaddedItems)}
-              maxDepth={1}
-              {...getCommonTreeProps({
-                placeholder: {
-                  title: 'Drag items here to remove from hierarchy'
-                },
-                dndType: dndId
-              })}
-            />
-          </div>
+          <Stack space={1}>
+            <Box paddingX={4} paddingBottom={2} paddingTop={3}>
+              <Heading size={1} as="h2">
+                Items not added
+              </Heading>
+            </Box>
+            <Box paddingX={1}>
+              {unaddedItems.map((item) => (
+                <DocumentInNode
+                  key={item._key}
+                  item={item}
+                  action={
+                    <Tooltip
+                      content={
+                        <Box padding={2}>
+                          <Text muted size={1}>
+                            Add to the bottom of the list
+                          </Text>
+                        </Box>
+                      }
+                    >
+                      <Button
+                        onClick={() => {
+                          handleMovedNode({
+                            nextPath: [],
+                            node: item,
+                            treeIndex: -1,
+                            treeData
+                          } as any)
+                        }}
+                        mode="bleed"
+                        icon={AddCircleIcon}
+                        style={{cursor: 'pointer'}}
+                      />
+                    </Tooltip>
+                  }
+                />
+              ))}
+            </Box>
+          </Stack>
         ) : (
           <Flex padding={4} align={'center'} justify={'center'}>
             <Spinner size={3} muted />

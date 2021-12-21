@@ -1,5 +1,5 @@
 import {usePaneRouter} from '@sanity/desk-tool'
-import {Card} from '@sanity/ui'
+import {Card, Flex} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
@@ -10,7 +10,11 @@ import useTreeContext from '../utils/useTreeContext'
  * Renders a preview for each referenced document.
  * Nested inside TreeNode.tsx
  */
-const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
+const DocumentInNode: React.FC<{
+  item: SanityTreeItem
+  status?: React.ReactNode
+  action?: React.ReactNode
+}> = (props) => {
   const {node, nodeDocType} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {placement} = useTreeContext()
@@ -31,9 +35,7 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
           childId={node?._ref}
           ref={ref}
           childParameters={{
-            type: nodeDocType,
-            // @TODO: replace this with proper parentRefPath
-            parentRefPath: 'test'
+            type: nodeDocType
           }}
         />
       )),
@@ -45,19 +47,27 @@ const DocumentInNode: React.FC<{item: SanityTreeItem}> = (props) => {
   }
 
   return (
-    // Loosely copied from @sanity/desk-tool's PaneItem.tsx
-    <Card
-      __unstable_focusRing
-      as={LinkComponent}
-      tone={isActive ? 'primary' : 'default'}
-      padding={2}
-      radius={2}
-      data-as="a"
-      data-ui="PaneItem"
-      style={{flex: 1, maxWidth: '600px'}}
-    >
-      <Preview layout="default" type={schemaType} value={{_ref: node?._ref}} />
-    </Card>
+    <Flex gap={2} align="center" style={{flex: 1, maxWidth: '600px'}}>
+      {/* Card loosely copied from @sanity/desk-tool's PaneItem.tsx */}
+      <Card
+        __unstable_focusRing
+        as={LinkComponent}
+        tone={isActive ? 'primary' : 'default'}
+        padding={2}
+        radius={2}
+        data-as="a"
+        data-ui="PaneItem"
+        style={{flex: 1}}
+      >
+        <Preview
+          layout="default"
+          type={schemaType}
+          value={{_ref: node?._ref}}
+          status={props.status}
+        />
+      </Card>
+      {props.action}
+    </Flex>
   )
 }
 
