@@ -1,17 +1,17 @@
 {
-  "name": "sanity-plugin-tree-input",
+  "name": "sanity-plugin-hierarchical-document-list",
   "version": "0.1.0-next.0",
   "author": "Sanity <hello@sanity.io>",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sanity-io/sanity-plugin-tree-input.git"
+    "url": "git+https://github.com/sanity-io/sanity-plugin-hierarchical-document-list.git"
   },
   "bugs": {
-    "url": "https://github.com/sanity-io/sanity-plugin-tree-input/issues"
+    "url": "https://github.com/sanity-io/sanity-plugin-hierarchical-document-list/issues"
   },
-  "homepage": "https://github.com/sanity-io/sanity-plugin-tree-input#readme",
+  "homepage": "https://github.com/sanity-io/sanity-plugin-hierarchical-document-list#readme",
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc",

@@ -1,4 +1,4 @@
-# sanity-plugin-hierarchies
+# sanity-plugin-hierarchical-document-list
 
 Plugin for editing hierarchical references in the [Sanity studio](https://www.sanity.io/docs/sanity-studio).
 
@@ -8,7 +8,7 @@ Plugin for editing hierarchical references in the [Sanity studio](https://www.sa
 
 ```bash
 # From the root of your sanity project
-sanity install hieararchies
+sanity install hierarchical-document-list
 ```
 
 With the plugin installed, you'll add the following to your Desk Structure:
@@ -18,7 +18,7 @@ With the plugin installed, you'll add the following to your Desk Structure:
 ```js
 // deskStructure.js
 import S from '@sanity/desk-tool/structure-builder'
-import {createDeskHierarchy} from 'sanity-plugin-tree-input'
+import {createDeskHierarchy} from 'sanity-plugin-hierarchical-document-list'
 
 export default () => {
   return S.list()
@@ -141,7 +141,7 @@ Find a given document in a hierarchy and get its parent - useful for rendering b
 From the flat data queried, you'll need to convert it to a nested tree with `flatDataToTree`:
 
 ```js
-import {flatDataToTree} from 'sanity-plugin-tree-input'
+import {flatDataToTree} from 'sanity-plugin-hierarchical-document-list'
 
 const hierarchyDocument = await client.fetch(`*[_id == "book-v3-review-a"][0]{
   tree[] {
@@ -167,7 +167,7 @@ By default, this plugin will create and update documents of `_type: hierarchy.tr
 To add this document type, create a new document schema similar to the following:
 
 ```js
-import {createHierarchicalField} from 'sanity-plugin-tree-input'
+import {createHierarchicalField} from 'sanity-plugin-hierarchical-document-list'
 
 export default {
   name: 'myCustomHierarchicalType',
