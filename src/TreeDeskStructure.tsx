@@ -1,7 +1,6 @@
 import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
-import {Box, Card, Flex, Spinner} from '@sanity/ui'
+import {Box, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
-import LiveEditNotice from './components/LiveEditNotice'
 import TreeEditor from './components/TreeEditor'
 import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
 import {toGradient} from './utils/gradientPatchAdapter'
@@ -11,7 +10,6 @@ interface ComponentProps {
   options: TreeDeskStructureProps
 }
 
-// @TODO: decide on exposing this to users and letting them create their own tree schemas
 const DEFAULT_TREE_FIELD_KEY = 'tree'
 const DEFAULT_TREE_DOC_TYPE = 'hierarchy.tree'
 
@@ -61,9 +59,6 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
           patchPrefix={treeFieldKey}
         />
       </Box>
-      <Card padding={3} style={{position: 'sticky', left: 0, bottom: 0}} borderTop={true}>
-        <LiveEditNotice lastPublished={published._updatedAt} />
-      </Card>
     </TreeContext.Provider>
   )
 })
