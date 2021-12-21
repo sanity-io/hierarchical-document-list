@@ -3,5 +3,10 @@
     "source": "./src",
     "compiled": "./lib"
   },
-  "parts": []
+  "parts": [
+    {
+      "implements": "part:@sanity/base/schema-type",
+      "path": "hierarchy.tree.js"
+    }
+  ]
 }

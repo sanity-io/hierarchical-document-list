@@ -7,9 +7,8 @@ Plugin for editing hierarchical references in the [Sanity studio](https://www.sa
 ## Getting started
 
 ```bash
+# From the root of your sanity project
 sanity install hieararchies
-# or yarn add sanity-plugin-hiearchies
-# or npm i sanity-plugin-hierarchies
 ```
 
 With the plugin installed, you'll add the following to your Desk Structure:
