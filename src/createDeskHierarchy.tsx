@@ -39,7 +39,7 @@ export default function createDeskHierarchy(props: TreeProps) {
         S.menuItem()
           .intent({
             type: 'create',
-            params: {type: schemaType, template: schemaType, id: 'testing'}
+            params: {type: schemaType, template: schemaType}
           })
           // @TODO: get the title for each schema type
           .title(schemaType)
@@ -48,6 +48,9 @@ export default function createDeskHierarchy(props: TreeProps) {
     )
     .canHandleIntent((intent: string, context: Record<string, unknown>) => {
       if (intent === 'edit' && context.id === props.documentId) {
+        return true
+      }
+      if (intent === 'create' && referenceTo.includes(context.type as string)) {
         return true
       }
       return false
