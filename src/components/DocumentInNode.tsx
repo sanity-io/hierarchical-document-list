@@ -1,3 +1,4 @@
+import {SanityDocument} from '@sanity/client'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {Card, Flex} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
@@ -5,6 +6,7 @@ import schema from 'part:@sanity/base/schema'
 import React from 'react'
 import {SanityTreeItem} from '../types/types'
 import useTreeContext from '../utils/useTreeContext'
+import DocumentPreviewStatus from './DocumentPreviewStatus'
 
 /**
  * Renders a preview for each referenced document.
@@ -63,7 +65,24 @@ const DocumentInNode: React.FC<{
             layout="default"
             type={schemaType}
             value={{_ref: draftId || node?._ref}}
-            status={draftId ? 'DRAFT' : 'only published'}
+            status={
+              <DocumentPreviewStatus
+                draft={
+                  draftId
+                    ? ({
+                        _id: draftId,
+                        _type: nodeDocType
+                      } as SanityDocument)
+                    : undefined
+                }
+                published={
+                  {
+                    _id: node?._ref,
+                    _type: nodeDocType
+                  } as SanityDocument
+                }
+              />
+            }
           />
         ) : (
           <div>Invalid document!</div>
