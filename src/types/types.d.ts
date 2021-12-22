@@ -16,7 +16,16 @@ export interface SanityTreeItem {
    * _key of parent node
    */
   parent?: string | null
+  /**
+   * Used by DocumentInNode to render the preview for drafts if they exist.
+   * Also informs document status icons.
+   */
   draftId?: string
+  /**
+   * If not present, DocumentInNode will show up an error for invalid document.
+   *  - undefined `publishedId` could mean the document is either deleted, or it doesn't match GROQ filters anymore
+   */
+  publishedId?: string
 }
 
 export interface TreeInputOptions {

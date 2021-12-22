@@ -10,7 +10,7 @@ type VisibilityMap = {
 /**
  * Enhances tree data with information on:
  *   - `expanded` - native property of react-sortable-tree to determine collapsing & expanding of a node's children
- *   - `draftId` - our custom property to let DocumentInNode render the preview for drafts if they exist
+ *   - `draftId` & `publishedId` - refer to SanityTreeItem's type annotations
  *
  * Doesn't modify the main tree or has side-effects on data.
  * Has the added benefit of being local to the user, so external changes won't affect local visibility.
@@ -34,7 +34,8 @@ export default function useLocalTree(
   const treeWithExpanded = tree.map((item) => ({
     ...item,
     expanded: visibilityMap[item._key] !== false,
-    draftId: allItems[item.node?._ref]?.draft?._id
+    draftId: allItems[item.node?._ref]?.draft?._id,
+    publishedId: allItems[item.node?._ref]?.published?._id
   }))
 
   return {

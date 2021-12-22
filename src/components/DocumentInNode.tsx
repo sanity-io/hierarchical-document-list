@@ -14,7 +14,7 @@ const DocumentInNode: React.FC<{
   item: SanityTreeItem
   action?: React.ReactNode
 }> = (props) => {
-  const {node, nodeDocType, draftId} = props.item
+  const {node, nodeDocType, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {placement} = useTreeContext()
 
@@ -58,12 +58,16 @@ const DocumentInNode: React.FC<{
         data-as="a"
         data-ui="PaneItem"
       >
-        <Preview
-          layout="default"
-          type={schemaType}
-          value={{_ref: draftId || node?._ref}}
-          status={draftId ? 'DRAFT' : 'only published'}
-        />
+        {publishedId ? (
+          <Preview
+            layout="default"
+            type={schemaType}
+            value={{_ref: draftId || node?._ref}}
+            status={draftId ? 'DRAFT' : 'only published'}
+          />
+        ) : (
+          <div>Invalid document!</div>
+        )}
       </Card>
       {props.action}
     </Flex>
