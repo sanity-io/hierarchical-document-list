@@ -53,11 +53,11 @@ const DocumentInNode: React.FC<{
         __unstable_focusRing
         as={LinkComponent}
         tone={isActive ? 'primary' : 'default'}
-        padding={2}
+        padding={1}
         radius={2}
+        flex={1}
         data-as="a"
         data-ui="PaneItem"
-        style={{flex: 1}}
       >
         <Preview
           layout="default"

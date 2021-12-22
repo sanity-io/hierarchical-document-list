@@ -51,8 +51,15 @@ const NodeContentRenderer: NodeRenderer = (props) => {
     // Show the handle used to initiate a drag-and-drop
     return props.connectDragSource(
       <div>
-        <Button mode="bleed" padding={0} style={{cursor: 'grab'}}>
-          <DragHandleIcon />
+        <Button
+          mode="bleed"
+          paddingX={0}
+          paddingY={1}
+          style={{cursor: 'grab', fontSize: '1.5625rem'}}
+          data-ui="DragHandleButton"
+          data-drag-handle={canDrag}
+        >
+          <DragHandleIcon style={{marginBottom: '-0.1em'}} />
         </Button>
       </div>,
       {
