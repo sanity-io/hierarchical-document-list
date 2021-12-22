@@ -16,34 +16,33 @@ export default function getTreePatch(
   const {nextParentNode} = data
   const keyPath = {_key: data.node._key}
 
-  // === REMOVING NODE FROM TREE ===
-  // `nextPath` will be `null` if the item was removed from the tree
-  if (!Array.isArray(data.nextPath)) {
-    const children = getChildrenPaths(data.node)
-    return PatchEvent.from([
+  let patches = []
+
+  // `nextPath` will only exist if the item is still in the tree
+  if (Array.isArray(data.nextPath)) {
+    patches = [
+      // 1. Ensure tree array exists
+      Patch.setIfMissing([]),
+
+      // 2. Unset the moved node
+      // (will be ignored by Content Lake on new nodes with _key not yet in tree)
       Patch.unset([keyPath]),
-      ...children.map((path) => Patch.unset([{_key: path}]))
-    ])
+
+      // 3. Add it to where in the tree it should appear
+      getInsertionPatch(data),
+
+      // 4. Patch the new node with its new `parent`
+      nextParentNode
+        ? // If it has a parent node, set that parent's _key
+          Patch.set(nextParentNode._key, [keyPath, 'parent'])
+        : // Else remove the parent key entirely
+          Patch.unset([keyPath, 'parent'])
+    ]
+  } else {
+    // === REMOVING NODE FROM TREE ===
+    const children = getChildrenPaths(data.node)
+    patches = [Patch.unset([keyPath]), ...children.map((path) => Patch.unset([{_key: path}]))]
   }
-
-  const patches = [
-    // 1. Ensure tree array exists
-    Patch.setIfMissing([]),
-
-    // 2. Unset the moved node
-    // (will be ignored by Content Lake on new nodes with _key not yet in tree)
-    Patch.unset([keyPath]),
-
-    // 3. Add it to where in the tree it should appear
-    getInsertionPatch(data),
-
-    // 4. Patch the new node with its new `parent`
-    nextParentNode
-      ? // If it has a parent node, set that parent's _key
-        Patch.set(nextParentNode._key, [keyPath, 'parent'])
-      : // Else remove the parent key entirely
-        Patch.unset([keyPath, 'parent'])
-  ]
 
   if (prefix) {
     return PatchEvent.from(patches.map((patch) => Patch.prefixPath(patch, prefix)))

@@ -4,7 +4,6 @@ import React from 'react'
 import TreeEditor from './components/TreeEditor'
 import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
 import {toGradient} from './utils/gradientPatchAdapter'
-import {TreeContext} from './utils/useTreeContext'
 
 interface ComponentProps {
   options: TreeDeskStructureProps
@@ -50,14 +49,12 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
   }
 
   return (
-    <TreeContext.Provider value={{placement: 'tree'}}>
-      <TreeEditor
-        options={props.options}
-        tree={value}
-        onChange={handleChange}
-        patchPrefix={treeFieldKey}
-      />
-    </TreeContext.Provider>
+    <TreeEditor
+      options={props.options}
+      tree={value}
+      onChange={handleChange}
+      patchPrefix={treeFieldKey}
+    />
   )
 })
 

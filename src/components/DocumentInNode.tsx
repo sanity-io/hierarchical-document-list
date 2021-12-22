@@ -5,7 +5,6 @@ import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
 import {SanityTreeItem} from '../types/types'
-import useTreeContext from '../utils/useTreeContext'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
 
 /**
@@ -18,7 +17,6 @@ const DocumentInNode: React.FC<{
 }> = (props) => {
   const {node, nodeDocType, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
-  const {placement} = useTreeContext()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
@@ -40,7 +38,7 @@ const DocumentInNode: React.FC<{
           }}
         />
       )),
-    [ChildLink, node?._ref, placement]
+    [ChildLink, node?._ref]
   )
 
   if (!node?._ref) {

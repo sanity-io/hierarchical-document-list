@@ -15,10 +15,13 @@ type VisibilityMap = {
  * Doesn't modify the main tree or has side-effects on data.
  * Has the added benefit of being local to the user, so external changes won't affect local visibility.
  */
-export default function useLocalTree(
-  tree: SanityTreeItem[],
+export default function useLocalTree({
+  tree,
+  allItems
+}: {
+  tree: SanityTreeItem[]
   allItems: AllItems
-): {
+}): {
   handleVisibilityToggle: (data: OnVisibilityToggleData) => void
   localTree: TreeItem[]
 } {
@@ -31,7 +34,7 @@ export default function useLocalTree(
     })
   }
 
-  const treeWithExpanded = tree.map((item) => {
+  const treeWithLocalContext = tree.map((item) => {
     const draftDoc = allItems[item.node?._ref]?.draft
     const publishedDoc = allItems[item.node?._ref]?.published
     return {
@@ -45,7 +48,7 @@ export default function useLocalTree(
   })
 
   return {
-    localTree: dataToEditorTree(treeWithExpanded),
+    localTree: dataToEditorTree(treeWithLocalContext),
     handleVisibilityToggle
   }
 }
