@@ -34,9 +34,9 @@
   },
   "type": "module",
   "dependencies": {
-    "@sanity/base": ">= 2.5.0",
-    "@sanity/desk-tool": ">= 2.21.0",
-    "@sanity/form-builder": ">= 2.21.0",
+    "@sanity/base": "^2.23.2",
+    "@sanity/desk-tool": "^2.23.2",
+    "@sanity/form-builder": "^2.23.2",
     "@sanity/icons": ">= 1.0.0",
     "@sanity/ui": ">= 0.33.9",
     "@types/styled-components": "^5.1.18",
@@ -46,6 +46,8 @@
     "react-sortable-tree": "^2.8.0"
   },
   "peerDependencies": {
-    "styled-components": "^5.2.0"
+    "@sanity/base": ">= 2.23.2",
+    "@sanity/desk-tool": ">= 2.23.2",
+    "styled-components": ">= 5.2.0"
   }
 }
