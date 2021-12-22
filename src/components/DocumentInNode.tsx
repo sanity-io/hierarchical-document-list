@@ -12,10 +12,9 @@ import useTreeContext from '../utils/useTreeContext'
  */
 const DocumentInNode: React.FC<{
   item: SanityTreeItem
-  status?: React.ReactNode
   action?: React.ReactNode
 }> = (props) => {
-  const {node, nodeDocType} = props.item
+  const {node, nodeDocType, draftId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {placement} = useTreeContext()
 
@@ -62,8 +61,8 @@ const DocumentInNode: React.FC<{
         <Preview
           layout="default"
           type={schemaType}
-          value={{_ref: node?._ref}}
-          status={props.status}
+          value={{_ref: draftId || node?._ref}}
+          status={draftId ? 'DRAFT' : 'only published'}
         />
       </Card>
       {props.action}

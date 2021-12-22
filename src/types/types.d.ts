@@ -1,4 +1,5 @@
 import {ArraySchemaType} from '@sanity/types'
+import {SanityDocument} from '@sanity/client'
 
 interface SanityReference {
   _type: 'reference'
@@ -15,6 +16,7 @@ export interface SanityTreeItem {
    * _key of parent node
    */
   parent?: string | null
+  draftId?: string
 }
 
 export interface TreeInputOptions {
@@ -62,4 +64,13 @@ export interface TreeDeskStructureProps extends TreeInputOptions {
    * Key for the field representing the hierarchical tree inside the document.
    */
   fieldKeyInDocument?: string
+}
+
+export interface DocumentPair {
+  draft?: SanityDocument
+  published?: SanityDocument
+}
+
+export interface AllItems {
+  [publishedId: string]: DocumentPair | undefined
 }

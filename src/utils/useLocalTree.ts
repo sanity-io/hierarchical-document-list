@@ -1,6 +1,6 @@
 import React from 'react'
 import {OnVisibilityToggleData, TreeItem} from 'react-sortable-tree'
-import {SanityTreeItem} from '../types/types'
+import {AllItems, SanityTreeItem} from '../types/types'
 import {dataToEditorTree} from './treeData'
 
 type VisibilityMap = {
@@ -8,11 +8,17 @@ type VisibilityMap = {
 }
 
 /**
- * Enhances tree data with information on the `expanded` property from sortable-tree's TreeItem.
+ * Enhances tree data with information on:
+ *   - `expanded` - native property of react-sortable-tree to determine collapsing & expanding of a node's children
+ *   - `draftId` - our custom property to let DocumentInNode render the preview for drafts if they exist
+ *
  * Doesn't modify the main tree or has side-effects on data.
  * Has the added benefit of being local to the user, so external changes won't affect local visibility.
  */
-export default function useTreeWithVisibility(tree: SanityTreeItem[]): {
+export default function useLocalTree(
+  tree: SanityTreeItem[],
+  allItems: AllItems
+): {
   handleVisibilityToggle: (data: OnVisibilityToggleData) => void
   treeData: TreeItem[]
 } {
@@ -27,7 +33,8 @@ export default function useTreeWithVisibility(tree: SanityTreeItem[]): {
 
   const treeWithExpanded = tree.map((item) => ({
     ...item,
-    expanded: visibilityMap[item._key] !== false
+    expanded: visibilityMap[item._key] !== false,
+    draftId: allItems[item.node?._ref]?.draft?._id
   }))
 
   return {

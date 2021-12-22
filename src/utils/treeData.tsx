@@ -1,10 +1,9 @@
 import {SanityDocument} from '@sanity/client'
+import {randomKey} from '@sanity/util/content'
 import React from 'react'
 import {TreeItem} from 'react-sortable-tree'
-import {randomKey} from '@sanity/util/content'
-
 import DocumentInNode from '../components/DocumentInNode'
-import {SanityTreeItem} from '../types/types'
+import {AllItems, DocumentPair, SanityTreeItem} from '../types/types'
 import flatDataToTree from './flatDataToTree'
 
 export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
@@ -19,13 +18,18 @@ export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]
   return flatDataToTree(itemsWithTitle)
 }
 
-const documentToNode = (doc: SanityDocument): SanityTreeItem => {
+const documentPairToNode = (doc?: DocumentPair): SanityTreeItem | undefined => {
+  if (!doc?.published?._id) {
+    return undefined
+  }
+
   return {
     _key: randomKey(12),
     _type: 'hierarchy.node',
-    nodeDocType: doc._type,
+    nodeDocType: doc.published._type,
+    draftId: doc.draft?._id,
     node: {
-      _ref: doc._id,
+      _ref: doc.published._id,
       _type: 'reference',
       _weak: true
     }
@@ -45,20 +49,22 @@ export interface FetchData {
 }
 
 export const getUnaddedItems = (data: {
-  allItems?: SanityDocument[]
+  allItems: AllItems
   tree: SanityTreeItem[]
 }): SanityTreeItem[] => {
-  if (!data?.allItems?.length) {
-    return []
-  }
-
   if (!data.tree) {
-    return data.allItems.map(documentToNode)
+    return Object.entries(data.allItems)
+      .map((value) => documentPairToNode(value[1]))
+      .filter(Boolean) as SanityTreeItem[]
   }
 
-  return data.allItems
-    .filter((item) => item._id && !data.tree.some((treeItem) => treeItem?.node?._ref === item._id))
-    .map(documentToNode)
+  return Object.entries(data.allItems)
+    .filter(
+      ([publishedId]) =>
+        publishedId && !data.tree.some((treeItem) => treeItem?.node?._ref === publishedId)
+    )
+    .map(([_publishedId, documentPair]) => documentPairToNode(documentPair))
+    .filter(Boolean) as SanityTreeItem[]
 }
 
 export function normalizeNodeForStorage(item: TreeItem): SanityTreeItem {

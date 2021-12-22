@@ -7,7 +7,7 @@ import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import getTreePatch from '../utils/getTreePatch'
 import {getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
-import useTreeWithVisibility from '../utils/useTreeWithVisibility'
+import useLocalTree from '../utils/useLocalTree'
 import DocumentInNode from './DocumentInNode'
 import TreeEditorErrorBoundary from './TreeEditorErrorBoundary'
 
@@ -20,10 +20,9 @@ const TreeEditor: React.FC<{
   options: TreeInputOptions
   patchPrefix?: string
 }> = (props) => {
-  const {tree} = props
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
-  const unaddedItems = getUnaddedItems({tree, allItems})
-  const {treeData, handleVisibilityToggle} = useTreeWithVisibility(tree)
+  const unaddedItems = getUnaddedItems({tree: props.tree, allItems})
+  const {treeData, handleVisibilityToggle} = useLocalTree(props.tree, allItems)
 
   function handleMovedNode(data: NodeData & FullTree & OnMovePreviousAndNextLocation) {
     const patch = getTreePatch(data, props.patchPrefix)
@@ -35,7 +34,7 @@ const TreeEditor: React.FC<{
   return (
     <TreeEditorErrorBoundary>
       <Stack space={4} paddingTop={4}>
-        <Card style={{minHeight: getTreeHeight(tree)}} borderBottom={true}>
+        <Card style={{minHeight: getTreeHeight(treeData)}} borderBottom={true}>
           <SortableTree
             maxDepth={props.options.maxDepth}
             onChange={() => {
