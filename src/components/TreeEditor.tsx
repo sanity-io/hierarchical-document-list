@@ -22,7 +22,7 @@ const TreeEditor: React.FC<{
 }> = (props) => {
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
   const unaddedItems = getUnaddedItems({tree: props.tree, allItems})
-  const {treeData, handleVisibilityToggle} = useLocalTree(props.tree, allItems)
+  const {localTree, handleVisibilityToggle} = useLocalTree(props.tree, allItems)
 
   function handleMovedNode(data: NodeData & FullTree & OnMovePreviousAndNextLocation) {
     const patch = getTreePatch(data, props.patchPrefix)
@@ -32,7 +32,7 @@ const TreeEditor: React.FC<{
   return (
     <TreeEditorErrorBoundary>
       <Stack space={4} paddingTop={4}>
-        <Card style={{minHeight: getTreeHeight(treeData)}} borderBottom={true}>
+        <Card style={{minHeight: getTreeHeight(props.tree)}} borderBottom={true}>
           <SortableTree
             maxDepth={props.options.maxDepth}
             onChange={() => {
@@ -40,7 +40,7 @@ const TreeEditor: React.FC<{
             }}
             onVisibilityToggle={handleVisibilityToggle}
             onMoveNode={handleMovedNode}
-            treeData={treeData}
+            treeData={localTree}
             {...getCommonTreeProps({
               placeholder: {
                 title: 'Add items by dragging them here'
@@ -77,7 +77,7 @@ const TreeEditor: React.FC<{
                             nextPath: [],
                             node: item,
                             treeIndex: -1,
-                            treeData
+                            treeData: localTree
                           } as any)
                         }}
                         mode="bleed"

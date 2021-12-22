@@ -20,7 +20,7 @@ export default function useLocalTree(
   allItems: AllItems
 ): {
   handleVisibilityToggle: (data: OnVisibilityToggleData) => void
-  treeData: TreeItem[]
+  localTree: TreeItem[]
 } {
   const [visibilityMap, setVisibilityMap] = React.useState<VisibilityMap>({})
 
@@ -35,11 +35,13 @@ export default function useLocalTree(
     ...item,
     expanded: visibilityMap[item._key] !== false,
     draftId: allItems[item.node?._ref]?.draft?._id,
-    publishedId: allItems[item.node?._ref]?.published?._id
+    publishedId: allItems[item.node?._ref]?.published?._id,
+    // If no publishedId, it shouldn't be draggable
+    canDrag: !!allItems[item.node?._ref]?.published?._id
   }))
 
   return {
-    treeData: dataToEditorTree(treeWithExpanded),
+    localTree: dataToEditorTree(treeWithExpanded),
     handleVisibilityToggle
   }
 }
