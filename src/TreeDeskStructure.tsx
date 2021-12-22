@@ -1,5 +1,5 @@
 import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
-import {Flex, Spinner} from '@sanity/ui'
+import {Box, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import TreeEditor from './components/TreeEditor'
 import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
@@ -49,12 +49,14 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
   }
 
   return (
-    <TreeEditor
-      options={props.options}
-      tree={value}
-      onChange={handleChange}
-      patchPrefix={treeFieldKey}
-    />
+    <Box paddingBottom={5} paddingRight={2}>
+      <TreeEditor
+        options={props.options}
+        tree={value}
+        onChange={handleChange}
+        patchPrefix={treeFieldKey}
+      />
+    </Box>
   )
 })
 

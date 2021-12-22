@@ -1,5 +1,5 @@
 import {AddCircleIcon} from '@sanity/icons'
-import {Box, Button, Card, Flex, Heading, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
+import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types/types'
@@ -7,8 +7,8 @@ import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
 import {getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
 import useLocalTree from '../utils/useLocalTree'
-import useTreeOperationsProvider from '../utils/useTreeOperationsProvider'
 import {TreeOperationsContext} from '../utils/useTreeOperations'
+import useTreeOperationsProvider from '../utils/useTreeOperationsProvider'
 import DocumentInNode from './DocumentInNode'
 import TreeEditorErrorBoundary from './TreeEditorErrorBoundary'
 
@@ -37,7 +37,11 @@ const TreeEditor: React.FC<{
     <TreeEditorErrorBoundary>
       <TreeOperationsContext.Provider value={operations}>
         <Stack space={4} paddingTop={4}>
-          <Card style={{minHeight: getTreeHeight(props.tree)}} borderBottom={true}>
+          <Card
+            style={{minHeight: getTreeHeight(props.tree)}}
+            // Only include borderBottom if there's something to show in unadded items
+            borderBottom={allItemsStatus !== 'success' || unaddedItems?.length > 0}
+          >
             <SortableTree
               maxDepth={props.options.maxDepth}
               onChange={() => {
@@ -54,45 +58,52 @@ const TreeEditor: React.FC<{
             />
           </Card>
 
-          {allItemsStatus === 'success' ? (
-            <Stack space={1}>
-              <Box paddingX={4} paddingBottom={2} paddingTop={3}>
-                <Heading size={1} as="h2">
+          {allItemsStatus === 'success' && unaddedItems?.length > 0 && (
+            <Stack space={1} paddingX={2} paddingTop={3}>
+              <Box paddingX={2} paddingBottom={3}>
+                <Text size={2} as="h2" weight="semibold">
                   Items not added
-                </Heading>
+                </Text>
               </Box>
-              <Box paddingX={1}>
-                {unaddedItems.map((item) => (
-                  <DocumentInNode
-                    key={item._key}
-                    item={item}
-                    action={
-                      <Tooltip
-                        content={
-                          <Box padding={2}>
-                            <Text muted size={1}>
-                              Add to the bottom of the list
-                            </Text>
-                          </Box>
-                        }
-                      >
-                        <Button
-                          onClick={() => {
-                            operations.removeItem(item)
-                          }}
-                          mode="bleed"
-                          icon={AddCircleIcon}
-                          style={{cursor: 'pointer'}}
-                        />
-                      </Tooltip>
-                    }
-                  />
-                ))}
-              </Box>
+              {unaddedItems.map((item) => (
+                <DocumentInNode
+                  key={item._key}
+                  item={item}
+                  action={
+                    <Tooltip
+                      placement="left"
+                      content={
+                        <Box padding={2}>
+                          <Text muted size={1}>
+                            Add to the bottom of the list
+                          </Text>
+                        </Box>
+                      }
+                    >
+                      <Button
+                        onClick={() => {
+                          operations.addItem(item)
+                        }}
+                        mode="bleed"
+                        icon={AddCircleIcon}
+                        style={{cursor: 'pointer'}}
+                      />
+                    </Tooltip>
+                  }
+                />
+              ))}
             </Stack>
-          ) : (
+          )}
+          {allItemsStatus === 'loading' && (
             <Flex padding={4} align={'center'} justify={'center'}>
               <Spinner size={3} muted />
+            </Flex>
+          )}
+          {allItemsStatus === 'error' && (
+            <Flex padding={4} align={'center'} justify={'center'}>
+              <Text size={2} weight="semibold">
+                Something went wrong when loading documents
+              </Text>
             </Flex>
           )}
         </Stack>

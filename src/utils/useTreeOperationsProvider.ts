@@ -14,6 +14,8 @@ export default function useTreeOperationsProvider(props: {
   handleMovedNode: HandleMovedNode
   addItem: (item: SanityTreeItem) => void
   removeItem: (item: SanityTreeItem) => void
+  moveItemUp: (item: SanityTreeItem) => void
+  moveItemDown: (item: SanityTreeItem) => void
 } {
   function handleMovedNode(data: HandleMovedNodeData) {
     const patch = getTreePatch(data, props.patchPrefix)
@@ -36,9 +38,19 @@ export default function useTreeOperationsProvider(props: {
     } as any)
   }
 
+  function moveItemUp(item: SanityTreeItem) {
+    // @TODO: move item up
+  }
+
+  function moveItemDown(item: SanityTreeItem) {
+    // @TODO: move item down
+  }
+
   return {
     handleMovedNode,
     addItem,
-    removeItem
+    removeItem,
+    moveItemUp,
+    moveItemDown
   }
 }

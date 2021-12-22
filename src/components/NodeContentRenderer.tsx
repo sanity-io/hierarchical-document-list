@@ -1,5 +1,5 @@
 import {cyan, gray, red} from '@sanity/color'
-import {ChevronDownIcon, ChevronUpIcon, DragHandleIcon} from '@sanity/icons'
+import {ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, DragHandleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import {isDescendant, NodeRenderer} from 'react-sortable-tree'
@@ -48,24 +48,34 @@ const NodeContentRenderer: NodeRenderer = (props) => {
       return <Spinner />
     }
 
-    // Show the handle used to initiate a drag-and-drop
-    return props.connectDragSource(
+    const BtnElement = (
       <div>
         <Button
           mode="bleed"
           paddingX={0}
           paddingY={1}
-          style={{cursor: 'grab', fontSize: '1.5625rem'}}
+          style={{
+            cursor: node.publishedId ? 'grab' : 'default',
+            fontSize: '1.5625rem'
+          }}
           data-ui="DragHandleButton"
           data-drag-handle={canDrag}
+          disabled={!node.publishedId}
         >
           <DragHandleIcon style={{marginBottom: '-0.1em'}} />
         </Button>
-      </div>,
-      {
-        dropEffect: 'copy'
-      }
+      </div>
     )
+
+    // Don't allow editors to drag invalid documents
+    if (!node.publishedId) {
+      return BtnElement
+    }
+
+    // Show the handle used to initiate a drag-and-drop
+    return props.connectDragSource(BtnElement, {
+      dropEffect: 'copy'
+    })
   }, [canDrag, node, typeof node.children === 'function'])
 
   const isDraggedDescendant = props.draggedNode && isDescendant(props.draggedNode, node)
@@ -86,9 +96,8 @@ const NodeContentRenderer: NodeRenderer = (props) => {
           >
             <Button
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
-              icon={node.expanded ? ChevronUpIcon : ChevronDownIcon}
+              icon={node.expanded ? ChevronDownIcon : ChevronRightIcon}
               mode="bleed"
-              tone="primary"
               fontSize={0}
               padding={2}
               onClick={() =>

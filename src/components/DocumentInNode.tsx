@@ -1,6 +1,8 @@
+import {TextWithTone} from '@sanity/base/components'
 import {SanityDocument} from '@sanity/client'
 import {usePaneRouter} from '@sanity/desk-tool'
-import {Card, Flex} from '@sanity/ui'
+import {HelpCircleIcon} from '@sanity/icons'
+import {Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
@@ -46,19 +48,19 @@ const DocumentInNode: React.FC<{
   }
 
   return (
-    <Flex gap={2} align="center" style={{flex: 1, maxWidth: '600px'}}>
-      {/* Card loosely copied from @sanity/desk-tool's PaneItem.tsx */}
-      <Card
-        __unstable_focusRing
-        as={LinkComponent}
-        tone={isActive ? 'primary' : 'default'}
-        padding={1}
-        radius={2}
-        flex={1}
-        data-as="a"
-        data-ui="PaneItem"
-      >
-        {publishedId ? (
+    <Flex gap={2} align="center" style={{flex: 1}}>
+      {publishedId ? (
+        /* Card loosely copied from @sanity/desk-tool's PaneItem.tsx */
+        <Card
+          __unstable_focusRing
+          as={LinkComponent}
+          tone={isActive ? 'primary' : 'default'}
+          padding={1}
+          radius={2}
+          flex={1}
+          data-as="a"
+          data-ui="PaneItem"
+        >
           <Preview
             layout="default"
             type={schemaType}
@@ -84,10 +86,42 @@ const DocumentInNode: React.FC<{
               />
             }
           />
-        ) : (
-          <div>Invalid document!</div>
-        )}
-      </Card>
+        </Card>
+      ) : (
+        <Card padding={3} radius={1} flex={1}>
+          <Flex align="center">
+            <Text size={2} muted style={{flex: 1}}>
+              Invalid document
+            </Text>
+            <Tooltip
+              placement="left"
+              portal
+              content={
+                <Box padding={3}>
+                  <Flex align="flex-start" gap={3}>
+                    <TextWithTone tone="default" size={3}>
+                      <HelpCircleIcon />
+                    </TextWithTone>
+                    <Stack space={3}>
+                      <Text as="h2" size={1} weight="semibold">
+                        This document is not valid
+                      </Text>
+                      {/* <Text size={1}>
+                        It was deleted or it doesn't match the filters set by this hierarchy.
+                      </Text> */}
+                      <Text size={1}>ID: {node._ref}</Text>
+                    </Stack>
+                  </Flex>
+                </Box>
+              }
+            >
+              <TextWithTone tone="default" size={2}>
+                <HelpCircleIcon />
+              </TextWithTone>
+            </Tooltip>
+          </Flex>
+        </Card>
+      )}
       {props.action}
     </Flex>
   )
