@@ -71,14 +71,16 @@ const DocumentInNode: React.FC<{
                   draftId
                     ? ({
                         _id: draftId,
-                        _type: nodeDocType
+                        _type: nodeDocType,
+                        _updatedAt: props.item.draftUpdatedAt
                       } as SanityDocument)
                     : undefined
                 }
                 published={
                   {
                     _id: node?._ref,
-                    _type: nodeDocType
+                    _type: nodeDocType,
+                    _updatedAt: props.item.publishedUpdatedAt
                   } as SanityDocument
                 }
               />

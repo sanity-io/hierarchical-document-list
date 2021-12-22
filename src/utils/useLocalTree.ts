@@ -31,14 +31,18 @@ export default function useLocalTree(
     })
   }
 
-  const treeWithExpanded = tree.map((item) => ({
-    ...item,
-    expanded: visibilityMap[item._key] !== false,
-    draftId: allItems[item.node?._ref]?.draft?._id,
-    publishedId: allItems[item.node?._ref]?.published?._id,
-    // If no publishedId, it shouldn't be draggable
-    canDrag: !!allItems[item.node?._ref]?.published?._id
-  }))
+  const treeWithExpanded = tree.map((item) => {
+    const draftDoc = allItems[item.node?._ref]?.draft
+    const publishedDoc = allItems[item.node?._ref]?.published
+    return {
+      ...item,
+      expanded: visibilityMap[item._key] !== false,
+      draftId: draftDoc?._id,
+      publishedId: publishedDoc?._id,
+      draftUpdatedAt: draftDoc?._updatedAt,
+      publishedUpdatedAt: publishedDoc?._updatedAt
+    }
+  })
 
   return {
     localTree: dataToEditorTree(treeWithExpanded),

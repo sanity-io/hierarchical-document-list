@@ -99,6 +99,7 @@ export default function useAllItems(options: TreeInputOptions): {
     const query = `*[${filter}] {
       _id,
       _type,
+      _updatedAt,
     }`
     client
       .fetch<SanityDocument[]>(query, params)

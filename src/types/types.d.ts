@@ -21,11 +21,13 @@ export interface SanityTreeItem {
    * Also informs document status icons.
    */
   draftId?: string
+  draftUpdatedAt?: string
   /**
    * If not present, DocumentInNode will show up an error for invalid document.
    *  - undefined `publishedId` could mean the document is either deleted, or it doesn't match GROQ filters anymore
    */
   publishedId?: string
+  publishedUpdatedAt?: string
 }
 
 export interface TreeInputOptions {

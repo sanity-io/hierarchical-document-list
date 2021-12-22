@@ -28,7 +28,9 @@ const documentPairToNode = (doc?: DocumentPair): SanityTreeItem | undefined => {
     _type: 'hierarchy.node',
     nodeDocType: doc.published._type,
     draftId: doc.draft?._id,
+    draftUpdatedAt: doc.draft?._updatedAt,
     publishedId: doc.published._id,
+    publishedUpdatedAt: doc.published?._updatedAt,
     node: {
       _ref: doc.published._id,
       _type: 'reference',
