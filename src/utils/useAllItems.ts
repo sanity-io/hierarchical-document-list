@@ -11,7 +11,7 @@ function getDeskFilter({referenceTo, referenceOptions}: TreeInputOptions): {
   filter: string
   params: Record<string, unknown>
 } {
-  const filterParts: string[] = ['!(_id in path("drafts.**"))', '_type in $generatedTypes']
+  const filterParts: string[] = ['_type in $docTypes']
 
   if (referenceOptions?.filter) {
     filterParts.push(referenceOptions.filter)
@@ -21,7 +21,7 @@ function getDeskFilter({referenceTo, referenceOptions}: TreeInputOptions): {
     filter: filterParts.join(' && '),
     params: {
       ...(referenceOptions?.filterParams || {}),
-      generatedTypes: referenceTo.map((schemaType) => schemaType)
+      docTypes: referenceTo.map((schemaType) => schemaType)
     }
   }
 }
