@@ -12,7 +12,7 @@ interface ComponentProps {
 const DEFAULT_TREE_FIELD_KEY = 'tree'
 const DEFAULT_TREE_DOC_TYPE = 'hierarchy.tree'
 
-const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => {
+const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
   const treeDocType = props.options.documentType || DEFAULT_TREE_DOC_TYPE
   const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_TREE_FIELD_KEY
   const {published, draft} = useEditState(props.options.documentId, treeDocType)
@@ -58,6 +58,6 @@ const TreeDeskStructure: React.FC<ComponentProps> = React.forwardRef((props) => 
       />
     </Box>
   )
-})
+}
 
 export default TreeDeskStructure

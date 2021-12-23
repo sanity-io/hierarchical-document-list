@@ -19,7 +19,7 @@ export interface TreeInputComponentProps {
   presence: FormFieldPresence[]
 }
 
-const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((props) => {
+const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((props, _ref) => {
   return (
     <FormField
       description={props.type.description} // Creates description from schema
