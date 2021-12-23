@@ -67,7 +67,7 @@ const TreeEditor: React.FC<{
               </Box>
               {unaddedItems.map((item) => (
                 <DocumentInNode
-                  key={item._key}
+                  key={item.publishedId || item.draftId}
                   item={item}
                   action={
                     <Tooltip
