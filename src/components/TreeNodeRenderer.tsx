@@ -1,5 +1,6 @@
 import React from 'react'
 import {TreeRenderer} from 'react-sortable-tree'
+import TreeNodeRendererScaffold from './TreeNodeRendererScaffold'
 
 /**
  * To prevent expand buttons from overflowing on the left, we add a minimum left padding to all entries
@@ -29,6 +30,7 @@ const TreeNodeRenderer: TreeRenderer = (props) => {
           })
         )}
       </div>
+      <TreeNodeRendererScaffold {...props} />
     </div>
   )
 }
