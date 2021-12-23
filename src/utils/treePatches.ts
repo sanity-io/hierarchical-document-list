@@ -8,10 +8,7 @@ export function getAddItemPatch(item: SanityTreeItem): unknown[] {
   const normalizedNode = normalizeNodeForStorage(item)
 
   return [
-    // 1. Ensure tree array exists
-    Patch.setIfMissing([]),
-
-    // 2. Add the node to the end of the tree
+    // Add the node to the end of the tree
     Patch.insert([normalizedNode], 'after', [-1])
   ]
 }
@@ -21,13 +18,10 @@ export function getRemoveItemPatch({node}: Pick<NodeRendererProps, 'node'>): unk
   const children = getChildrenPaths(node)
 
   return [
-    // 1. Ensure tree array exists
-    Patch.setIfMissing([]),
-
-    // 2. Unset the removed node
+    // 1. Unset the removed node
     Patch.unset([keyPath]),
 
-    // 3. Unset its children
+    // 2. Unset its children
     ...children.map((path) => Patch.unset([{_key: path}]))
   ]
 }
@@ -43,17 +37,14 @@ export function getMovedNodePatch(data: HandleMovedNodeData): unknown[] {
   }
 
   return [
-    // 1. Ensure tree array exists
-    Patch.setIfMissing([]),
-
-    // 2. Unset the moved node
+    // 1. Unset the moved node
     // (will be ignored by Content Lake on new nodes with _key not yet in tree)
     Patch.unset([keyPath]),
 
-    // 3. Add it to where in the tree it should appear
+    // 2. Add it to where in the tree it should appear
     getInsertionPatch(data),
 
-    // 4. Patch the new node with its new `parent`
+    // 3. Patch the new node with its new `parent`
     nextParentNode
       ? // If it has a parent node, set that parent's _key
         Patch.set(nextParentNode._key, [keyPath, 'parent'])

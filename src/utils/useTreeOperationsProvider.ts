@@ -26,10 +26,15 @@ export default function useTreeOperationsProvider(props: {
   moveItemDown: (nodeProps: NodeRendererProps) => void
 } {
   function runPatches(patches: unknown[]) {
-    let patchEvent = PatchEvent.from(patches)
+    const finalPatches = [
+      // Ensure tree array exists before any operation
+      Patch.setIfMissing([]),
+      ...(patches || [])
+    ]
+    let patchEvent = PatchEvent.from(finalPatches)
     if (props.patchPrefix) {
       patchEvent = PatchEvent.from(
-        patches.map((patch) => Patch.prefixPath(patch, props.patchPrefix))
+        finalPatches.map((patch) => Patch.prefixPath(patch, props.patchPrefix))
       )
     }
     props.onChange(patchEvent)
