@@ -34,8 +34,9 @@
   },
   "type": "module",
   "dependencies": {
-    "@sanity/base": "^2.23.2",
-    "@sanity/desk-tool": "^2.23.2",
+    "@sanity/base": ">= 2.23.2",
+    "@sanity/color": "^2.1.6",
+    "@sanity/desk-tool": ">= 2.23.2",
     "@sanity/form-builder": "^2.23.2",
     "@sanity/icons": ">= 1.0.0",
     "@sanity/ui": ">= 0.33.9",
