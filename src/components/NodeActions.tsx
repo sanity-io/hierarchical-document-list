@@ -3,10 +3,9 @@ import {
   ArrowUpIcon,
   CopyIcon,
   EllipsisVerticalIcon,
-  LaunchIcon,
   RemoveCircleIcon
 } from '@sanity/icons'
-import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
+import {Button, Menu, MenuButton, MenuItem} from '@sanity/ui'
 import React from 'react'
 import {NodeRendererProps} from 'react-sortable-tree'
 import useTreeOperations from '../utils/useTreeOperations'
@@ -17,6 +16,7 @@ import useTreeOperations from '../utils/useTreeOperations'
  */
 const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
   const operations = useTreeOperations()
+  const {node} = nodeProps
 
   // Adapted from @sanity\form-builder\src\inputs\ReferenceInput\ArrayItemReferenceInput.tsx
   // @TODO: Make OpenLink work - currently getting "No router context provider found"
@@ -31,21 +31,21 @@ const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
   //         <IntentLink
   //           {...restProps}
   //           intent="edit"
-  //           params={{id: item.node?._ref, type: item?.nodeDocType}}
+  //           params={{id: node.node?._ref, type: node.nodeDocType}}
   //           target="_blank"
   //           rel="noopener noreferrer"
   //           ref={_ref}
   //         />
   //       )
   //     }),
-  //   [item.node?._ref, item?.nodeDocType]
+  //   [node.node?._ref, node?.nodeDocType]
   // )
 
-  const isValid = !!nodeProps.node.publishedId
+  const isValid = !!node.publishedId
   return (
     <MenuButton
       button={<Button padding={2} mode="bleed" icon={EllipsisVerticalIcon} />}
-      id={`hiearchical-doc-list--${nodeProps.node._key}-menuButton`}
+      id={`hiearchical-doc-list--${node._key}-menuButton`}
       menu={
         <Menu>
           <MenuItem
@@ -72,13 +72,14 @@ const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
             disabled={!isValid}
             onClick={() => operations.moveItemDown(nodeProps)}
           />
-          <MenuDivider />
+          {/* <MenuDivider />
           <MenuItem
             text="Open in new tab"
             icon={LaunchIcon}
             disabled={!isValid}
-            onClick={() => alert('Work in progress!')}
-          />
+            as={OpenLink}
+            data-as="a"
+          /> */}
         </Menu>
       }
       placement="right"
