@@ -1,11 +1,6 @@
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CopyIcon,
-  EllipsisVerticalIcon,
-  RemoveCircleIcon
-} from '@sanity/icons'
-import {Button, Menu, MenuButton, MenuItem} from '@sanity/ui'
+import {IntentLink} from '@sanity/base/components'
+import {CopyIcon, EllipsisVerticalIcon, LaunchIcon, RemoveCircleIcon} from '@sanity/icons'
+import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
 import React from 'react'
 import {NodeRendererProps} from 'react-sortable-tree'
 import useTreeOperations from '../utils/useTreeOperations'
@@ -19,27 +14,26 @@ const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
   const {node} = nodeProps
 
   // Adapted from @sanity\form-builder\src\inputs\ReferenceInput\ArrayItemReferenceInput.tsx
-  // @TODO: Make OpenLink work - currently getting "No router context provider found"
-  // const OpenLink = React.useMemo(
-  //   () =>
-  //     // eslint-disable-next-line @typescript-eslint/no-shadow
-  //     React.forwardRef(function OpenLinkInner(
-  //       restProps: React.ComponentProps<typeof IntentLink>,
-  //       _ref: React.ForwardedRef<HTMLAnchorElement>
-  //     ) {
-  //       return (
-  //         <IntentLink
-  //           {...restProps}
-  //           intent="edit"
-  //           params={{id: node.node?._ref, type: node.nodeDocType}}
-  //           target="_blank"
-  //           rel="noopener noreferrer"
-  //           ref={_ref}
-  //         />
-  //       )
-  //     }),
-  //   [node.node?._ref, node?.nodeDocType]
-  // )
+  const OpenLink = React.useMemo(
+    () =>
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      React.forwardRef(function OpenLinkInner(
+        restProps: React.ComponentProps<typeof IntentLink>,
+        _ref: React.ForwardedRef<HTMLAnchorElement>
+      ) {
+        return (
+          <IntentLink
+            {...restProps}
+            intent="edit"
+            params={{id: node.node?._ref, type: node.nodeDocType}}
+            target="_blank"
+            rel="noopener noreferrer"
+            ref={_ref}
+          />
+        )
+      }),
+    [node.node?._ref, node?.nodeDocType]
+  )
 
   const isValid = !!node.publishedId
   return (
@@ -60,7 +54,7 @@ const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
             disabled={!isValid}
             onClick={() => operations.duplicateItem(nodeProps)}
           />
-          <MenuItem
+          {/* <MenuItem
             text="Move up"
             icon={ArrowUpIcon}
             disabled={!isValid}
@@ -71,15 +65,15 @@ const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
             icon={ArrowDownIcon}
             disabled={!isValid}
             onClick={() => operations.moveItemDown(nodeProps)}
-          />
-          {/* <MenuDivider />
+          /> */}
+          <MenuDivider />
           <MenuItem
             text="Open in new tab"
             icon={LaunchIcon}
             disabled={!isValid}
             as={OpenLink}
             data-as="a"
-          /> */}
+          />
         </Menu>
       }
       placement="right"
