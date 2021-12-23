@@ -12,6 +12,7 @@ function placeholder() {
 
 export const TreeOperationsContext = React.createContext<ContextValue>({
   addItem: placeholder,
+  duplicateItem: placeholder,
   removeItem: placeholder,
   handleMovedNode: placeholder,
   moveItemDown: placeholder,

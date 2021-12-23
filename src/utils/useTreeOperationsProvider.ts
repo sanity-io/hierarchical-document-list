@@ -1,18 +1,16 @@
-import {
-  FullTree,
-  NodeData,
-  NodeRendererProps,
-  OnMovePreviousAndNextLocation,
-  TreeItem
-} from 'react-sortable-tree'
-import {SanityTreeItem} from '../types/types'
-import {getAddItemPatch, getMovedNodePatch, getRemoveItemPatch} from './treePatches'
-import PatchEvent from '@sanity/form-builder/PatchEvent'
 import * as Patch from '@sanity/form-builder/lib/patch/patches'
-
-export type HandleMovedNodeData = NodeData & FullTree & OnMovePreviousAndNextLocation
-
-export type HandleMovedNode = (moveData: HandleMovedNodeData) => void
+import PatchEvent from '@sanity/form-builder/PatchEvent'
+import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
+import {SanityTreeItem} from '../types/types'
+import {
+  getAddItemPatch,
+  getDuplicateItemPatch,
+  getMovedNodePatch,
+  getMoveItemPatch,
+  getRemoveItemPatch,
+  HandleMovedNode,
+  HandleMovedNodeData
+} from './treePatches'
 
 export default function useTreeOperationsProvider(props: {
   patchPrefix?: string
@@ -21,10 +19,13 @@ export default function useTreeOperationsProvider(props: {
 }): {
   handleMovedNode: HandleMovedNode
   addItem: (item: SanityTreeItem) => void
+  duplicateItem: (nodeProps: NodeRendererProps) => void
   removeItem: (nodeProps: NodeRendererProps) => void
   moveItemUp: (nodeProps: NodeRendererProps) => void
   moveItemDown: (nodeProps: NodeRendererProps) => void
 } {
+  const {localTree} = props
+
   function runPatches(patches: unknown[]) {
     const finalPatches = [
       // Ensure tree array exists before any operation
@@ -48,16 +49,32 @@ export default function useTreeOperationsProvider(props: {
     runPatches(getAddItemPatch(item))
   }
 
+  function duplicateItem(nodeProps: NodeRendererProps) {
+    runPatches(getDuplicateItemPatch(nodeProps))
+  }
+
   function removeItem(nodeProps: NodeRendererProps) {
     runPatches(getRemoveItemPatch(nodeProps))
   }
 
   function moveItemUp(nodeProps: NodeRendererProps) {
-    // @TODO: move item up
+    runPatches(
+      getMoveItemPatch({
+        nodeProps,
+        localTree,
+        direction: 'up'
+      })
+    )
   }
 
   function moveItemDown(nodeProps: NodeRendererProps) {
-    // @TODO: move item down
+    runPatches(
+      getMoveItemPatch({
+        nodeProps,
+        localTree,
+        direction: 'down'
+      })
+    )
   }
 
   return {
@@ -65,6 +82,7 @@ export default function useTreeOperationsProvider(props: {
     addItem,
     removeItem,
     moveItemUp,
-    moveItemDown
+    moveItemDown,
+    duplicateItem
   }
 }

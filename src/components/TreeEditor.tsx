@@ -30,7 +30,7 @@ const TreeEditor: React.FC<{
   const operations = useTreeOperationsProvider({
     patchPrefix: props.patchPrefix,
     onChange: props.onChange,
-    localTree: localTree
+    localTree
   })
 
   return (

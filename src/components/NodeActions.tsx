@@ -1,6 +1,7 @@
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  CopyIcon,
   EllipsisVerticalIcon,
   LaunchIcon,
   RemoveCircleIcon
@@ -52,6 +53,12 @@ const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
             tone="critical"
             icon={RemoveCircleIcon}
             onClick={() => operations.removeItem(nodeProps)}
+          />
+          <MenuItem
+            text="Duplicate"
+            icon={CopyIcon}
+            disabled={!isValid}
+            onClick={() => operations.duplicateItem(nodeProps)}
           />
           <MenuItem
             text="Move up"
