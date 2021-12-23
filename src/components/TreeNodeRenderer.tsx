@@ -4,8 +4,8 @@ import {TreeRenderer} from 'react-sortable-tree'
 /**
  * To prevent expand buttons from overflowing on the left, we add a minimum left padding to all entries
  */
-const BASE_LEFT_PADDING = -5
-const NESTING_PADDING = 35
+const BASE_LEFT_PADDING = 10
+const NESTING_PADDING = 14
 
 const TreeNodeRenderer: TreeRenderer = (props) => {
   const {children, lowerSiblingCounts, connectDropTarget, isOver, draggedNode, canDrop} = props

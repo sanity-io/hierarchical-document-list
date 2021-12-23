@@ -3,7 +3,7 @@ import NodeContentRenderer from '../components/NodeContentRenderer'
 import PlaceholderDropzone from '../components/PlaceholderDropzone'
 import TreeNodeRenderer from '../components/TreeNodeRenderer'
 
-const ROW_HEIGHT = 50
+const ROW_HEIGHT = 51
 
 export function getTreeHeight(tree: TreeItem[] | undefined): string {
   // prettier-ignore

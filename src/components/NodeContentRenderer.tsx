@@ -1,5 +1,5 @@
 import {cyan, gray, red} from '@sanity/color'
-import {ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, DragHandleIcon} from '@sanity/icons'
+import {ChevronDownIcon, ChevronRightIcon, DragHandleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import {isDescendant, NodeRenderer} from 'react-sortable-tree'
@@ -89,17 +89,24 @@ const NodeContentRenderer: NodeRenderer = (props) => {
           <div
             style={{
               position: 'absolute',
-              left: '-1.5em',
-              top: '50%',
-              transform: 'translateY(-50%)'
+              left: '-2px',
+              top: '40%',
+              transform: 'translate(-100%, -50%)'
             }}
           >
             <Button
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
-              icon={node.expanded ? ChevronDownIcon : ChevronRightIcon}
+              icon={
+                node.expanded ? (
+                  <ChevronDownIcon color={gray[200].hex} />
+                ) : (
+                  <ChevronRightIcon color={gray[200].hex} />
+                )
+              }
               mode="bleed"
-              fontSize={0}
-              padding={2}
+              fontSize={2}
+              padding={1}
+              type="button"
               onClick={() =>
                 props.toggleChildrenVisibility?.({
                   node,
@@ -120,7 +127,7 @@ const NodeContentRenderer: NodeRenderer = (props) => {
               opacity: isDraggedDescendant ? 0.5 : 1
             }}
           >
-            <Flex gap={1} align="center">
+            <Flex align="center">
               {Handle}
               {typeof nodeTitle === 'function'
                 ? nodeTitle({

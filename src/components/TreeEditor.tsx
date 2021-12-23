@@ -62,7 +62,7 @@ const TreeEditor: React.FC<{
             <Stack space={1} paddingX={2} paddingTop={3}>
               <Box paddingX={2} paddingBottom={3}>
                 <Text size={2} as="h2" weight="semibold">
-                  Items not added
+                  Add more items
                 </Text>
               </Box>
               {unaddedItems.map((item) => (
@@ -74,9 +74,7 @@ const TreeEditor: React.FC<{
                       placement="left"
                       content={
                         <Box padding={2}>
-                          <Text muted size={1}>
-                            Add to the bottom of the list
-                          </Text>
+                          <Text size={1}>Add to list</Text>
                         </Box>
                       }
                     >
