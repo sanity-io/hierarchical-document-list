@@ -13,8 +13,8 @@
   },
   "homepage": "https://github.com/sanity-io/sanity-plugin-hierarchical-document-list#readme",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc",
+    "dev": "tsc -w -d",
+    "build": "tsc -d",
     "format": "prettier src -w",
     "lint": "eslint src"
   },
