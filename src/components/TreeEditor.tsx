@@ -35,7 +35,7 @@ const TreeEditor: React.FC<{
 
   return (
     <TreeEditorErrorBoundary>
-      <TreeOperationsContext.Provider value={operations}>
+      <TreeOperationsContext.Provider value={{...operations, allItemsStatus}}>
         <Stack space={4} paddingTop={4}>
           <Card
             style={{minHeight: getTreeHeight(props.tree)}}

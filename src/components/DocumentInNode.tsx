@@ -7,6 +7,7 @@ import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
 import {SanityTreeItem} from '../types/types'
+import useTreeOperations from '../utils/useTreeOperations'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
 
 /**
@@ -19,6 +20,7 @@ const DocumentInNode: React.FC<{
 }> = (props) => {
   const {node, nodeDocType, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
+  const {allItemsStatus} = useTreeOperations()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
@@ -49,7 +51,8 @@ const DocumentInNode: React.FC<{
 
   return (
     <Flex gap={2} align="center" style={{flex: 1}}>
-      {publishedId ? (
+      {/* Show loading preview while allItems aren't ready */}
+      {publishedId || allItemsStatus !== 'success' ? (
         /* Card loosely copied from @sanity/desk-tool's PaneItem.tsx */
         <Card
           __unstable_focusRing
