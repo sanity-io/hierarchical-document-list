@@ -7,14 +7,14 @@ import {
 } from '@sanity/icons'
 import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
 import React from 'react'
-import {SanityTreeItem} from '../types/types'
+import {NodeRendererProps} from 'react-sortable-tree'
 import useTreeOperations from '../utils/useTreeOperations'
 
 /**
  * Applicable only to nodes inside the main tree.
  * Unadded items have their actions defined in TreeEditor.
  */
-const NodeActions: React.FC<{item: SanityTreeItem}> = ({item}) => {
+const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
   const operations = useTreeOperations()
 
   // Adapted from @sanity\form-builder\src\inputs\ReferenceInput\ArrayItemReferenceInput.tsx
@@ -40,35 +40,36 @@ const NodeActions: React.FC<{item: SanityTreeItem}> = ({item}) => {
   //   [item.node?._ref, item?.nodeDocType]
   // )
 
+  const isValid = !!nodeProps.node.publishedId
   return (
     <MenuButton
       button={<Button padding={2} mode="bleed" icon={EllipsisVerticalIcon} />}
-      id={`hiearchical-doc-list--${item._key}-menuButton`}
+      id={`hiearchical-doc-list--${nodeProps.node._key}-menuButton`}
       menu={
         <Menu>
           <MenuItem
             text="Remove from list"
             tone="critical"
             icon={RemoveCircleIcon}
-            onClick={() => operations.removeItem(item)}
+            onClick={() => operations.removeItem(nodeProps)}
           />
           <MenuItem
             text="Move up"
             icon={ArrowUpIcon}
-            disabled={!item.publishedId}
-            onClick={() => alert('Work in progress!')}
+            disabled={!isValid}
+            onClick={() => operations.moveItemUp(nodeProps)}
           />
           <MenuItem
             text="Move down"
             icon={ArrowDownIcon}
-            disabled={!item.publishedId}
-            onClick={() => alert('Work in progress!')}
+            disabled={!isValid}
+            onClick={() => operations.moveItemDown(nodeProps)}
           />
           <MenuDivider />
           <MenuItem
             text="Open in new tab"
             icon={LaunchIcon}
-            disabled={!item.publishedId}
+            disabled={!isValid}
             onClick={() => alert('Work in progress!')}
           />
         </Menu>

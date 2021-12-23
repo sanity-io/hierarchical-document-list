@@ -1,7 +1,7 @@
 import {SanityDocument} from '@sanity/client'
 import {randomKey} from '@sanity/util/content'
 import React from 'react'
-import {TreeItem} from 'react-sortable-tree'
+import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
 import {AllItems, DocumentPair, SanityTreeItem} from '../types/types'
@@ -13,7 +13,9 @@ export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]
     .map((item) => ({
       ...item,
       expanded: item.expanded,
-      title: () => <DocumentInNode item={item} action={<NodeActions item={item} />} />,
+      title: (nodeProps: NodeRendererProps) => (
+        <DocumentInNode item={item} action={<NodeActions nodeProps={nodeProps} />} />
+      ),
       children: []
     }))
   return flatDataToTree(itemsWithTitle)

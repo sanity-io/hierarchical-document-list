@@ -129,13 +129,7 @@ const NodeContentRenderer: NodeRenderer = (props) => {
           >
             <Flex align="center">
               {Handle}
-              {typeof nodeTitle === 'function'
-                ? nodeTitle({
-                    node,
-                    path,
-                    treeIndex
-                  })
-                : nodeTitle}
+              {typeof nodeTitle === 'function' ? nodeTitle(props) : nodeTitle}
             </Flex>
           </Root>
         </div>

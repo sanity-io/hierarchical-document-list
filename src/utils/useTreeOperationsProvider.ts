@@ -1,6 +1,14 @@
-import {FullTree, NodeData, OnMovePreviousAndNextLocation, TreeItem} from 'react-sortable-tree'
+import {
+  FullTree,
+  NodeData,
+  NodeRendererProps,
+  OnMovePreviousAndNextLocation,
+  TreeItem
+} from 'react-sortable-tree'
 import {SanityTreeItem} from '../types/types'
-import getTreePatch from './getTreePatch'
+import {getAddItemPatch, getMovedNodePatch, getRemoveItemPatch} from './treePatches'
+import PatchEvent from '@sanity/form-builder/PatchEvent'
+import * as Patch from '@sanity/form-builder/lib/patch/patches'
 
 export type HandleMovedNodeData = NodeData & FullTree & OnMovePreviousAndNextLocation
 
@@ -13,36 +21,37 @@ export default function useTreeOperationsProvider(props: {
 }): {
   handleMovedNode: HandleMovedNode
   addItem: (item: SanityTreeItem) => void
-  removeItem: (item: SanityTreeItem) => void
-  moveItemUp: (item: SanityTreeItem) => void
-  moveItemDown: (item: SanityTreeItem) => void
+  removeItem: (nodeProps: NodeRendererProps) => void
+  moveItemUp: (nodeProps: NodeRendererProps) => void
+  moveItemDown: (nodeProps: NodeRendererProps) => void
 } {
+  function runPatches(patches: unknown[]) {
+    let patchEvent = PatchEvent.from(patches)
+    if (props.patchPrefix) {
+      patchEvent = PatchEvent.from(
+        patches.map((patch) => Patch.prefixPath(patch, props.patchPrefix))
+      )
+    }
+    props.onChange(patchEvent)
+  }
+
   function handleMovedNode(data: HandleMovedNodeData) {
-    const patch = getTreePatch(data, props.patchPrefix)
-    props.onChange(patch)
+    runPatches(getMovedNodePatch(data))
   }
 
   function addItem(item: SanityTreeItem) {
-    handleMovedNode({
-      nextPath: [],
-      node: item,
-      treeIndex: -1,
-      treeData: props.localTree
-    } as any)
+    runPatches(getAddItemPatch(item))
   }
 
-  function removeItem(item: SanityTreeItem) {
-    handleMovedNode({
-      nextPath: null,
-      node: item
-    } as any)
+  function removeItem(nodeProps: NodeRendererProps) {
+    runPatches(getRemoveItemPatch(nodeProps))
   }
 
-  function moveItemUp(item: SanityTreeItem) {
+  function moveItemUp(nodeProps: NodeRendererProps) {
     // @TODO: move item up
   }
 
-  function moveItemDown(item: SanityTreeItem) {
+  function moveItemDown(nodeProps: NodeRendererProps) {
     // @TODO: move item down
   }
 
