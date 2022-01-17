@@ -1,17 +1,17 @@
 {
-  "name": "sanity-plugin-hierarchical-document-list",
+  "name": "@sanity/hierarchical-document-list",
   "version": "0.1.0-next.1",
   "author": "Sanity <hello@sanity.io>",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sanity-io/sanity-plugin-hierarchical-document-list.git"
+    "url": "git+https://github.com/sanity-io/hierarchical-document-list.git"
   },
   "bugs": {
-    "url": "https://github.com/sanity-io/sanity-plugin-hierarchical-document-list/issues"
+    "url": "https://github.com/sanity-io/hierarchical-document-list/issues"
   },
-  "homepage": "https://github.com/sanity-io/sanity-plugin-hierarchical-document-list#readme",
+  "homepage": "https://github.com/sanity-io/hierarchical-document-list#readme",
   "scripts": {
     "dev": "tsc -w -d",
     "build": "tsc -d",
