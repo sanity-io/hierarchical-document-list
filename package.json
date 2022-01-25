@@ -23,32 +23,32 @@
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "@types/react-sortable-tree": "^0.3.14",
-    "@types/styled-components": "^5.1.18",
-    "@typescript-eslint/eslint-plugin": "^5.10.0",
-    "@typescript-eslint/parser": "^5.10.0",
+    "@types/styled-components": "^5.1.21",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-sanity": "^5.1.0",
     "prettier": "^2.5.1",
     "styled-components": "^5.3.3",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.5"
   },
   "type": "module",
   "dependencies": {
-    "@sanity/base": ">= 2.23.2",
+    "@sanity/base": ">= 2.25.0",
     "@sanity/color": "^2.1.6",
-    "@sanity/desk-tool": ">= 2.23.2",
-    "@sanity/form-builder": "^2.23.2",
-    "@sanity/icons": ">= 1.0.0",
-    "@sanity/ui": ">= 0.33.9",
+    "@sanity/desk-tool": ">= 2.25.0",
+    "@sanity/form-builder": "^2.25.0",
+    "@sanity/icons": ">= 1.2.0",
+    "@sanity/ui": ">= 0.37.0",
     "assert": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-sortable-tree": "^2.8.0"
   },
   "peerDependencies": {
-    "@sanity/base": ">= 2.23.2",
-    "@sanity/desk-tool": ">= 2.23.2",
+    "@sanity/base": ">= 2.25.0",
+    "@sanity/desk-tool": ">= 2.25.0",
     "styled-components": ">= 5.2.0"
   }
 }

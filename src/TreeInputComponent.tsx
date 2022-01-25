@@ -3,7 +3,7 @@ import {Marker, Path} from '@sanity/types'
 import React from 'react'
 import {FormField} from '@sanity/base/components'
 import TreeEditor from './components/TreeEditor'
-import {SanityTreeItem, TreeFieldSchema} from './types/types'
+import {SanityTreeItem, TreeFieldSchema} from './types'
 
 export interface TreeInputComponentProps {
   type: TreeFieldSchema

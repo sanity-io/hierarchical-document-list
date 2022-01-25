@@ -1,7 +1,7 @@
 import {ArraySchemaType} from '@sanity/types'
 import React from 'react'
 import TreeInputComponent from './TreeInputComponent'
-import {TreeFieldSchema} from './types/types'
+import {TreeFieldSchema} from './types'
 
 export default function createHierarchicalField({
   name,

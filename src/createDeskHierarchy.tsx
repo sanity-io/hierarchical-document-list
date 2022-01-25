@@ -2,7 +2,7 @@ import S from '@sanity/desk-tool/structure-builder'
 import {AddIcon} from '@sanity/icons'
 import React from 'react'
 import TreeDeskStructure from './TreeDeskStructure'
-import {TreeDeskStructureProps} from './types/types'
+import {TreeDeskStructureProps} from './types'
 
 interface TreeProps extends TreeDeskStructureProps {
   /**

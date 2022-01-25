@@ -2,8 +2,9 @@ import {AddCircleIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
-import {SanityTreeItem, TreeInputOptions} from '../types/types'
-import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
+import {SanityTreeItem, TreeInputOptions} from '../types'
+import getCommonTreeProps from '../utils/getCommonTreeProps'
+import getTreeHeight from '../utils/getTreeHeight'
 import {getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
 import useLocalTree from '../utils/useLocalTree'
@@ -38,7 +39,7 @@ const TreeEditor: React.FC<{
       <TreeOperationsContext.Provider value={{...operations, allItemsStatus}}>
         <Stack space={4} paddingTop={4}>
           <Card
-            style={{minHeight: getTreeHeight(props.tree)}}
+            style={{minHeight: getTreeHeight(localTree)}}
             // Only include borderBottom if there's something to show in unadded items
             borderBottom={allItemsStatus !== 'success' || unaddedItems?.length > 0}
           >
@@ -60,11 +61,14 @@ const TreeEditor: React.FC<{
 
           {allItemsStatus === 'success' && unaddedItems?.length > 0 && (
             <Stack space={1} paddingX={2} paddingTop={3}>
-              <Box paddingX={2} paddingBottom={3}>
+              <Stack space={2} paddingX={2} paddingBottom={3}>
                 <Text size={2} as="h2" weight="semibold">
                   Add more items
                 </Text>
-              </Box>
+                <Text size={1} muted>
+                  Only published documents are shown.
+                </Text>
+              </Stack>
               {unaddedItems.map((item) => (
                 <DocumentInNode
                   key={item.publishedId || item.draftId}

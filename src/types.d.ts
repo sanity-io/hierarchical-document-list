@@ -10,8 +10,10 @@ interface SanityReference {
 export interface SanityTreeItem {
   _key: string
   _type: 'hierarchy.node' | string
-  node: SanityReference
-  nodeDocType: string
+  value?: {
+    reference?: SanityReference
+    docType?: string
+  }
   /**
    * _key of parent node
    */
@@ -84,4 +86,25 @@ export interface DocumentPair {
 
 export interface AllItems {
   [publishedId: string]: DocumentPair | undefined
+}
+
+type DocumentOperation<Payload = unknown> = {
+  execute?: (payload?: Payload) => void
+  disabled?: boolean | string
+}
+
+export interface DocumentOperations {
+  patch?: DocumentOperation<unknown[]>
+  commit?: DocumentOperation
+  del?: DocumentOperation
+  delete?: DocumentOperation
+  discardChanges?: DocumentOperation
+  duplicate?: DocumentOperation
+  restore?: DocumentOperation
+  unpublish?: DocumentOperation
+  publish?: DocumentOperation
+}
+
+export interface VisibilityMap {
+  [_key: string]: boolean
 }

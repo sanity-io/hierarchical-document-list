@@ -6,7 +6,7 @@ import {Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
-import {SanityTreeItem} from '../types/types'
+import {SanityTreeItem} from '../types'
 import useTreeOperations from '../utils/useTreeOperations'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
 
@@ -18,16 +18,16 @@ const DocumentInNode: React.FC<{
   item: SanityTreeItem
   action?: React.ReactNode
 }> = (props) => {
-  const {node, nodeDocType, draftId, publishedId} = props.item
+  const {value: {reference, docType} = {}, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {allItemsStatus} = useTreeOperations()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
-    return routerPanesState.some((pane) => pane.some((group) => group.id === node?._ref))
+    return routerPanesState.some((pane) => pane.some((group) => group.id === reference?._ref))
   }, [routerPanesState])
 
-  const schemaType = React.useMemo(() => schema.get(nodeDocType), [nodeDocType])
+  const schemaType = React.useMemo(() => schema.get(docType), [docType])
 
   const LinkComponent = React.useMemo(
     () =>
@@ -35,17 +35,17 @@ const DocumentInNode: React.FC<{
       React.forwardRef((linkProps: any, ref: any) => (
         <ChildLink
           {...linkProps}
-          childId={node?._ref}
+          childId={reference?._ref}
           ref={ref}
           childParameters={{
-            type: nodeDocType
+            type: docType
           }}
         />
       )),
-    [ChildLink, node?._ref]
+    [ChildLink, reference?._ref]
   )
 
-  if (!node?._ref) {
+  if (!reference?._ref) {
     return null
   }
 
@@ -67,22 +67,22 @@ const DocumentInNode: React.FC<{
           <Preview
             layout="default"
             type={schemaType}
-            value={{_ref: draftId || node?._ref}}
+            value={{_ref: draftId || reference?._ref}}
             status={
               <DocumentPreviewStatus
                 draft={
                   draftId
                     ? ({
                         _id: draftId,
-                        _type: nodeDocType,
+                        _type: docType,
                         _updatedAt: props.item.draftUpdatedAt
                       } as SanityDocument)
                     : undefined
                 }
                 published={
                   {
-                    _id: node?._ref,
-                    _type: nodeDocType,
+                    _id: reference?._ref,
+                    _type: docType,
                     _updatedAt: props.item.publishedUpdatedAt
                   } as SanityDocument
                 }
@@ -112,7 +112,7 @@ const DocumentInNode: React.FC<{
                       {/* <Text size={1}>
                         It was deleted or it doesn't match the filters set by this hierarchy.
                       </Text> */}
-                      <Text size={1}>ID: {node._ref}</Text>
+                      <Text size={1}>ID: {reference?._ref}</Text>
                     </Stack>
                   </Flex>
                 </Box>

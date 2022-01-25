@@ -1,5 +1,5 @@
 import {getTreeFromFlatData} from 'react-sortable-tree'
-import {SanityTreeItem} from '../types/types'
+import {SanityTreeItem} from '../types'
 
 interface TreeItemWithChildren extends SanityTreeItem {
   children?: TreeItemWithChildren[]
