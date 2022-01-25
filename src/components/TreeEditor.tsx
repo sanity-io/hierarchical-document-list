@@ -60,11 +60,14 @@ const TreeEditor: React.FC<{
 
           {allItemsStatus === 'success' && unaddedItems?.length > 0 && (
             <Stack space={1} paddingX={2} paddingTop={3}>
-              <Box paddingX={2} paddingBottom={3}>
+              <Stack space={2} paddingX={2} paddingBottom={3}>
                 <Text size={2} as="h2" weight="semibold">
                   Add more items
                 </Text>
-              </Box>
+                <Text size={1} muted>
+                  Only published documents are shown.
+                </Text>
+              </Stack>
               {unaddedItems.map((item) => (
                 <DocumentInNode
                   key={item.publishedId || item.draftId}
