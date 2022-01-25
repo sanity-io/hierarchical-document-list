@@ -9,10 +9,9 @@ import flatDataToTree from './flatDataToTree'
 
 export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
   const itemsWithTitle = data
-    .filter((item) => item?.value?._ref)
+    .filter((item) => item?.value?.reference?._ref)
     .map((item) => ({
       ...item,
-      expanded: item.expanded,
       title: (nodeProps: NodeRendererProps) => (
         <DocumentInNode item={item} action={<NodeActions nodeProps={nodeProps} />} />
       ),
@@ -29,15 +28,17 @@ const documentPairToNode = (doc?: DocumentPair): SanityTreeItem | undefined => {
   return {
     _key: randomKey(12),
     _type: 'hierarchy.node',
-    nodeDocType: doc.published._type,
     draftId: doc.draft?._id,
     draftUpdatedAt: doc.draft?._updatedAt,
     publishedId: doc.published._id,
     publishedUpdatedAt: doc.published?._updatedAt,
     value: {
-      _ref: doc.published._id,
-      _type: 'reference',
-      _weak: true
+      reference: {
+        _ref: doc.published._id,
+        _type: 'reference',
+        _weak: true
+      },
+      docType: doc.published._type
     }
   }
 }
@@ -67,7 +68,9 @@ export const getUnaddedItems = (data: {
   return Object.entries(data.allItems)
     .filter(
       ([publishedId]) =>
-        publishedId && !data.tree.some((treeItem) => treeItem?.value?._ref === publishedId)
+        publishedId &&
+        // unadded items shouldn't be in the tree
+        !data.tree.some((treeItem) => treeItem?.value?.reference?._ref === publishedId)
     )
     .map(([_publishedId, documentPair]) => documentPairToNode(documentPair))
     .filter(Boolean) as SanityTreeItem[]
@@ -78,7 +81,6 @@ export function normalizeNodeForStorage(item: TreeItem): SanityTreeItem {
     _key: item._key,
     _type: item._type || 'hierarchy.node',
     value: item.value,
-    parent: item.parent,
-    nodeDocType: item.nodeDocType
+    parent: item.parent
   }
 }
