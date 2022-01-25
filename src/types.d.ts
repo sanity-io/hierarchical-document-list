@@ -10,7 +10,7 @@ interface SanityReference {
 export interface SanityTreeItem {
   _key: string
   _type: 'hierarchy.node' | string
-  node: SanityReference
+  value: SanityReference
   nodeDocType: string
   /**
    * _key of parent node

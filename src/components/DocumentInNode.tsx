@@ -18,13 +18,13 @@ const DocumentInNode: React.FC<{
   item: SanityTreeItem
   action?: React.ReactNode
 }> = (props) => {
-  const {node, nodeDocType, draftId, publishedId} = props.item
+  const {value, nodeDocType, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {allItemsStatus} = useTreeOperations()
 
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
-    return routerPanesState.some((pane) => pane.some((group) => group.id === node?._ref))
+    return routerPanesState.some((pane) => pane.some((group) => group.id === value?._ref))
   }, [routerPanesState])
 
   const schemaType = React.useMemo(() => schema.get(nodeDocType), [nodeDocType])
@@ -35,17 +35,17 @@ const DocumentInNode: React.FC<{
       React.forwardRef((linkProps: any, ref: any) => (
         <ChildLink
           {...linkProps}
-          childId={node?._ref}
+          childId={value?._ref}
           ref={ref}
           childParameters={{
             type: nodeDocType
           }}
         />
       )),
-    [ChildLink, node?._ref]
+    [ChildLink, value?._ref]
   )
 
-  if (!node?._ref) {
+  if (!value?._ref) {
     return null
   }
 
@@ -67,7 +67,7 @@ const DocumentInNode: React.FC<{
           <Preview
             layout="default"
             type={schemaType}
-            value={{_ref: draftId || node?._ref}}
+            value={{_ref: draftId || value?._ref}}
             status={
               <DocumentPreviewStatus
                 draft={
@@ -81,7 +81,7 @@ const DocumentInNode: React.FC<{
                 }
                 published={
                   {
-                    _id: node?._ref,
+                    _id: value?._ref,
                     _type: nodeDocType,
                     _updatedAt: props.item.publishedUpdatedAt
                   } as SanityDocument
@@ -112,7 +112,7 @@ const DocumentInNode: React.FC<{
                       {/* <Text size={1}>
                         It was deleted or it doesn't match the filters set by this hierarchy.
                       </Text> */}
-                      <Text size={1}>ID: {node._ref}</Text>
+                      <Text size={1}>ID: {value._ref}</Text>
                     </Stack>
                   </Flex>
                 </Box>

@@ -35,8 +35,8 @@ export default function useLocalTree({
   }
 
   const treeWithLocalContext = tree.map((item) => {
-    const draftDoc = allItems[item.node?._ref]?.draft
-    const publishedDoc = allItems[item.node?._ref]?.published
+    const draftDoc = allItems[item.value?._ref]?.draft
+    const publishedDoc = allItems[item.value?._ref]?.published
     return {
       ...item,
       expanded: visibilityMap[item._key] !== false,
