@@ -2,7 +2,7 @@ import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
 import {Box, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import TreeEditor from './components/TreeEditor'
-import {SanityTreeItem, TreeDeskStructureProps} from './types'
+import {DocumentOperation, SanityTreeItem, TreeDeskStructureProps} from './types'
 import {toGradient} from './utils/gradientPatchAdapter'
 
 interface ComponentProps {
@@ -16,17 +16,22 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
   const treeDocType = props.options.documentType || DEFAULT_TREE_DOC_TYPE
   const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_TREE_FIELD_KEY
   const {published, draft} = useEditState(props.options.documentId, treeDocType)
-  const {patch}: any = useDocumentOperation(props.options.documentId, treeDocType)
+  const {patch} = useDocumentOperation(props.options.documentId, treeDocType) as DocumentOperation
 
   const value = (published?.[treeFieldKey] || []) as SanityTreeItem[]
 
   const handleChange = React.useCallback(
-    (patchEvent) => patch.execute(toGradient(patchEvent.patches)),
+    (patchEvent) => {
+      if (!patch?.execute) {
+        return
+      }
+      patch.execute(toGradient(patchEvent.patches))
+    },
     [patch]
   )
 
   React.useEffect(() => {
-    if (!published?._id && patch?.excute && !patch?.disabled) {
+    if (!published?._id && patch?.execute && !patch?.disabled) {
       // If no published document, create it
       patch.execute([{setIfMissing: {[treeFieldKey]: []}}])
     }

@@ -85,3 +85,10 @@ export interface DocumentPair {
 export interface AllItems {
   [publishedId: string]: DocumentPair | undefined
 }
+
+export interface DocumentOperation {
+  patch?: {
+    execute?: (patches: unknown) => void
+    disabled?: boolean
+  }
+}
