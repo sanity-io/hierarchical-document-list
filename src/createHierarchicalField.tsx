@@ -1,4 +1,4 @@
-import {ArraySchemaType} from '@sanity/types'
+import {ArraySchemaType} from '@sanity/types/src/schema'
 import React from 'react'
 import TreeInputComponent from './TreeInputComponent'
 import {TreeFieldSchema} from './types'

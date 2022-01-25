@@ -1,5 +1,5 @@
 import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType} from '@sanity/types'
+import {ArraySchemaType} from '@sanity/types/src/schema'
 
 interface SanityReference {
   _type: 'reference'
