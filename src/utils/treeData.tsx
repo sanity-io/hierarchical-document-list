@@ -4,19 +4,43 @@ import React from 'react'
 import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
-import {AllItems, DocumentPair, SanityTreeItem} from '../types'
+import {AllItems, DocumentPair, SanityTreeItem, VisibilityMap} from '../types'
 import flatDataToTree from './flatDataToTree'
 
-export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {
-  const itemsWithTitle = data
+export const dataToEditorTree = ({
+  tree,
+  allItems,
+  visibilityMap
+}: {
+  tree: SanityTreeItem[]
+  allItems: AllItems
+  visibilityMap: VisibilityMap
+}): TreeItem[] => {
+  const itemsWithTitle = tree
     .filter((item) => item?.value?.reference?._ref)
-    .map((item) => ({
-      ...item,
-      title: (nodeProps: NodeRendererProps) => (
-        <DocumentInNode item={item} action={<NodeActions nodeProps={nodeProps} />} />
-      ),
-      children: []
-    }))
+    .map((item) => {
+      const refId = item.value?.reference?._ref
+      const docPair = refId ? allItems[refId] : undefined
+      const draftDoc = docPair?.draft
+      const publishedDoc = docPair?.published
+
+      const enhancedItem = {
+        ...item,
+        expanded: visibilityMap[item._key] !== false,
+        draftId: draftDoc?._id,
+        publishedId: publishedDoc?._id,
+        draftUpdatedAt: draftDoc?._updatedAt,
+        publishedUpdatedAt: publishedDoc?._updatedAt
+      }
+
+      return {
+        ...enhancedItem,
+        title: (nodeProps: NodeRendererProps) => (
+          <DocumentInNode item={enhancedItem} action={<NodeActions nodeProps={nodeProps} />} />
+        ),
+        children: []
+      }
+    })
   return flatDataToTree(itemsWithTitle)
 }
 

@@ -1,11 +1,7 @@
 import React from 'react'
 import {OnVisibilityToggleData, TreeItem} from 'react-sortable-tree'
-import {AllItems, SanityTreeItem} from '../types'
+import {AllItems, SanityTreeItem, VisibilityMap} from '../types'
 import {dataToEditorTree} from './treeData'
-
-type VisibilityMap = {
-  [_key: string]: boolean
-}
 
 /**
  * Enhances tree data with information on:
@@ -34,23 +30,12 @@ export default function useLocalTree({
     })
   }
 
-  const treeWithLocalContext = tree.map((item) => {
-    const refId = item.value?.reference?._ref
-    const docPair = refId ? allItems[refId] : undefined
-    const draftDoc = docPair?.draft
-    const publishedDoc = docPair?.published
-    return {
-      ...item,
-      expanded: visibilityMap[item._key] !== false,
-      draftId: draftDoc?._id,
-      publishedId: publishedDoc?._id,
-      draftUpdatedAt: draftDoc?._updatedAt,
-      publishedUpdatedAt: publishedDoc?._updatedAt
-    }
-  })
-
   return {
-    localTree: dataToEditorTree(treeWithLocalContext),
+    localTree: dataToEditorTree({
+      tree,
+      allItems,
+      visibilityMap
+    }),
     handleVisibilityToggle
   }
 }

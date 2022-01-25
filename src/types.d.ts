@@ -94,3 +94,7 @@ export interface DocumentOperation {
     disabled?: boolean
   }
 }
+
+export interface VisibilityMap {
+  [_key: string]: boolean
+}
