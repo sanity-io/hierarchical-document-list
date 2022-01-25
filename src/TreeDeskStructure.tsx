@@ -1,8 +1,20 @@
+import {PublishIcon} from '@sanity/icons'
 import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
-import {Box, Flex, Spinner} from '@sanity/ui'
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+  useToast
+} from '@sanity/ui'
 import React from 'react'
 import TreeEditor from './components/TreeEditor'
-import {DocumentOperation, SanityTreeItem, TreeDeskStructureProps} from './types'
+import {DocumentOperations, SanityTreeItem, TreeDeskStructureProps} from './types'
 import {toGradient} from './utils/gradientPatchAdapter'
 
 interface ComponentProps {
@@ -16,9 +28,13 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
   const treeDocType = props.options.documentType || DEFAULT_TREE_DOC_TYPE
   const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_TREE_FIELD_KEY
   const {published, draft} = useEditState(props.options.documentId, treeDocType)
-  const {patch} = useDocumentOperation(props.options.documentId, treeDocType) as DocumentOperation
+  const {patch, ...ops} = useDocumentOperation(
+    props.options.documentId,
+    treeDocType
+  ) as DocumentOperations
+  const {push} = useToast()
 
-  const value = (published?.[treeFieldKey] || []) as SanityTreeItem[]
+  const treeValue = (published?.[treeFieldKey] || []) as SanityTreeItem[]
 
   const handleChange = React.useCallback(
     (patchEvent) => {
@@ -37,17 +53,41 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
     }
   }, [published?._id, patch])
 
-  if (draft?._id && !published?._id) {
-    // @TODO: handle drafts by warning users when they exist and displaying a Live Sync badge when they don't
-  }
-
   if (draft?._id) {
-    // @TODO: Warning to delete draft
+    return (
+      <Container padding={5} style={{maxWidth: '25rem'}} sizing={'content'}>
+        <Card padding={4} border radius={2} width={0} tone="caution">
+          <Stack space={3}>
+            <Heading size={1}>This hierarchy tree contains a draft</Heading>
+            {/* <Text>Hierarchies can't currently contain drafts.</Text> */}
+            <Text size={1}>
+              Click on the button below to publish your draft in order to continue editing the live
+              published document.
+            </Text>
+            <Box marginTop={2}>
+              <Button
+                fontSize={1}
+                tone="positive"
+                text="Publish draft"
+                icon={PublishIcon}
+                onClick={() => {
+                  ops.publish?.execute?.()
+                  push({
+                    status: 'info',
+                    title: 'Publishing draft...'
+                  })
+                }}
+              />
+            </Box>
+          </Stack>
+        </Card>
+      </Container>
+    )
   }
 
   if (!published?._id) {
     return (
-      <Flex padding={5} align={'center'} justify={'center'}>
+      <Flex padding={5} align={'center'} justify={'center'} height={'fill'}>
         <Spinner width={4} muted />
       </Flex>
     )
@@ -57,7 +97,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
     <Box paddingBottom={5} paddingRight={2}>
       <TreeEditor
         options={props.options}
-        tree={value}
+        tree={treeValue}
         onChange={handleChange}
         patchPrefix={treeFieldKey}
       />

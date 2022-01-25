@@ -88,11 +88,21 @@ export interface AllItems {
   [publishedId: string]: DocumentPair | undefined
 }
 
-export interface DocumentOperation {
-  patch?: {
-    execute?: (patches: unknown) => void
-    disabled?: boolean
-  }
+type DocumentOperation<Payload = unknown> = {
+  execute?: (payload?: Payload) => void
+  disabled?: boolean | string
+}
+
+export interface DocumentOperations {
+  patch?: DocumentOperation<unknown[]>
+  commit?: DocumentOperation
+  del?: DocumentOperation
+  delete?: DocumentOperation
+  discardChanges?: DocumentOperation
+  duplicate?: DocumentOperation
+  restore?: DocumentOperation
+  unpublish?: DocumentOperation
+  publish?: DocumentOperation
 }
 
 export interface VisibilityMap {
