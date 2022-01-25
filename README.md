@@ -65,20 +65,26 @@ The plugin stores flat arrays which represent your hierarchical data through `pa
   {
     "_key": "741b9edde2ba",
     "_type": "hierarchy.node",
-    "node": {
-      "_ref": "75c47994-e6bb-487a-b8c9-b283f2436031",
-      "_type": "reference",
-      "_weak": true // This plugin includes weak references by default
+    "value": {
+      "reference": {
+        "_ref": "75c47994-e6bb-487a-b8c9-b283f2436031",
+        "_type": "reference",
+        "_weak": true // This plugin includes weak references by default
+      },
+      "docType": "docs.article"
     }
     // no `parent`, this item is top-level
   },
   {
     "_key": "f92eaeec96f7",
     "_type": "hierarchy.node",
-    "node": {
-      "_ref": "7ad60a02-5d6e-47d8-92e2-6724cc130058",
-      "_type": "reference",
-      "_weak": true
+    "value": {
+      "reference": {
+        "_ref": "7ad60a02-5d6e-47d8-92e2-6724cc130058",
+        "_type": "reference",
+        "_weak": true
+      },
+      "docType": "site.post"
     },
     // The `parent` property points to the _key of the parent node where this one is nested
     "parent": "741b9edde2ba"
@@ -98,10 +104,12 @@ From the the above, we know how to expand referenced documents in GROQ:
     parent,
 
     // "Expand" the reference to the node
-    node->{
-      // Get whatever property you need from your documents
-      title,
-      slug,
+    value {
+      reference->{
+        // Get whatever property you need from your documents
+        title,
+        slug,
+      }
     }
   }
 }
@@ -119,13 +127,13 @@ Find a given document in a hierarchy and get its parent - useful for rendering b
   // From the tree, get the 1st node that references a given document _id
   tree[node._ref == "my-book-section"][0] {
     _key,
-    "section": node->{
+    "section": node.reference->{
       title,
     },
     // Then, from the tree get the element matching the `parent` _key of the found node
     "parentChapter": ^.tree[_key == ^.parent][0]{
       _key,
-      "chapter": node->{
+      "chapter": node.reference->{
         title,
         contributors,
       }
@@ -148,10 +156,12 @@ const hierarchyDocument = await client.fetch(`*[_id == "book-v3-review-a"][0]{
     // Make sure you include each item's _key and parent
     _key,
     parent,
-    node->{
-      title,
-      slug,
-      content,
+    value {
+      reference->{
+        title,
+        slug,
+        content,
+      }
     }
   }
 }`)
@@ -173,9 +183,10 @@ export default {
   name: 'myCustomHierarchicalType',
   title: 'Custom document type for holding hierarchical data',
   type: 'document',
+  liveEdit: true, // 👉 Important: set liveEdit to `true` to ensure the UI works properly
   fields: [
     createHierarchicalField({
-      name: 'treeData', // custom key for
+      name: 'customTreeDataKey', // key for the tree field in the document
       title: 'Custom tree',
       options: {
         referenceTo: ['category']
@@ -185,25 +196,24 @@ export default {
 }
 ```
 
----
-
-📌 **Note:** you can also use the method above to add hierarchies inside the schema of documents and objects. We're considering adapting this input to support any type of nest-able data, not only references. Until then, avoid `createHierarchicalField` for fields in nested schemas as, in these contexts, it lacks the necessary affordances for a good editing experience.
-
----
-
 Then, in your desk structure where you added the hierarchical document(s), include the right `documentType` and `fieldKeyInDocument` properties:
 
 ```js
 createDeskHierarchy({
-  title: 'Hierarchies',
-  referenceTo: ['product', 'collection'],
-  documentId: 'hierarchies',
-
-  // Include whatever values you defined in your schema
-  documentType: 'myCustomHierarchicalType',
-  fieldKeyInDocument: 'treeData'
+  // Include whatever values you defined in your schema in the step above
+  documentType: 'myCustomHierarchicalType', // the name of your document type
+  fieldKeyInDocument: 'customTreeDataKey' // the name of the hierarchical field
+  // ...
 })
 ```
+
+---
+
+📌 **Note:** you can also use the method above to add hierarchies inside the schema of documents and objects, which would be editable outside the desk structure.
+
+We're considering adapting this input to support any type of nest-able data, not only references. Until then, avoid `createHierarchicalField` for fields in nested schemas as, in these contexts, it lacks the necessary affordances for a good editing experience.
+
+---
 
 ## License
 
