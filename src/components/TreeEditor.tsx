@@ -3,7 +3,8 @@ import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
 import {SanityTreeItem, TreeInputOptions} from '../types'
-import getCommonTreeProps, {getTreeHeight} from '../utils/getCommonTreeProps'
+import getCommonTreeProps from '../utils/getCommonTreeProps'
+import getTreeHeight from '../utils/getTreeHeight'
 import {getUnaddedItems} from '../utils/treeData'
 import useAllItems from '../utils/useAllItems'
 import useLocalTree from '../utils/useLocalTree'
@@ -38,7 +39,7 @@ const TreeEditor: React.FC<{
       <TreeOperationsContext.Provider value={{...operations, allItemsStatus}}>
         <Stack space={4} paddingTop={4}>
           <Card
-            style={{minHeight: getTreeHeight(props.tree)}}
+            style={{minHeight: getTreeHeight(localTree)}}
             // Only include borderBottom if there's something to show in unadded items
             borderBottom={allItemsStatus !== 'success' || unaddedItems?.length > 0}
           >
