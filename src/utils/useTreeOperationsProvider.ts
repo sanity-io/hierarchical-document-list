@@ -1,7 +1,7 @@
 import * as Patch from '@sanity/form-builder/lib/patch/patches'
 import PatchEvent from '@sanity/form-builder/PatchEvent'
 import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
-import {SanityTreeItem} from '../types/types'
+import {SanityTreeItem} from '../types'
 import {
   getAddItemPatch,
   getDuplicateItemPatch,

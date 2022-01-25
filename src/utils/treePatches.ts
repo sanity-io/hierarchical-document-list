@@ -9,7 +9,7 @@ import {
   OnMovePreviousAndNextLocation,
   TreeItem
 } from 'react-sortable-tree'
-import {SanityTreeItem} from '../types/types'
+import {SanityTreeItem} from '../types'
 import getAdjescentNodes from './getAdjescentNodes'
 import moveItemInArray from './moveItemInArray'
 import {normalizeNodeForStorage} from './treeData'

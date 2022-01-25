@@ -2,7 +2,7 @@ import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
 import {Box, Flex, Spinner} from '@sanity/ui'
 import React from 'react'
 import TreeEditor from './components/TreeEditor'
-import {SanityTreeItem, TreeDeskStructureProps} from './types/types'
+import {SanityTreeItem, TreeDeskStructureProps} from './types'
 import {toGradient} from './utils/gradientPatchAdapter'
 
 interface ComponentProps {

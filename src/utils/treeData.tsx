@@ -4,7 +4,7 @@ import React from 'react'
 import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
-import {AllItems, DocumentPair, SanityTreeItem} from '../types/types'
+import {AllItems, DocumentPair, SanityTreeItem} from '../types'
 import flatDataToTree from './flatDataToTree'
 
 export const dataToEditorTree = (data: (SanityTreeItem & {expanded?: boolean})[]): TreeItem[] => {

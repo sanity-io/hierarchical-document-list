@@ -6,7 +6,7 @@ import {Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
-import {SanityTreeItem} from '../types/types'
+import {SanityTreeItem} from '../types'
 import useTreeOperations from '../utils/useTreeOperations'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
 

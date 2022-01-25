@@ -1,6 +1,6 @@
 import React from 'react'
 import {OnVisibilityToggleData, TreeItem} from 'react-sortable-tree'
-import {AllItems, SanityTreeItem} from '../types/types'
+import {AllItems, SanityTreeItem} from '../types'
 import {dataToEditorTree} from './treeData'
 
 type VisibilityMap = {
