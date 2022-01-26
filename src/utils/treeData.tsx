@@ -1,7 +1,7 @@
 import {SanityDocument} from '@sanity/client'
 import {randomKey} from '@sanity/util/content'
 import React from 'react'
-import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
+import {TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
 import {
@@ -9,6 +9,7 @@ import {
   DocumentPair,
   EnhancedTreeItem,
   LocalTreeItem,
+  NodeProps,
   StoredTreeItem,
   VisibilityMap
 } from '../types'
@@ -42,7 +43,7 @@ export const dataToEditorTree = ({
 
       return {
         ...enhancedItem,
-        title: (nodeProps: NodeRendererProps) => (
+        title: (nodeProps: NodeProps) => (
           <DocumentInNode item={enhancedItem} action={<NodeActions nodeProps={nodeProps} />} />
         ),
         children: []
