@@ -35,7 +35,6 @@ export default function createDeskHierarchy(props: TreeProps) {
     .id(documentId)
     .menuItems(
       (referenceTo || []).map((schemaType) =>
-        // @TODO: ensure menu items work - menuItem().action renders
         S.menuItem()
           .intent({
             type: 'create',

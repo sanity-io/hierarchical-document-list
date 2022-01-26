@@ -4,6 +4,8 @@ export default {
   name: 'hierarchy.tree',
   title: 'Hierarchical tree',
   type: 'document',
+  // The plugin needs to define a `schemaType` with liveEdit enabled so that
+  // `useDocumentOperation` in TreeDeskStructure.tsx doesn't create drafts at every patch.
   liveEdit: true,
   fields: [
     createHierarchicalField({
