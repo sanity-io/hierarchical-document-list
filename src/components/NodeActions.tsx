@@ -2,14 +2,14 @@ import {IntentLink} from '@sanity/base/components'
 import {CopyIcon, EllipsisVerticalIcon, LaunchIcon, RemoveCircleIcon} from '@sanity/icons'
 import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
 import React from 'react'
-import {NodeRendererProps} from 'react-sortable-tree'
+import {NodeProps} from '../types'
 import useTreeOperations from '../utils/useTreeOperations'
 
 /**
  * Applicable only to nodes inside the main tree.
  * Unadded items have their actions defined in TreeEditor.
  */
-const NodeActions: React.FC<{nodeProps: NodeRendererProps}> = ({nodeProps}) => {
+const NodeActions: React.FC<{nodeProps: NodeProps}> = ({nodeProps}) => {
   const operations = useTreeOperations()
   const {node} = nodeProps
 

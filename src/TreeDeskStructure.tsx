@@ -4,7 +4,7 @@ import {Box, Button, Flex, Spinner, useToast} from '@sanity/ui'
 import React from 'react'
 import DeskWarning from './components/DeskWarning'
 import TreeEditor from './components/TreeEditor'
-import {DocumentOperations, SanityTreeItem, TreeDeskStructureProps} from './types'
+import {DocumentOperations, StoredTreeItem, TreeDeskStructureProps} from './types'
 import {toGradient} from './utils/gradientPatchAdapter'
 
 interface ComponentProps {
@@ -24,7 +24,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
   ) as DocumentOperations
   const {push} = useToast()
 
-  const treeValue = (published?.[treeFieldKey] || []) as SanityTreeItem[]
+  const treeValue = (published?.[treeFieldKey] || []) as StoredTreeItem[]
 
   const handleChange = React.useCallback(
     (patchEvent) => {

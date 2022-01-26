@@ -1,5 +1,6 @@
 import {SanityDocument} from '@sanity/client'
 import {ArraySchemaType} from '@sanity/types/src/schema'
+import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
 
 interface SanityReference {
   _type: 'reference'
@@ -7,7 +8,10 @@ interface SanityReference {
   _weak?: boolean
 }
 
-export interface SanityTreeItem {
+/**
+ * Objects saved to tree documents in Sanity's Content Lake
+ */
+export interface StoredTreeItem {
   _key: string
   _type: 'hierarchy.node' | string
   value?: {
@@ -18,6 +22,16 @@ export interface SanityTreeItem {
    * _key of parent node
    */
   parent?: string | null
+}
+
+/**
+ * Tree items enhanced locally in the client with info from `allItems` and `visibilityMap`.
+ * `allItems` stop here and never become LocalTreeItems as they aren't added to react-sortable-tree.
+ *
+ * See `useLocalTree.ts` and `dataToEditorTree()`.
+ */
+export interface EnhancedTreeItem extends StoredTreeItem {
+  expanded?: boolean | undefined
   /**
    * Used by DocumentInNode to render the preview for drafts if they exist.
    * Also informs document status icons.
@@ -31,6 +45,11 @@ export interface SanityTreeItem {
   publishedId?: string
   publishedUpdatedAt?: string
 }
+
+/**
+ * Tree items as found in the sortable tree itself.
+ */
+export type LocalTreeItem = EnhancedTreeItem & Pick<TreeItem, 'title' | 'children'>
 
 export interface TreeInputOptions {
   /**
@@ -113,4 +132,8 @@ export interface DocumentOperations {
 
 export interface VisibilityMap {
   [_key: string]: boolean
+}
+
+export interface NodeProps extends NodeRendererProps {
+  node: LocalTreeItem
 }

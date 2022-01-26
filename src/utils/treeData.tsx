@@ -4,7 +4,14 @@ import React from 'react'
 import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
-import {AllItems, DocumentPair, SanityTreeItem, VisibilityMap} from '../types'
+import {
+  AllItems,
+  DocumentPair,
+  EnhancedTreeItem,
+  LocalTreeItem,
+  StoredTreeItem,
+  VisibilityMap
+} from '../types'
 import flatDataToTree from './flatDataToTree'
 
 export const dataToEditorTree = ({
@@ -12,10 +19,10 @@ export const dataToEditorTree = ({
   allItems,
   visibilityMap
 }: {
-  tree: SanityTreeItem[]
+  tree: StoredTreeItem[]
   allItems: AllItems
   visibilityMap: VisibilityMap
-}): TreeItem[] => {
+}): LocalTreeItem[] => {
   const itemsWithTitle = tree
     .filter((item) => item?.value?.reference?._ref)
     .map((item) => {
@@ -24,7 +31,7 @@ export const dataToEditorTree = ({
       const draftDoc = docPair?.draft
       const publishedDoc = docPair?.published
 
-      const enhancedItem = {
+      const enhancedItem: LocalTreeItem = {
         ...item,
         expanded: visibilityMap[item._key] !== false,
         draftId: draftDoc?._id,
@@ -44,7 +51,7 @@ export const dataToEditorTree = ({
   return flatDataToTree(itemsWithTitle)
 }
 
-const documentPairToNode = (doc?: DocumentPair): SanityTreeItem | undefined => {
+const documentPairToNode = (doc?: DocumentPair): EnhancedTreeItem | undefined => {
   if (!doc?.published?._id) {
     return undefined
   }
@@ -75,18 +82,18 @@ export const flatTree = (tree: TreeItem[]): TreeItem[] => {
 }
 
 export interface FetchData {
-  mainTree?: SanityTreeItem[]
+  mainTree?: LocalTreeItem[]
   allItems?: SanityDocument[]
 }
 
 export const getUnaddedItems = (data: {
   allItems: AllItems
-  tree: SanityTreeItem[]
-}): SanityTreeItem[] => {
+  tree: StoredTreeItem[]
+}): EnhancedTreeItem[] => {
   if (!data.tree) {
     return Object.entries(data.allItems)
       .map((value) => documentPairToNode(value[1]))
-      .filter(Boolean) as SanityTreeItem[]
+      .filter(Boolean) as EnhancedTreeItem[]
   }
 
   return Object.entries(data.allItems)
@@ -97,10 +104,10 @@ export const getUnaddedItems = (data: {
         !data.tree.some((treeItem) => treeItem?.value?.reference?._ref === publishedId)
     )
     .map(([_publishedId, documentPair]) => documentPairToNode(documentPair))
-    .filter(Boolean) as SanityTreeItem[]
+    .filter(Boolean) as EnhancedTreeItem[]
 }
 
-export function normalizeNodeForStorage(item: TreeItem): SanityTreeItem {
+export function normalizeNodeForStorage(item: LocalTreeItem): StoredTreeItem {
   return {
     _key: item._key,
     _type: item._type || 'hierarchy.node',

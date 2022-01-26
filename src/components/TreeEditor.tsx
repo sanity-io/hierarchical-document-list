@@ -2,10 +2,11 @@ import {AddCircleIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import React from 'react'
 import SortableTree from 'react-sortable-tree'
-import {SanityTreeItem, TreeInputOptions} from '../types'
+import {StoredTreeItem, TreeInputOptions} from '../types'
 import getCommonTreeProps from '../utils/getCommonTreeProps'
 import getTreeHeight from '../utils/getTreeHeight'
 import {getUnaddedItems} from '../utils/treeData'
+import {HandleMovedNodeData} from '../utils/treePatches'
 import useAllItems from '../utils/useAllItems'
 import useLocalTree from '../utils/useLocalTree'
 import {TreeOperationsContext} from '../utils/useTreeOperations'
@@ -17,7 +18,7 @@ import TreeEditorErrorBoundary from './TreeEditorErrorBoundary'
  * The loaded tree users interact with
  */
 const TreeEditor: React.FC<{
-  tree: SanityTreeItem[]
+  tree: StoredTreeItem[]
   onChange: (patch: unknown) => void
   options: TreeInputOptions
   patchPrefix?: string
@@ -49,7 +50,9 @@ const TreeEditor: React.FC<{
                 // Do nothing. onMoveNode will do all the work
               }}
               onVisibilityToggle={handleVisibilityToggle}
-              onMoveNode={operations.handleMovedNode}
+              onMoveNode={(data) =>
+                operations.handleMovedNode(data as unknown as HandleMovedNodeData)
+              }
               treeData={localTree}
               {...getCommonTreeProps({
                 placeholder: {

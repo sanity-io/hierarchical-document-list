@@ -3,12 +3,12 @@ import {Marker, Path} from '@sanity/types'
 import React from 'react'
 import {FormField} from '@sanity/base/components'
 import TreeEditor from './components/TreeEditor'
-import {SanityTreeItem, TreeFieldSchema} from './types'
+import {StoredTreeItem, TreeFieldSchema} from './types'
 
 export interface TreeInputComponentProps {
   type: TreeFieldSchema
-  value: SanityTreeItem[]
-  compareValue: SanityTreeItem[]
+  value: StoredTreeItem[]
+  compareValue: StoredTreeItem[]
   markers: Marker[]
   level: number
   onChange: (event: unknown) => void

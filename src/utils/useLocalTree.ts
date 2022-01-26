@@ -1,12 +1,12 @@
 import React from 'react'
-import {OnVisibilityToggleData, TreeItem} from 'react-sortable-tree'
-import {AllItems, SanityTreeItem, VisibilityMap} from '../types'
+import {OnVisibilityToggleData} from 'react-sortable-tree'
+import {AllItems, LocalTreeItem, StoredTreeItem, VisibilityMap} from '../types'
 import {dataToEditorTree} from './treeData'
 
 /**
  * Enhances tree data with information on:
  *   - `expanded` - native property of react-sortable-tree to determine collapsing & expanding of a node's children
- *   - `draftId` & `publishedId` - refer to SanityTreeItem's type annotations
+ *   - `draftId` & `publishedId` - refer to LocalTreeItem's type annotations
  *
  * Doesn't modify the main tree or has side-effects on data.
  * Has the added benefit of being local to the user, so external changes won't affect local visibility.
@@ -15,11 +15,11 @@ export default function useLocalTree({
   tree,
   allItems
 }: {
-  tree: SanityTreeItem[]
+  tree: StoredTreeItem[]
   allItems: AllItems
 }): {
   handleVisibilityToggle: (data: OnVisibilityToggleData) => void
-  localTree: TreeItem[]
+  localTree: LocalTreeItem[]
 } {
   const [visibilityMap, setVisibilityMap] = React.useState<VisibilityMap>({})
 

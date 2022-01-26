@@ -1,7 +1,6 @@
 import * as Patch from '@sanity/form-builder/lib/patch/patches'
 import PatchEvent from '@sanity/form-builder/PatchEvent'
-import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
-import {SanityTreeItem} from '../types'
+import {LocalTreeItem, NodeProps} from '../types'
 import {
   getAddItemPatch,
   getDuplicateItemPatch,
@@ -15,14 +14,14 @@ import {
 export default function useTreeOperationsProvider(props: {
   patchPrefix?: string
   onChange: (patch: unknown) => void
-  localTree: TreeItem[]
+  localTree: LocalTreeItem[]
 }): {
   handleMovedNode: HandleMovedNode
-  addItem: (item: SanityTreeItem) => void
-  duplicateItem: (nodeProps: NodeRendererProps) => void
-  removeItem: (nodeProps: NodeRendererProps) => void
-  moveItemUp: (nodeProps: NodeRendererProps) => void
-  moveItemDown: (nodeProps: NodeRendererProps) => void
+  addItem: (item: LocalTreeItem) => void
+  duplicateItem: (nodeProps: NodeProps) => void
+  removeItem: (nodeProps: NodeProps) => void
+  moveItemUp: (nodeProps: NodeProps) => void
+  moveItemDown: (nodeProps: NodeProps) => void
 } {
   const {localTree} = props
 
@@ -41,23 +40,23 @@ export default function useTreeOperationsProvider(props: {
     props.onChange(patchEvent)
   }
 
-  function handleMovedNode(data: HandleMovedNodeData) {
+  function handleMovedNode(data: HandleMovedNodeData & {node: LocalTreeItem}) {
     runPatches(getMovedNodePatch(data))
   }
 
-  function addItem(item: SanityTreeItem) {
+  function addItem(item: LocalTreeItem) {
     runPatches(getAddItemPatch(item))
   }
 
-  function duplicateItem(nodeProps: NodeRendererProps) {
+  function duplicateItem(nodeProps: NodeProps & {node: LocalTreeItem}) {
     runPatches(getDuplicateItemPatch(nodeProps))
   }
 
-  function removeItem(nodeProps: NodeRendererProps) {
+  function removeItem(nodeProps: NodeProps) {
     runPatches(getRemoveItemPatch(nodeProps))
   }
 
-  function moveItemUp(nodeProps: NodeRendererProps) {
+  function moveItemUp(nodeProps: NodeProps) {
     runPatches(
       getMoveItemPatch({
         nodeProps,
@@ -67,7 +66,7 @@ export default function useTreeOperationsProvider(props: {
     )
   }
 
-  function moveItemDown(nodeProps: NodeRendererProps) {
+  function moveItemDown(nodeProps: NodeProps) {
     runPatches(
       getMoveItemPatch({
         nodeProps,

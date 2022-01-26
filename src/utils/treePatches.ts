@@ -5,23 +5,22 @@ import {
   FullTree,
   getFlatDataFromTree,
   NodeData,
-  NodeRendererProps,
   OnMovePreviousAndNextLocation,
   TreeItem
 } from 'react-sortable-tree'
-import {SanityTreeItem} from '../types'
+import {LocalTreeItem, NodeProps} from '../types'
 import getAdjescentNodes from './getAdjescentNodes'
 import moveItemInArray from './moveItemInArray'
 import {normalizeNodeForStorage} from './treeData'
 
 export type HandleMovedNodeData = Omit<
   NodeData & FullTree & OnMovePreviousAndNextLocation,
-  'prevPath' | 'prevTreeIndex' | 'path' | 'treeIndex'
->
+  'prevPath' | 'prevTreeIndex' | 'path' | 'treeIndex' | 'node'
+> & {node: LocalTreeItem}
 
 export type HandleMovedNode = (moveData: HandleMovedNodeData) => void
 
-export function getAddItemPatch(item: SanityTreeItem): unknown[] {
+export function getAddItemPatch(item: LocalTreeItem): unknown[] {
   const normalizedNode = normalizeNodeForStorage(item)
 
   return [
@@ -30,7 +29,7 @@ export function getAddItemPatch(item: SanityTreeItem): unknown[] {
   ]
 }
 
-export function getDuplicateItemPatch(nodeProps: NodeRendererProps): unknown[] {
+export function getDuplicateItemPatch(nodeProps: NodeProps): unknown[] {
   const newItem = {
     ...nodeProps.node,
     _key: randomKey(12)
@@ -43,7 +42,7 @@ export function getDuplicateItemPatch(nodeProps: NodeRendererProps): unknown[] {
   ]
 }
 
-export function getRemoveItemPatch({node}: Pick<NodeRendererProps, 'node'>): unknown[] {
+export function getRemoveItemPatch({node}: Pick<NodeProps, 'node'>): unknown[] {
   const keyPath = {_key: node._key}
   const children = getChildrenPaths(node)
 
@@ -90,9 +89,8 @@ export function getMovedNodePatch(data: HandleMovedNodeData): unknown[] {
       ? // After the sibling before it
         Patch.insert([normalizedNode], 'after', [{_key: leadingNode.node._key}])
       : // Or before the sibling right after it, in case there's no leading sibling node
-        Patch.insert([normalizedNode], 'before', [
-          followingNode?.node?._key ? {_key: followingNode.node._key} : data.nextTreeIndex
-        ]),
+        // prettier-ignore
+        Patch.insert([normalizedNode], 'before', [followingNode?.node?._key ? {_key: followingNode.node._key} : data.nextTreeIndex]),
 
     // 3. Patch the new node with its new `parent`
     nextParentNode
@@ -117,11 +115,11 @@ function getChildrenPaths(node: TreeItem): string[] {
 }
 
 export function getMoveItemPatch({
-  nodeProps: {node, treeIndex, parentNode},
+  nodeProps: {node, treeIndex},
   localTree,
   direction = 'up'
 }: {
-  nodeProps: NodeRendererProps
+  nodeProps: NodeProps
   localTree: TreeItem[]
   direction: 'up' | 'down'
 }): unknown[] {
@@ -145,16 +143,6 @@ export function getMoveItemPatch({
   })
 
   const normalizedNode = normalizeNodeForStorage(node)
-  console.log(`Move ${direction}`, {
-    node,
-    treeIndex,
-    parentNode,
-    nextFlatTree,
-    flatTree,
-    localTree,
-    leadingSibling: leadingNode,
-    followingSibling: followingNode
-  })
 
   // When moving up, look at following node to figure out what is the next parent.
   const nodeToInheritParent = direction === 'up' ? followingNode : leadingNode

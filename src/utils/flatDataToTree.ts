@@ -1,11 +1,11 @@
 import {getTreeFromFlatData} from 'react-sortable-tree'
-import {SanityTreeItem} from '../types'
+import {StoredTreeItem} from '../types'
 
-interface TreeItemWithChildren extends SanityTreeItem {
+interface TreeItemWithChildren extends StoredTreeItem {
   children?: TreeItemWithChildren[]
 }
 
-export default function flatDataToTree(data: SanityTreeItem[]): TreeItemWithChildren[] {
+export default function flatDataToTree(data: StoredTreeItem[]): TreeItemWithChildren[] {
   return getTreeFromFlatData({
     flatData: data.map((item) => ({
       ...item,
