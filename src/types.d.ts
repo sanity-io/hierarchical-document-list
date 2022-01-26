@@ -1,5 +1,5 @@
 import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType} from '@sanity/types/src/schema'
+import {ArraySchemaType} from '@sanity/types'
 import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
 
 interface SanityReference {
