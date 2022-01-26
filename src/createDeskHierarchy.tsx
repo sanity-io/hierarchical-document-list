@@ -30,7 +30,7 @@ export default function createDeskHierarchy(props: TreeProps) {
   let mainList = (
     referenceTo?.length === 1
       ? S.documentTypeList(referenceTo[0]).schemaType(referenceTo[0])
-      : S.documentList()
+      : S.documentList().filter('_type in $types').params({types: referenceTo})
   )
     .id(documentId)
     .menuItems(
