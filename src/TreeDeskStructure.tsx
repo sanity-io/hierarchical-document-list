@@ -47,7 +47,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
     return (
       <DeskWarning
         title="Invalid configuration"
-        subtitle="The `documentType` passed to `createDeskHiearchy` isn't live editable. Add `liveEdit: true` to your schema in order to use this plugin."
+        subtitle="The `documentType` passed to `createDeskHiearchy` isn't live editable. \nTo continue using this plugin, add `liveEdit: true` to your custom schema type or unset `documentType` in your hierarchy configuration."
       />
     )
   }
