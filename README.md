@@ -4,6 +4,8 @@ Plugin for editing hierarchical references in the [Sanity studio](https://www.sa
 
 ![Screenshot of the plugin](/screenshot-1.jpg)
 
+⚠️ **Compatibility:** This plugin requires Sanity Studio [version 2.25.0](https://github.com/sanity-io/sanity/releases/tag/v2.25.0) or higher.
+
 ## Getting started
 
 ```bash
@@ -28,7 +30,7 @@ export default () => {
       createDeskHierarchy({
         title: 'Main table of contents',
 
-        // The hiearchy will be stored in this document ID 👇
+        // The hierarchy will be stored in this document ID 👇
         documentId: 'main-table-of-contents',
 
         // Document types editors should be able to include in the hierarchy
