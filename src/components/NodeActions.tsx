@@ -12,6 +12,7 @@ import useTreeOperations from '../utils/useTreeOperations'
 const NodeActions: React.FC<{nodeProps: NodeProps}> = ({nodeProps}) => {
   const operations = useTreeOperations()
   const {node} = nodeProps
+  const {reference, docType} = node?.value || {}
 
   // Adapted from @sanity\form-builder\src\inputs\ReferenceInput\ArrayItemReferenceInput.tsx
   const OpenLink = React.useMemo(
@@ -25,14 +26,14 @@ const NodeActions: React.FC<{nodeProps: NodeProps}> = ({nodeProps}) => {
           <IntentLink
             {...restProps}
             intent="edit"
-            params={{id: node.node?._ref, type: node.nodeDocType}}
+            params={{id: reference?._ref, type: docType}}
             target="_blank"
             rel="noopener noreferrer"
             ref={_ref}
           />
         )
       }),
-    [node.node?._ref, node?.nodeDocType]
+    [reference?._ref, docType]
   )
 
   const isValid = !!node.publishedId
