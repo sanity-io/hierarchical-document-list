@@ -30,13 +30,19 @@ export default function createHierarchicalField({
         type: 'object',
         fields: [
           {name: 'parent', type: 'string'},
-          {name: 'nodeDocType', type: 'string'},
           {
-            name: 'node',
-            type: 'reference',
-            weak: true,
-            to: options.referenceTo.map((type) => ({type})),
-            options: options.referenceOptions
+            name: 'value',
+            type: 'object',
+            fields: [
+              {name: 'docType', type: 'string'},
+              {
+                name: 'reference',
+                type: 'reference',
+                weak: true,
+                to: options.referenceTo.map((type) => ({type})),
+                options: options.referenceOptions
+              }
+            ]
           }
         ]
       }
