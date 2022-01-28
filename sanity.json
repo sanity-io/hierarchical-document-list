@@ -6,7 +6,7 @@
   "parts": [
     {
       "implements": "part:@sanity/base/schema-type",
-      "path": "hierarchy.tree.js"
+      "path": "schemas/hierarchy.tree.js"
     }
   ]
 }

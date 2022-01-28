@@ -1,4 +1,4 @@
-import createHierarchicalField from './createHierarchicalField'
+import createHierarchicalField from '../createHierarchicalField'
 
 export default {
   name: 'hierarchy.tree',
