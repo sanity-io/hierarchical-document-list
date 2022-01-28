@@ -6,6 +6,8 @@ Plugin for editing hierarchical references in the [Sanity studio](https://www.sa
 
 ⚠️ **Compatibility:** This plugin requires Sanity Studio [version 2.25.0](https://github.com/sanity-io/sanity/releases/tag/v2.25.0) or higher.
 
+If you're looking for a way to order documents on a flat list, refer to [@sanity/orderable-document-list](https://github.com/sanity-io/orderable-document-list).
+
 ## Getting started
 
 ```bash
