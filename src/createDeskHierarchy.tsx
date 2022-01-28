@@ -10,6 +10,11 @@ interface TreeProps extends TreeDeskStructureProps {
    * Also used as the label in the desk list item.
    */
   title: string
+
+  /**
+   * Optional icon for rendering the item in the desk structure.
+   */
+  icon?: any
 }
 
 const deskTreeValidator = (props: TreeProps): React.FC => {
@@ -66,6 +71,7 @@ export default function createDeskHierarchy(props: TreeProps) {
   return S.listItem()
     .id(documentId)
     .title(props.title || documentId)
+    .icon(props.icon)
     .child(
       Object.assign(
         mainList.serialize(),
