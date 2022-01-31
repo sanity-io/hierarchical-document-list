@@ -9,7 +9,12 @@ import {DocumentPair} from '../types'
 export function TimeAgo({time}: {time: string | Date}) {
   const timeAgo = useTimeAgo(time)
 
-  return <span title={timeAgo}>{timeAgo} ago</span>
+  return (
+    <span title={timeAgo}>
+      {timeAgo}
+      {timeAgo.toLowerCase().trim().startsWith('just now') ? '' : ' ago'}
+    </span>
+  )
 }
 
 const PublishedStatus = ({document}: {document?: SanityDocument | null}) => (
