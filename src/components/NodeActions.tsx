@@ -50,7 +50,7 @@ const NodeActions: React.FC<{nodeProps: NodeProps}> = ({nodeProps}) => {
             onClick={() => operations.removeItem(nodeProps)}
           />
           <MenuItem
-            text="Duplicate"
+            text="Duplicate item"
             icon={CopyIcon}
             disabled={!isValid}
             onClick={() => operations.duplicateItem(nodeProps)}

@@ -14,6 +14,7 @@ export function TimeAgo({time}: {time: string | Date}) {
 
 const PublishedStatus = ({document}: {document?: SanityDocument | null}) => (
   <Tooltip
+    portal
     content={
       <Box padding={2}>
         <Text size={1}>
@@ -34,6 +35,7 @@ const PublishedStatus = ({document}: {document?: SanityDocument | null}) => (
 
 const DraftStatus = ({document}: {document?: SanityDocument | null}) => (
   <Tooltip
+    portal
     content={
       <Box padding={2}>
         <Text size={1}>

@@ -56,7 +56,7 @@ const TreeEditor: React.FC<{
               treeData={localTree}
               {...getCommonTreeProps({
                 placeholder: {
-                  title: 'Add items by dragging them here'
+                  title: 'Add items from the list below'
                 }
               })}
             />
@@ -78,6 +78,7 @@ const TreeEditor: React.FC<{
                   item={item}
                   action={
                     <Tooltip
+                      portal
                       placement="left"
                       content={
                         <Box padding={2}>
