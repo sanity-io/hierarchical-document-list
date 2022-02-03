@@ -78,7 +78,8 @@ export default function createDeskHierarchy(props: TreeProps) {
         {
           type: 'component',
           component: deskTreeValidator(props),
-          options: props
+          options: props,
+          __preserveInstance: true
         },
         props.title ? {title: props.title} : {}
       )
