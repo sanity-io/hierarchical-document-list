@@ -12,7 +12,7 @@ export default {
       name: 'tree',
       title: 'Tree',
       options: {
-        referenceTo: ['document']
+        referenceTo: ['image']
       }
     })
   ],
