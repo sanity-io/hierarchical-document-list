@@ -6,11 +6,13 @@ interface ErrorInfo {
   description?: string
 }
 
+const DISPLAY_ERROR = false
+
 const ErrorToast: React.FC<{error?: ErrorInfo}> = ({error}) => {
   const {push} = useToast()
 
   React.useEffect(() => {
-    if (error?.title) {
+    if (error?.title && DISPLAY_ERROR) {
       push({
         title: error.title,
         description: error.description,
