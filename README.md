@@ -1,6 +1,10 @@
 # sanity-plugin-hierarchical-document-list
 
-Plugin for editing hierarchical references in the [Sanity studio](https://www.sanity.io/docs/sanity-studio).
+Plugin for visually organizing documents as hierarchies in the [Sanity studio](https://www.sanity.io/docs/sanity-studio). Applications include:
+
+- Tables of content - such as a book's sections and chapters
+- Navigational structure & menus - a website mega-menu with multiple levels, for example
+- Taxonomy inheritance - "_Carbs_ is a parent of _Legumes_ which is a parent of _Beans_"
 
 ![Screenshot of the plugin](/screenshot-1.jpg)
 
@@ -15,9 +19,9 @@ If you're looking for a way to order documents on a flat list, refer to [@sanity
 sanity install @sanity/hierarchical-document-list
 ```
 
-With the plugin installed, you'll add the following to your Desk Structure:
+Once you've installed the plugin the next step is to add one or more hierarchy documents to your Structure Builder.
 
-💡 _If you don't have a custom desk structure, refer to the [Structure Builder docs](https://www.sanity.io/docs/overview-structure-builder) to learn how to do so._
+💡 _To learn about custom desk structures, refer to the [Structure Builder docs](https://www.sanity.io/docs/overview-structure-builder)._
 
 ```js
 // deskStructure.js
@@ -52,13 +56,15 @@ export default () => {
 
 ## How it works
 
-The hierarchical data is stored in the document specified by the `documentId` of your choosing. As compared to storing `parent` fields in each individual document in the hierarchy, this makes it easier to implement different hierarchies for the same content according to the context, and also simplifies querying the full structure - as you'll see in [Querying data](#querying-data) below.
+The hierarchical data is stored in a centralized document with the `documentId` of your choosing. As compared to storing parent/child relationships in each individual document in the hierarchy, this makes it easier to implement different hierarchies for the same content according to the context.
 
-Keep in mind that **this document is live-edited**, meaning it has no draft and every change by editors will directly affect its published version.
+This approach also simplifies querying the full structure - as you'll see in [querying data](#querying-data) below.
 
-Instead of manually adding items one-by-one, the plugin will create a [GROQ](https://www.sanity.io/docs/overview-groq) query that matches all documents with a `_type` in `referenceTo`, that also match the optional `referenceOptions.filter`. From these documents, editors are able to drag, nest and re-order them at will from the "Items not added" list.
+Keep in mind that this specified **document is live-edited**, meaning it has no draft and every change by editors will directly affect its published version.
 
-If a document in the tree doesn't match the filters set, it'll still exist in the tree. This can happen if the document has a new, unfitting value, the configuration changed or it was deleted. Although the tree will still be publishable, editors will get a warning and won't be able to drag these entries around.
+Instead of requiring editors to manually add items one-by-one, the plugin will create a [GROQ](https://www.sanity.io/docs/overview-groq) query that matches all documents with a `_type` in the `referenceTo` option you specify, that also match the optional `referenceOptions.filter`. From these documents, editors are able to drag, nest and re-order them at will from the "Add more items" list.
+
+If a document in the tree doesn't match the filters set, it'll keep existing in the data. This can happen if the document has a new, unfitting value, the configuration changed or it was deleted. Although the tree will still be publishable, editors will get a warning and won't be able to drag these faulty entries around.
 
 ## Querying data
 
@@ -170,6 +176,37 @@ const hierarchyDocument = await client.fetch(`*[_id == "book-v3-review-a"][0]{
   }
 }`)
 const tree = flatDataToTree(data.tree)
+
+/* Results in a recursively nested structure. Using the example data above:
+{
+  "_key": "741b9edde2ba",
+  "_type": "hierarchy.node",
+  "value": {
+    "reference": {
+      "_ref": "75c47994-e6bb-487a-b8c9-b283f2436031",
+      "_type": "reference",
+      "_weak": true
+    },
+    "docType": "docs.article"
+  },
+  "parent": null,
+  "children": [
+    {
+      "_key": "f92eaeec96f7",
+      "_type": "hierarchy.node",
+      "value": {
+        "reference": {
+          "_ref": "7ad60a02-5d6e-47d8-92e2-6724cc130058",
+          "_type": "reference",
+          "_weak": true
+        },
+        "docType": "site.post"
+      },
+      "parent": "741b9edde2ba"
+    }
+  ]
+}
+*/
 ```
 
 After the transformation above, nodes with nested entries will include a `children` array. This data structure is recursive.
