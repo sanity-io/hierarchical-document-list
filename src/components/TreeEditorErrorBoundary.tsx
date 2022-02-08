@@ -1,21 +1,18 @@
-import {useToast} from '@sanity/ui'
+import {ErrorBoundary, ErrorBoundaryProps, useToast} from '@sanity/ui'
 import React from 'react'
 
-interface ErrorInfo {
-  title: string
-  description?: string
-}
+type BoundaryError = Parameters<ErrorBoundaryProps['onCatch']>[0]
 
 const DISPLAY_ERROR = false
 
-const ErrorToast: React.FC<{error?: ErrorInfo}> = ({error}) => {
+const ErrorToast: React.FC<{error?: BoundaryError}> = ({error}) => {
   const {push} = useToast()
 
   React.useEffect(() => {
-    if (error?.title && DISPLAY_ERROR) {
+    if (error?.error && DISPLAY_ERROR) {
       push({
-        title: error.title,
-        description: error.description,
+        title: error.error.name,
+        description: error.error.message,
         closable: true,
         status: 'error',
         id: 'hierarchical-error'
@@ -26,34 +23,18 @@ const ErrorToast: React.FC<{error?: ErrorInfo}> = ({error}) => {
   return null
 }
 
-class TreeEditorErrorBoundary extends React.Component<any, {error?: ErrorInfo}> {
-  constructor(props: any) {
-    super(props)
-    this.state = {error: undefined}
-  }
-
-  static getDerivedStateFromError(error: unknown) {
-    if (!error) {
-      return {
-        error: undefined
-      }
-    }
-
-    return {
-      error: {
-        title: 'Something went wrong'
-      } as ErrorInfo
-    }
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <ErrorToast error={this.state.error} />
-        {this.props.children}
-      </React.Fragment>
-    )
-  }
+const TreeEditorErrorBoundary: React.FC = (props) => {
+  const [exception, setException] = React.useState<BoundaryError | undefined>(undefined)
+  return (
+    <ErrorBoundary
+      onCatch={(newException) => {
+        setException(newException)
+      }}
+    >
+      <ErrorToast error={exception} />
+      {props.children}
+    </ErrorBoundary>
+  )
 }
 
 export default TreeEditorErrorBoundary
