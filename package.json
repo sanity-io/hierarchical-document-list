@@ -1,6 +1,6 @@
 {
   "name": "@sanity/hierarchical-document-list",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Sanity <hello@sanity.io>",
   "license": "MIT",
   "main": "lib/index.js",
