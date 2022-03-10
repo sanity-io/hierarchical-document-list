@@ -3,7 +3,7 @@ import {useTimeAgo} from '@sanity/base/hooks'
 import {EditIcon, PublishIcon} from '@sanity/icons'
 import {SanityDocument} from '@sanity/types'
 import {Box, Inline, Text, Tooltip} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 import {DocumentPair} from '../types'
 
 export function TimeAgo({time}: {time: string | Date}) {

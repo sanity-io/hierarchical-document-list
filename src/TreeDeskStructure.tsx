@@ -1,7 +1,7 @@
 import {PublishIcon} from '@sanity/icons'
 import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
 import {Box, Button, Flex, Spinner, useToast} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 import DeskWarning from './components/DeskWarning'
 import TreeEditor from './components/TreeEditor'
 import {DocumentOperations, StoredTreeItem, TreeDeskStructureProps} from './types'

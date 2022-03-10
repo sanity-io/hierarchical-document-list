@@ -1,7 +1,7 @@
 import {IntentLink} from '@sanity/base/components'
 import {CopyIcon, EllipsisVerticalIcon, LaunchIcon, RemoveCircleIcon} from '@sanity/icons'
 import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 import {NodeProps} from '../types'
 import useTreeOperations from '../hooks/useTreeOperations'
 

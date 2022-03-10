@@ -1,5 +1,5 @@
 import {Box, Card, Container, Heading, Stack, Text} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 
 // React component that wraps text between two delimiters in a <pre> tag
 

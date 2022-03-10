@@ -1,5 +1,5 @@
 import {ErrorBoundary, ErrorBoundaryProps, useToast} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 
 type BoundaryError = Parameters<ErrorBoundaryProps['onCatch']>[0]
 

@@ -1,6 +1,6 @@
 import {FormFieldPresence} from '@sanity/base/presence'
 import {Marker, Path} from '@sanity/types'
-import React from 'react'
+import * as React from 'react'
 import {FormField} from '@sanity/base/components'
 import TreeEditor from './components/TreeEditor'
 import {StoredTreeItem, TreeFieldSchema} from './types'

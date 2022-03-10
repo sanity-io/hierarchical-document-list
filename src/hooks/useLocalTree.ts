@@ -1,7 +1,7 @@
-import React from 'react'
+import * as React from 'react'
 import {OnVisibilityToggleData} from 'react-sortable-tree'
 import {AllItems, LocalTreeItem, StoredTreeItem, VisibilityMap} from '../types'
-import {dataToEditorTree} from './treeData'
+import {dataToEditorTree} from '../utils/treeData'
 
 /**
  * Enhances tree data with information on:

@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import {TreeRenderer} from 'react-sortable-tree'
 import TreeNodeRendererScaffold from './TreeNodeRendererScaffold'
 

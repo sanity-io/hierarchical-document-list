@@ -1,5 +1,5 @@
 import {blue} from '@sanity/color'
-import React from 'react'
+import * as React from 'react'
 import {TreeRendererProps} from 'react-sortable-tree'
 import {createGlobalStyle} from 'styled-components'
 

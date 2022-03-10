@@ -1,5 +1,5 @@
 import {ArraySchemaType} from '@sanity/types'
-import React from 'react'
+import * as React from 'react'
 import TreeInputComponent from './TreeInputComponent'
 import {TreeFieldSchema} from './types'
 

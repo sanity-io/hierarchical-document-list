@@ -1,6 +1,6 @@
 import {SanityDocument} from '@sanity/client'
 import {randomKey} from '@sanity/util/content'
-import React from 'react'
+import * as React from 'react'
 import {TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'

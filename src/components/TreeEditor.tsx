@@ -1,6 +1,6 @@
 import {AddCircleIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 import SortableTree from 'react-sortable-tree'
 import {StoredTreeItem, TreeInputOptions} from '../types'
 import getCommonTreeProps from '../utils/getCommonTreeProps'

@@ -1,5 +1,5 @@
 import {Box, Card, CardTone, Stack, Text} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 import {PlaceholderRendererProps} from 'react-sortable-tree'
 
 const PlaceholderDropzone: React.FC<

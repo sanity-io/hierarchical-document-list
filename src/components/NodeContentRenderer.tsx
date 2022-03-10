@@ -1,7 +1,7 @@
 import {cyan, gray, red} from '@sanity/color'
 import {ChevronDownIcon, ChevronRightIcon, DragHandleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Spinner} from '@sanity/ui'
-import React from 'react'
+import * as React from 'react'
 import {isDescendant, NodeRenderer} from 'react-sortable-tree'
 import styled from 'styled-components'
 
