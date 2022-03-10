@@ -3,7 +3,7 @@ import {CopyIcon, EllipsisVerticalIcon, LaunchIcon, RemoveCircleIcon} from '@san
 import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
 import React from 'react'
 import {NodeProps} from '../types'
-import useTreeOperations from '../utils/useTreeOperations'
+import useTreeOperations from '../hooks/useTreeOperations'
 
 /**
  * Applicable only to nodes inside the main tree.

@@ -9,7 +9,7 @@ import {
   getRemoveItemPatch,
   HandleMovedNode,
   HandleMovedNodeData
-} from './treePatches'
+} from '../utils/treePatches'
 
 export default function useTreeOperationsProvider(props: {
   patchPrefix?: string

@@ -7,7 +7,7 @@ import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React from 'react'
 import {LocalTreeItem} from '../types'
-import useTreeOperations from '../utils/useTreeOperations'
+import useTreeOperations from '../hooks/useTreeOperations'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
 
 /**

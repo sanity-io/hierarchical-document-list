@@ -2,7 +2,7 @@ import {MutationEvent, SanityClient, SanityDocument} from '@sanity/client'
 import sanityClient from 'part:@sanity/base/client'
 import React from 'react'
 import {AllItems, TreeInputOptions} from '../types'
-import {isDraft, unprefixId} from './idUtils'
+import {isDraft, unprefixId} from '../utils/idUtils'
 
 const client = sanityClient.withConfig({
   apiVersion: '2021-09-01'
