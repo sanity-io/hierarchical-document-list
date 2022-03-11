@@ -6,17 +6,17 @@ import DeskWarning from './components/DeskWarning'
 import TreeEditor from './components/TreeEditor'
 import {DocumentOperations, StoredTreeItem, TreeDeskStructureProps} from './types'
 import {toGradient} from './utils/gradientPatchAdapter'
+import injectNodeTypeInPatches, {DEFAULT_DOC_TYPE} from './utils/injectNodeTypeInPatches'
 
 interface ComponentProps {
   options: TreeDeskStructureProps
 }
 
-const DEFAULT_TREE_FIELD_KEY = 'tree'
-const DEFAULT_TREE_DOC_TYPE = 'hierarchy.tree'
+export const DEFAULT_FIELD_KEY = 'tree'
 
 const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
-  const treeDocType = props.options.documentType || DEFAULT_TREE_DOC_TYPE
-  const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_TREE_FIELD_KEY
+  const treeDocType = props.options.documentType || DEFAULT_DOC_TYPE
+  const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_FIELD_KEY
   const {published, draft, liveEdit} = useEditState(props.options.documentId, treeDocType)
   const {patch, ...ops} = useDocumentOperation(
     props.options.documentId,
@@ -31,7 +31,7 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
       if (!patch?.execute) {
         return
       }
-      patch.execute(toGradient(patchEvent.patches))
+      patch.execute(toGradient(injectNodeTypeInPatches(patchEvent.patches, treeDocType)))
     },
     [patch]
   )

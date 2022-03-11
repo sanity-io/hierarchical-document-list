@@ -1,6 +1,7 @@
 import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType} from '@sanity/types'
+import {ArraySchemaType, ObjectSchemaType} from '@sanity/types'
 import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
+import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './utils/injectNodeTypeInPatches'
 
 interface SanityReference {
   _type: 'reference'
@@ -13,8 +14,9 @@ interface SanityReference {
  */
 export interface StoredTreeItem {
   _key: string
-  _type: 'hierarchy.node' | string
+  _type: typeof INTERNAL_NODE_TYPE | string
   value?: {
+    _type: typeof INTERNAL_NODE_VALUE_TYPE | string
     reference?: SanityReference
     docType?: string
   }
@@ -76,6 +78,12 @@ export interface TreeInputOptions {
    * How deep should editors be allowed to nest items.
    */
   maxDepth?: number
+
+  /**
+   * Schema type for your hierarchical documents.
+   * Refer to documentation on how to provide these schemas in your studio.
+   */
+  documentType: string
 }
 
 export interface TreeFieldSchema
@@ -83,18 +91,16 @@ export interface TreeFieldSchema
   options: ArraySchemaType['options'] & TreeInputOptions
 }
 
+export interface TreeNodeObjectSchema
+  extends Omit<ObjectSchemaType, 'name' | 'fields' | 'type' | 'inputComponent' | 'jsonType'> {
+  options: ObjectSchemaType['options'] & TreeInputOptions
+}
+
 export interface TreeDeskStructureProps extends TreeInputOptions {
   /**
    * _id of the document that will hold the tree data.
    */
   documentId: string
-
-  /**
-   * (Optional)
-   * Schema type for your hierarchical documents.
-   * By default, the document will be of type `hierarchy.tree`, a type provided by the plugin.
-   */
-  documentType?: string
 
   /**
    * (Optional)

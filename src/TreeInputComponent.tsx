@@ -1,9 +1,11 @@
+import {FormField} from '@sanity/base/components'
 import {FormFieldPresence} from '@sanity/base/presence'
+import PatchEvent from '@sanity/form-builder/PatchEvent'
 import {Marker, Path} from '@sanity/types'
 import * as React from 'react'
-import {FormField} from '@sanity/base/components'
 import TreeEditor from './components/TreeEditor'
 import {StoredTreeItem, TreeFieldSchema} from './types'
+import injectNodeTypeInPatches, {DEFAULT_DOC_TYPE} from './utils/injectNodeTypeInPatches'
 
 export interface TreeInputComponentProps {
   type: TreeFieldSchema
@@ -19,7 +21,17 @@ export interface TreeInputComponentProps {
   presence: FormFieldPresence[]
 }
 
-const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((props, _ref) => {
+const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((props) => {
+  const documentType = props.type.options.documentType || DEFAULT_DOC_TYPE
+
+  const onChange = React.useCallback(
+    (patch: any) => {
+      const patches = injectNodeTypeInPatches(patch?.patches, documentType)
+      props.onChange(new PatchEvent(patches))
+    },
+    [props.onChange]
+  )
+
   return (
     <FormField
       description={props.type.description} // Creates description from schema
@@ -29,7 +41,7 @@ const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((
       // @ts-expect-error FormField's TS definitions are off - it doesn't include compareValue
       compareValue={props.compareValue} // Handles "edited" status
     >
-      <TreeEditor options={props.type.options} tree={props.value || []} onChange={props.onChange} />
+      <TreeEditor options={props.type.options} tree={props.value || []} onChange={onChange} />
     </FormField>
   )
 })

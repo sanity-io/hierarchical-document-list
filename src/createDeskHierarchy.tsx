@@ -3,6 +3,7 @@ import {AddIcon} from '@sanity/icons'
 import * as React from 'react'
 import TreeDeskStructure from './TreeDeskStructure'
 import {TreeDeskStructureProps} from './types'
+import throwError from './utils/throwError'
 
 interface TreeProps extends TreeDeskStructureProps {
   /**
@@ -20,12 +21,10 @@ interface TreeProps extends TreeDeskStructureProps {
 const deskTreeValidator = (props: TreeProps): React.FC => {
   const {documentId, referenceTo} = props
   if (typeof documentId !== 'string' && !documentId) {
-    throw new Error('[hierarchical input] Please add a documentId to your tree')
+    throwError('invalidDocumentId')
   }
   if (!Array.isArray(referenceTo)) {
-    throw new Error(
-      `[hierarchical input] Missing valid 'referenceTo' in createDeskHierarchy (documentId "${documentId}")`
-    )
+    throwError('invalidReferenceTo', `(documentId "${documentId}")`)
   }
   return (deskProps) => <TreeDeskStructure {...deskProps} options={props} />
 }
@@ -45,7 +44,6 @@ export default function createDeskHierarchy(props: TreeProps) {
             type: 'create',
             params: {type: schemaType, template: schemaType}
           })
-          // @TODO: get the title for each schema type
           .title(schemaType)
           .icon(AddIcon)
       )

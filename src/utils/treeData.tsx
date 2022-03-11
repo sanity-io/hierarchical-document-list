@@ -1,6 +1,5 @@
 import {SanityDocument} from '@sanity/client'
 import {randomKey} from '@sanity/util/content'
-import * as React from 'react'
 import {TreeItem} from 'react-sortable-tree'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
@@ -14,6 +13,7 @@ import {
   VisibilityMap
 } from '../types'
 import flatDataToTree from './flatDataToTree'
+import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './injectNodeTypeInPatches'
 
 export const dataToEditorTree = ({
   tree,
@@ -59,12 +59,13 @@ const documentPairToNode = (doc?: DocumentPair): EnhancedTreeItem | undefined =>
 
   return {
     _key: randomKey(12),
-    _type: 'hierarchy.node',
+    _type: INTERNAL_NODE_TYPE,
     draftId: doc.draft?._id,
     draftUpdatedAt: doc.draft?._updatedAt,
     publishedId: doc.published._id,
     publishedUpdatedAt: doc.published?._updatedAt,
     value: {
+      _type: INTERNAL_NODE_VALUE_TYPE,
       reference: {
         _ref: doc.published._id,
         _type: 'reference',
@@ -111,7 +112,7 @@ export const getUnaddedItems = (data: {
 export function normalizeNodeForStorage(item: LocalTreeItem): StoredTreeItem {
   return {
     _key: item._key,
-    _type: item._type || 'hierarchy.node',
+    _type: item._type || INTERNAL_NODE_TYPE,
     value: item.value,
     parent: item.parent
   }
