@@ -48,7 +48,10 @@ export default () => {
           filterParams: {
             acceptedStatuses: ['published', 'approved']
           }
-        }
+        },
+
+        // ❓ Optional: limit the depth of your hierarachies
+        maxDept: 3
       })
     ])
 }
@@ -215,26 +218,51 @@ After the transformation above, nodes with nested entries will include a `childr
 
 By default, this plugin will create and update documents of `_type: hierarchy.tree`, with a `tree` field holding the hierarchical data. When deploying a [GraphQL Sanity endpoint](https://www.sanity.io/docs/graphql), however, you'll need an explicit document type in your schema so that you get the proper types for querying.
 
-To add this document type, create a new document schema similar to the following:
+To add this document type, create a set of schemas with the `createHierarchicalSchemas`:
 
 ```js
-import {createHierarchicalField} from '@sanity/hierarchical-document-list'
+// hierarchicalSchemas.js
+import {createHierarchicalSchemas} from '@sanity/hierarchical-document-list'
 
-export default {
-  name: 'myCustomHierarchicalType',
-  title: 'Custom document type for holding hierarchical data',
-  type: 'document',
-  liveEdit: true, // 👉 Important: set liveEdit to `true` to ensure the UI works properly
-  fields: [
-    createHierarchicalField({
-      name: 'customTreeDataKey', // key for the tree field in the document
-      title: 'Custom tree',
-      options: {
-        referenceTo: ['category']
-      }
-    })
-  ]
+export const hierarchicalOptions = {
+  // choose the document type name that suits you best
+  documentType: 'myCustomHierarchicalType',
+
+  // key for the tree field in the document - "tree" by default
+  fieldKeyInDocument: 'customTreeDataKey',
+
+  // Document types editors should be able to include in the hierarchy
+  referenceTo: ['site.page', 'site.post', 'docs.article', 'social.youtubeVideo'],
+
+  // ❓ Optional: provide filters and/or parameters for narrowing which documents can be added
+  referenceOptions: {
+    filter: 'status in $acceptedStatuses',
+    filterParams: {
+      acceptedStatuses: ['published', 'approved']
+    }
+  },
+
+  // ❓ Optional: limit the depth of your hierarachies
+  maxDept: 3
 }
+
+export default createHierarchicalSchemas(hierarchicalOptions)
+```
+
+And add these schemas to your studio:
+
+```js
+import createSchema from 'part:@sanity/base/schema-creator'
+import schemaTypes from 'all:part:@sanity/base/schema-type'
+import hierarchicalSchemas from './hierarchicalSchemas'
+
+export default createSchema({
+  name: 'default',
+  types: schemaTypes.concat([
+    // ...Other schemas
+    ...hierarchicalSchemas // add all items in the array of hierarchical schemas
+  ])
+})
 ```
 
 Then, in your desk structure where you added the hierarchical document(s), include the right `documentType` and `fieldKeyInDocument` properties:
@@ -246,13 +274,21 @@ createDeskHierarchy({
   fieldKeyInDocument: 'customTreeDataKey' // the name of the hierarchical field
   // ...
 })
+
+// Ideally, use the same configuration object you defined in your schemas:
+import {hierarchicalOptions} from './hierarchicalSchemas'
+
+createDeskHierarchy({
+  ...hierarchicalOptions
+  // ...
+})
 ```
 
 ---
 
 📌 **Note:** you can also use the method above to add hierarchies inside the schema of documents and objects, which would be editable outside the desk structure.
 
-We're considering adapting this input to support any type of nest-able data, not only references. Until then, avoid `createHierarchicalField` for fields in nested schemas as, in these contexts, it lacks the necessary affordances for a good editing experience.
+We're considering adapting this input to support any type of nest-able data, not only references. Until then, avoid using the generated schemas in nested schemas as, in these contexts, it lacks the necessary affordances for a good editing experience.
 
 ---
 
