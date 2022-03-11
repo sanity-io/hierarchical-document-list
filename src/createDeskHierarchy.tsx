@@ -33,28 +33,38 @@ const deskTreeValidator = (props: TreeProps): React.FC => {
 
 export default function createDeskHierarchy(props: TreeProps) {
   const {documentId, referenceTo, referenceOptions} = props
+  // @TODO: allow creating all types once upstream desk fix is shipped
+  /**
+   * Context: With multiple referenced document types we can’t set S.documentList().schemaType(),
+   * which only accepts one type. So the desk doesn’t have an expanded schemaType to access and
+   * try creating a new document without that, which breaks resolveEnabledActions (and probably more)
+   * in packages\@sanity\base\src\actions\utils\legacy_documentActionUtils.js
+   */
+  const safelyCreatableTypes = referenceTo.slice(0, 1)
   let mainList = (
-    referenceTo?.length === 1
-      ? S.documentTypeList(referenceTo[0]).schemaType(referenceTo[0])
-      : S.documentList().filter('_type in $types').params({types: referenceTo})
+    safelyCreatableTypes?.length === 1
+      ? S.documentTypeList(safelyCreatableTypes[0]).schemaType(safelyCreatableTypes[0])
+      : S.documentList().filter('_type in $types').params({types: safelyCreatableTypes})
   )
     .id(documentId)
     .menuItems(
-      (referenceTo || []).map((schemaType) =>
+      (safelyCreatableTypes || []).map((schemaType) =>
         S.menuItem()
           .intent({
             type: 'create',
             params: {type: schemaType}
           })
-          .title(schema.get(schemaType)?.title)
+          .title(`Create ${schema.get(schemaType)?.title}`)
           .icon(schema.get(schemaType)?.icon || AddIcon)
       )
     )
     .canHandleIntent((intent: string, context: Record<string, unknown>) => {
+      // Can edit itself
       if (intent === 'edit' && context.id === props.documentId) {
         return true
       }
-      if (intent === 'create' && referenceTo.includes(context.type as string)) {
+      // Can create & edit referenced document types
+      if (safelyCreatableTypes.includes(context.type as string)) {
         return true
       }
       return false
