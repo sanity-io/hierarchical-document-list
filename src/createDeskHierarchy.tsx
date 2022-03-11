@@ -1,6 +1,8 @@
 import S from '@sanity/desk-tool/structure-builder'
 import {AddIcon} from '@sanity/icons'
+import schema from 'part:@sanity/base/schema'
 import * as React from 'react'
+
 import TreeDeskStructure from './TreeDeskStructure'
 import {TreeDeskStructureProps} from './types'
 import throwError from './utils/throwError'
@@ -42,10 +44,10 @@ export default function createDeskHierarchy(props: TreeProps) {
         S.menuItem()
           .intent({
             type: 'create',
-            params: {type: schemaType, template: schemaType}
+            params: {type: schemaType}
           })
-          .title(schemaType)
-          .icon(AddIcon)
+          .title(schema.get(schemaType)?.title)
+          .icon(schema.get(schemaType)?.icon || AddIcon)
       )
     )
     .canHandleIntent((intent: string, context: Record<string, unknown>) => {
