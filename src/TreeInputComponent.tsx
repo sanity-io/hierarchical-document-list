@@ -38,7 +38,6 @@ const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((
       title={props.type.title} // Creates label from schema title
       __unstable_markers={props.markers} // Handles all markers including validation
       __unstable_presence={props.presence} // Handles presence avatars
-      // @ts-expect-error FormField's TS definitions are off - it doesn't include compareValue
       compareValue={props.compareValue} // Handles "edited" status
     >
       <TreeEditor options={props.type.options} tree={props.value || []} onChange={onChange} />

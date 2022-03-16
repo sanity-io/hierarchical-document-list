@@ -1,40 +1,22 @@
-import {ErrorBoundary, ErrorBoundaryProps, useToast} from '@sanity/ui'
 import * as React from 'react'
 
-type BoundaryError = Parameters<ErrorBoundaryProps['onCatch']>[0]
-
-const DISPLAY_ERROR = false
-
-const ErrorToast: React.FC<{error?: BoundaryError}> = ({error}) => {
-  const {push} = useToast()
-
-  React.useEffect(() => {
-    if (error?.error && DISPLAY_ERROR) {
-      push({
-        title: error.error.name,
-        description: error.error.message,
-        closable: true,
-        status: 'error',
-        id: 'hierarchical-error'
-      })
-    }
-  }, [error])
-
-  return null
+/**
+ * react-sortable-tree emits a lot of random errors when dragging to invalid states,
+ * even when drag-targets are disabled.
+ *
+ * This boundary is a workaround so users are not pestered with error-toasts for things
+ * that have no functional impact.
+ *
+ * This boundry does NOT handle errors that happen in the React dnd
+ * event handlers, so there is addtional workarounds in the
+ * DnDManager.
+ *  */
+export class TreeEditorErrorBoundary extends React.Component {
+  // eslint-disable-next-line class-methods-use-this
+  componentDidCatch(error: Error) {
+    // do nothing
+  }
+  render() {
+    return this.props.children
+  }
 }
-
-const TreeEditorErrorBoundary: React.FC = (props) => {
-  const [exception, setException] = React.useState<BoundaryError | undefined>(undefined)
-  return (
-    <ErrorBoundary
-      onCatch={(newException) => {
-        setException(newException)
-      }}
-    >
-      <ErrorToast error={exception} />
-      {props.children}
-    </ErrorBoundary>
-  )
-}
-
-export default TreeEditorErrorBoundary
