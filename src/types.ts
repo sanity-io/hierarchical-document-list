@@ -82,8 +82,10 @@ export interface TreeInputOptions {
   /**
    * Schema type for your hierarchical documents.
    * Refer to documentation on how to provide these schemas in your studio.
+   *
+   * Defautlt: 'hierarchy.tree' - this schema is bundled with the plugin
    */
-  documentType: string
+  documentType?: string
 }
 
 export interface TreeFieldSchema
