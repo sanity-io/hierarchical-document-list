@@ -1,5 +1,4 @@
 // Adapted from @sanity/form-builder/src/sanity/utils/gradientPatchAdapter.ts
-import assert from 'assert'
 import {arrayToJSONMatchPath} from '@sanity/mutator'
 
 type Patch = Record<string, any>
@@ -28,7 +27,9 @@ function toGradientPatch(patch: Patch): GradientPatch {
     }
   }
 
-  assert(patch.type, `Missing patch type in patch ${JSON.stringify(patch)}`)
+  if (!patch.type) {
+    throw new Error(`Missing patch type in patch ${JSON.stringify(patch)}`)
+  }
   if (matchPath) {
     return {
       [patch.type]: {

@@ -295,3 +295,21 @@ We're considering adapting this input to support any type of nest-able data, not
 ## License
 
 MIT-licensed. See LICENSE.
+
+## Developing
+
+If you want to test a dev-build of this plugin in the studio there is a bit of a workaround.
+npm/yarn link does not integrate correctly with StructureBuilder and schema part registration in
+the Studio.
+
+The most consistent workflow is:
+
+1.Install [yalc](https://github.com/wclr/yalc)
+2. Run `npm run build && yalc publish` in this repo
+3. In Sanity Studio:
+   1. Run `yalc link @sanity/hierarchical-document-list`
+   2. Run `yarn install` (installs the dependencies for the plugin)
+   3. Ensure `"@sanity/hierarchical-document-list"` is present in `sanity.json` plugins array.
+   4. Configure the plugin for structure as documented above
+
+Rerun steps 2. and 3.1 after making edits to the plugin (or automate it).
