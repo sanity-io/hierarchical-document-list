@@ -16,9 +16,15 @@
     "dev": "tsc -w -d",
     "build": "tsc -d",
     "format": "prettier src -w",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prepare": "npm run build && husky install",
+    "clean": "rimraf lib",
+    "release": "standard-version",
+    "prepublishOnly": "npm run clean && npm run lint && npm run build"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "@sanity/base": ">= 2.25.0",
     "@sanity/color": "^2.1.6",
     "@sanity/desk-tool": ">= 2.25.0",
@@ -35,9 +41,13 @@
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-sanity": "^5.1.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "rimraf": "^3.0.2",
+    "standard-version": "^9.3.2",
     "styled-components": "^5.3.3",
     "typescript": "^4.5.5"
   },
