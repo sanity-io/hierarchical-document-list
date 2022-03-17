@@ -313,3 +313,15 @@ The most consistent workflow is:
    4. Configure the plugin for structure as documented above
 
 Rerun steps 2. and 3.1 after making edits to the plugin (or automate it).
+
+### Publishing
+
+Test publish command safely: 
+* `yalc publish`
+
+To go live with a new version, run:
+* `npm run release`
+  * runs [standard-version](https://www.npmjs.com/package/standard-version) which will bump version according to semver, commit and tag
+  * feel free to inspect the results in package.json and git log before continuing
+* `npm publish`
+  * Will clean, lint and build before finally publishing to npm.
