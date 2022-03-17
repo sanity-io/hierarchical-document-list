@@ -13,7 +13,7 @@ import * as React from 'react'
  *  */
 export class TreeEditorErrorBoundary extends React.Component {
   // eslint-disable-next-line class-methods-use-this
-  componentDidCatch(error: Error) {
+  componentDidCatch() {
     // do nothing
   }
   render() {

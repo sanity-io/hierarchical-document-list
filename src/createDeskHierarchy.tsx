@@ -33,7 +33,6 @@ const deskTreeValidator = (props: TreeProps): React.FC => {
 
 export default function createDeskHierarchy(props: TreeProps) {
   const {documentId, referenceTo, referenceOptions} = props
-  // @TODO: allow creating all types once upstream desk fix is shipped
   /**
    * Context: With multiple referenced document types we can’t set S.documentList().schemaType(),
    * which only accepts one type. So the desk doesn’t have an expanded schemaType to access and
