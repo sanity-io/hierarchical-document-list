@@ -325,3 +325,5 @@ To go live with a new version, run:
   * feel free to inspect the results in package.json and git log before continuing
 * `npm publish`
   * Will clean, lint and build before finally publishing to npm.
+* After publishing, you should push with tags: 
+  * `git push --follow-tags`
