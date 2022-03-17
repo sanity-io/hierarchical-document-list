@@ -105,7 +105,7 @@ export const getUnaddedItems = (data: {
         // unadded items shouldn't be in the tree
         !data.tree.some((treeItem) => treeItem?.value?.reference?._ref === publishedId)
     )
-    .map(([_publishedId, documentPair]) => documentPairToNode(documentPair))
+    .map(([, documentPair]) => documentPairToNode(documentPair))
     .filter(Boolean) as EnhancedTreeItem[]
 }
 

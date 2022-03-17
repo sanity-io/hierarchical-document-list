@@ -31,7 +31,6 @@ const DocumentInNode: React.FC<{
 
   const LinkComponent = React.useMemo(
     () =>
-      // eslint-disable-next-line @typescript-eslint/no-shadow
       React.forwardRef((linkProps: any, ref: any) => (
         <ChildLink
           {...linkProps}

@@ -27,6 +27,7 @@ export const INTERNAL_NODE_ARRAY_TYPE = getSchemaTypeName(DEFAULT_DOC_TYPE, 'arr
 /**
  * Barebones recursive utility to inject the desired nodeObjectType in patches generated in deeply nested components and utilities.
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function injectNodeTypeInPatches(patchData: any, documentType: string): any {
   if (Array.isArray(patchData)) {
     return patchData.map((child) => injectNodeTypeInPatches(child, documentType))

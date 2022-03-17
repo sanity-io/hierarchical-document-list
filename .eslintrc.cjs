@@ -21,6 +21,9 @@ module.exports = {
   rules: {
     'max-len': [0],
     'implicit-arrow-linebreak': [0],
-    indent: [0]
+    indent: [0],
+    'array-bracket-newline': [0],
+    'function-paren-newline': [0],
+    '@typescript-eslint/no-explicit-any': [0]
   }
 }
