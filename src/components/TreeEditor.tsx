@@ -44,16 +44,12 @@ const TreeEditor: React.FC<{
     localTree
   })
 
-  const doNothingOnChange = useCallback(() => {
-    // Do nothing. onMoveNode will do all the work
-  }, [])
-
-  const canDrop = useCanDrop()
   const onMoveNode = useCallback(
     (data: NodeData & FullTree & OnMovePreviousAndNextLocation) =>
       operations.handleMovedNode(data as unknown as HandleMovedNodeData),
     [operations]
   )
+
   const treeProps = useMemo(
     () =>
       getCommonTreeProps({
@@ -64,10 +60,15 @@ const TreeEditor: React.FC<{
     []
   )
 
+  const operationContext = useMemo(
+    () => ({...operations, allItemsStatus}),
+    [operations, allItemsStatus]
+  )
+
   return (
     <TreeEditorErrorBoundary>
       <DndProvider manager={suppressedDnDManager}>
-        <TreeOperationsContext.Provider value={{...operations, allItemsStatus}}>
+        <TreeOperationsContext.Provider value={operationContext}>
           <Stack space={4} paddingTop={4}>
             <Card
               style={{minHeight: getTreeHeight(localTree)}}
@@ -142,13 +143,15 @@ const TreeEditor: React.FC<{
   )
 }
 
-function useCanDrop() {
-  return useCallback(({nextPath, prevPath}: OnDragPreviousAndNextLocation & NodeData) => {
-    const insideItself =
-      nextPath.length >= prevPath.length &&
-      prevPath.every((pathIndex, index) => nextPath[index] === pathIndex)
-    return !insideItself
-  }, [])
+function canDrop({nextPath, prevPath}: OnDragPreviousAndNextLocation & NodeData) {
+  const insideItself =
+    nextPath.length >= prevPath.length &&
+    prevPath.every((pathIndex, index) => nextPath[index] === pathIndex)
+  return !insideItself
+}
+
+const doNothingOnChange = () => {
+  // Do nothing. onMoveNode will do all the work
 }
 
 export default TreeEditor
