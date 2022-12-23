@@ -1,3 +1,9 @@
+## ⚠️ This plugin is DEPRECATED
+
+We regret to inform you that this project is no longer maintained and is deprecated.
+
+---
+
 # sanity-plugin-hierarchical-document-list
 
 Plugin for visually organizing documents as hierarchies in the [Sanity studio](https://www.sanity.io/docs/sanity-studio). Applications include:
