@@ -1,4 +1,4 @@
-import {IntentLink} from '@sanity/base/components'
+import {IntentButton as IntentLink} from 'sanity'
 import {CopyIcon, EllipsisVerticalIcon, LaunchIcon, RemoveCircleIcon} from '@sanity/icons'
 import {Button, Menu, MenuButton, MenuDivider, MenuItem} from '@sanity/ui'
 import * as React from 'react'
@@ -29,7 +29,6 @@ const NodeActions: React.FC<{nodeProps: NodeProps}> = ({nodeProps}) => {
             params={{id: reference?._ref, type: docType}}
             target="_blank"
             rel="noopener noreferrer"
-            ref={_ref}
           />
         )
       }),

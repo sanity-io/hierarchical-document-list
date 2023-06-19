@@ -1,7 +1,7 @@
 export default function moveItemInArray<ItemType = unknown>({
   array,
   fromIndex,
-  toIndex
+  toIndex,
 }: {
   array: ItemType[]
   fromIndex: number

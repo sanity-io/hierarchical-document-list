@@ -1,13 +1,13 @@
-import S from '@sanity/desk-tool/structure-builder'
+import type {ConfigContext} from 'sanity'
 import {AddIcon} from '@sanity/icons'
-import schema from 'part:@sanity/base/schema'
+import {StructureBuilder} from 'sanity/desk'
 import * as React from 'react'
 
 import TreeDeskStructure from './TreeDeskStructure'
 import {TreeDeskStructureProps} from './types'
 import throwError from './utils/throwError'
 
-interface TreeProps extends TreeDeskStructureProps {
+export interface TreeProps extends TreeDeskStructureProps {
   /**
    * Visible title above the tree.
    * Also used as the label in the desk list item.
@@ -18,6 +18,9 @@ interface TreeProps extends TreeDeskStructureProps {
    * Optional icon for rendering the item in the desk structure.
    */
   icon?: any
+
+  context?: ConfigContext | any
+  S?: StructureBuilder | any
 }
 
 const deskTreeValidator = (props: TreeProps): React.FC => {
@@ -32,7 +35,8 @@ const deskTreeValidator = (props: TreeProps): React.FC => {
 }
 
 export default function createDeskHierarchy(props: TreeProps) {
-  const {documentId, referenceTo, referenceOptions} = props
+  const {documentId, referenceTo, referenceOptions, context, S} = props
+  const {schema} = context
   /**
    * Context: With multiple referenced document types we can’t set S.documentList().schemaType(),
    * which only accepts one type. So the desk doesn’t have an expanded schemaType to access and
@@ -51,19 +55,19 @@ export default function createDeskHierarchy(props: TreeProps) {
         S.menuItem()
           .intent({
             type: 'create',
-            params: {type: schemaType}
+            params: {type: schemaType},
           })
           .title(`Create ${schema.get(schemaType)?.title}`)
           .icon(schema.get(schemaType)?.icon || AddIcon)
       )
     )
-    .canHandleIntent((intent: string, context: Record<string, unknown>) => {
+    .canHandleIntent((intent: string, c: Record<string, unknown>) => {
       // Can edit itself
-      if (intent === 'edit' && context.id === props.documentId) {
+      if (intent === 'edit' && c.id === props.documentId) {
         return true
       }
       // Can create & edit referenced document types
-      if (safelyCreatableTypes.includes(context.type as string)) {
+      if (safelyCreatableTypes.includes(c.type as string)) {
         return true
       }
       return false
@@ -88,7 +92,7 @@ export default function createDeskHierarchy(props: TreeProps) {
           type: 'component',
           component: deskTreeValidator(props),
           options: props,
-          __preserveInstance: true
+          __preserveInstance: true,
         },
         props.title ? {title: props.title} : {}
       )

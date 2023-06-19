@@ -1,5 +1,15 @@
 {
+  "extends": "./tsconfig.settings",
+  "include": ["src/**/*"],
+  "exclude": [
+    "./src/**/__fixtures__",
+    "./src/**/__mocks__",
+    "./src/**/*.test.ts",
+    "./src/**/*.test.tsx"
+  ],
   "compilerOptions": {
+    "rootDir": ".",
+    "emitDeclarationOnly": true,
     "jsx": "preserve",
     "moduleResolution": "node",
     "target": "esnext",
@@ -18,8 +28,5 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "checkJs": false,
-    "emitDeclarationOnly": true,
-    "rootDir": "."
   },
-  "include": ["src/**/*"]
 }

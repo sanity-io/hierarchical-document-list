@@ -1,20 +1,19 @@
-import * as Patch from '@sanity/form-builder/lib/patch/patches'
+import * as Patch from 'sanity'
 import {randomKey} from '@sanity/util/content'
 import {
   FlatDataItem,
   FullTree,
   getFlatDataFromTree,
   NodeData,
-  OnMovePreviousAndNextLocation,
-  TreeItem
-} from 'react-sortable-tree'
+  TreeItem,
+} from '@nosferatu500/react-sortable-tree'
 import {LocalTreeItem, NodeProps} from '../types'
 import getAdjescentNodes from './getAdjescentNodes'
 import moveItemInArray from './moveItemInArray'
 import {normalizeNodeForStorage} from './treeData'
 
 export type HandleMovedNodeData = Omit<
-  NodeData & FullTree & OnMovePreviousAndNextLocation,
+  NodeData & FullTree & any,
   'prevPath' | 'prevTreeIndex' | 'path' | 'treeIndex' | 'node'
 > & {node: LocalTreeItem}
 
@@ -25,20 +24,20 @@ export function getAddItemPatch(item: LocalTreeItem): unknown[] {
 
   return [
     // Add the node to the end of the tree
-    Patch.insert([normalizedNode], 'after', [-1])
+    Patch.insert([normalizedNode], 'after', [-1]),
   ]
 }
 
 export function getDuplicateItemPatch(nodeProps: NodeProps): unknown[] {
   const newItem = {
     ...nodeProps.node,
-    _key: randomKey(12)
+    _key: randomKey(12),
   }
   const normalizedNode = normalizeNodeForStorage(newItem)
 
   return [
     // Add duplicated node before the existing one
-    Patch.insert([normalizedNode], 'before', [{_key: nodeProps.node._key}])
+    Patch.insert([normalizedNode], 'before', [{_key: nodeProps.node._key}]),
   ]
 }
 
@@ -51,7 +50,7 @@ export function getRemoveItemPatch({node}: Pick<NodeProps, 'node'>): unknown[] {
     Patch.unset([keyPath]),
 
     // 2. Unset its children
-    ...children.map((path) => Patch.unset([{_key: path}]))
+    ...children.map((path) => Patch.unset([{_key: path}])),
   ]
 }
 
@@ -67,14 +66,14 @@ export function getMovedNodePatch(data: HandleMovedNodeData): unknown[] {
 
   const nextFlatTree = getFlatDataFromTree({
     treeData: data.treeData,
-    getNodeKey: (t) => t.node._key
+    getNodeKey: (t) => t.node._key,
   })
   const normalizedNode = normalizeNodeForStorage(data.node)
 
   const {leadingNode, followingNode} = getAdjescentNodes({
     flatTree: nextFlatTree,
     node: data.node,
-    treeIndex: data.nextTreeIndex
+    treeIndex: data.nextTreeIndex,
   })
 
   return [
@@ -90,14 +89,14 @@ export function getMovedNodePatch(data: HandleMovedNodeData): unknown[] {
         Patch.insert([normalizedNode], 'after', [{_key: leadingNode.node._key}])
       : // Or before the sibling right after it, in case there's no leading sibling node
         // prettier-ignore
-        Patch.insert([normalizedNode], 'before', [followingNode?.node?._key ? {_key: followingNode.node._key} : data.nextTreeIndex]),
+        Patch.insert([normalizedNode], 'before', [followingNode?.node?._key ? { _key: followingNode.node._key } : data.nextTreeIndex]),
 
     // 3. Patch the new node with its new `parent`
     nextParentNode
       ? // If it has a parent node, set that parent's _key
         Patch.set(nextParentNode._key, [keyPath, 'parent'])
       : // Else remove the parent key entirely
-        Patch.unset([keyPath, 'parent'])
+        Patch.unset([keyPath, 'parent']),
   ]
 }
 
@@ -117,9 +116,9 @@ function getChildrenPaths(node: TreeItem): string[] {
 export function getMoveItemPatch({
   nodeProps: {node, treeIndex},
   localTree,
-  direction = 'up'
+  direction = 'up',
 }: {
-  nodeProps: NodeProps
+  nodeProps: any
   localTree: TreeItem[]
   direction: 'up' | 'down'
 }): unknown[] {
@@ -129,17 +128,17 @@ export function getMoveItemPatch({
 
   const flatTree = getFlatDataFromTree({
     treeData: localTree,
-    getNodeKey: (t) => t.node._key
+    getNodeKey: (t) => t.node._key,
   })
   const nextFlatTree = moveItemInArray<FlatDataItem>({
     array: flatTree,
     fromIndex: treeIndex,
-    toIndex: nextTreeIndex
+    toIndex: nextTreeIndex,
   })
   const {leadingNode, followingNode} = getAdjescentNodes({
     flatTree: nextFlatTree,
     node,
-    treeIndex: nextTreeIndex
+    treeIndex: nextTreeIndex,
   })
 
   const normalizedNode = normalizeNodeForStorage(node)
@@ -159,7 +158,7 @@ export function getMoveItemPatch({
         Patch.insert([normalizedNode], 'after', [{_key: leadingNode.node._key}])
       : // Or before the sibling right after it, in case there's no leading sibling node
         Patch.insert([normalizedNode], 'before', [
-          followingNode?.node?._key ? {_key: followingNode.node._key} : nextTreeIndex
+          followingNode?.node?._key ? {_key: followingNode.node._key} : nextTreeIndex,
         ]),
 
     // 3. Patch the new node with its new `parent`
@@ -167,6 +166,6 @@ export function getMoveItemPatch({
       ? // If it has a parent node, set that parent's _key
         Patch.set(nextParentNode._key, [keyPath, 'parent'])
       : // Else remove the parent key entirely
-        Patch.unset([keyPath, 'parent'])
+        Patch.unset([keyPath, 'parent']),
   ]
 }

@@ -1,7 +1,5 @@
-import {TextWithTone} from '@sanity/base/components'
-import {useTimeAgo} from '@sanity/base/hooks'
+import {TextWithTone, useTimeAgo} from 'sanity'
 import {EditIcon, PublishIcon} from '@sanity/icons'
-import {SanityDocument} from '@sanity/types'
 import {Box, Inline, Text, Tooltip} from '@sanity/ui'
 import * as React from 'react'
 import {DocumentPair} from '../types'
@@ -17,7 +15,7 @@ export function TimeAgo({time}: {time: string | Date}) {
   )
 }
 
-const PublishedStatus = ({document}: {document?: SanityDocument | null}) => (
+const PublishedStatus = ({document}: {document?: any | null}) => (
   <Tooltip
     portal
     content={
@@ -38,7 +36,7 @@ const PublishedStatus = ({document}: {document?: SanityDocument | null}) => (
   </Tooltip>
 )
 
-const DraftStatus = ({document}: {document?: SanityDocument | null}) => (
+const DraftStatus = ({document}: {document?: any | null}) => (
   <Tooltip
     portal
     content={

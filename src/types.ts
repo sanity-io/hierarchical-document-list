@@ -1,6 +1,5 @@
 import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType, ObjectSchemaType} from '@sanity/types'
-import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
+import {TreeItem} from '@nosferatu500/react-sortable-tree'
 import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './utils/injectNodeTypeInPatches'
 
 interface SanityReference {
@@ -88,14 +87,13 @@ export interface TreeInputOptions {
   documentType?: string
 }
 
-export interface TreeFieldSchema
-  extends Omit<ArraySchemaType, 'of' | 'type' | 'inputComponent' | 'jsonType'> {
-  options: ArraySchemaType['options'] & TreeInputOptions
+export interface TreeFieldSchema extends Omit<any, 'of' | 'type' | 'inputComponent' | 'jsonType'> {
+  options: any['options'] & TreeInputOptions
 }
 
 export interface TreeNodeObjectSchema
-  extends Omit<ObjectSchemaType, 'name' | 'fields' | 'type' | 'inputComponent' | 'jsonType'> {
-  options: ObjectSchemaType['options'] & TreeInputOptions
+  extends Omit<any, 'name' | 'fields' | 'type' | 'inputComponent' | 'jsonType'> {
+  options: any['options'] & TreeInputOptions
 }
 
 export interface TreeDeskStructureProps extends TreeInputOptions {
@@ -142,6 +140,6 @@ export interface VisibilityMap {
   [_key: string]: boolean
 }
 
-export interface NodeProps extends NodeRendererProps {
+export interface NodeProps {
   node: LocalTreeItem
 }

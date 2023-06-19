@@ -1,12 +1,8 @@
-import {MutationEvent, SanityClient, SanityDocument} from '@sanity/client'
-import sanityClient from 'part:@sanity/base/client'
+import {MutationEvent, SanityDocument} from '@sanity/client'
 import * as React from 'react'
 import {AllItems, TreeInputOptions} from '../types'
 import {isDraft, unprefixId} from '../utils/idUtils'
-
-const client = sanityClient.withConfig({
-  apiVersion: '2021-09-01'
-}) as SanityClient
+import {useClient} from 'sanity'
 
 function getDeskFilter({referenceTo, referenceOptions}: TreeInputOptions): {
   filter: string
@@ -22,8 +18,8 @@ function getDeskFilter({referenceTo, referenceOptions}: TreeInputOptions): {
     filter: filterParts.join(' && '),
     params: {
       ...(referenceOptions?.filterParams || {}),
-      docTypes: referenceTo.map((schemaType) => schemaType)
-    }
+      docTypes: referenceTo.map((schemaType) => schemaType),
+    },
   }
 }
 
@@ -39,7 +35,7 @@ function updateItemInState(state: AllItems, item: SanityDocument): AllItems {
   const publishedId = unprefixId(item._id)
   newState[publishedId] = {
     ...(newState[publishedId] || {}),
-    [isDraft(item._id) ? 'draft' : 'published']: item
+    [isDraft(item._id) ? 'draft' : 'published']: item,
   }
   return newState
 }
@@ -56,11 +52,11 @@ function allItemsReducer(state: AllItems, action: ACTIONTYPE): AllItems {
       [publishedId]: isDraft(action.itemId)
         ? // If a draft, keep only published
           {
-            published: state[publishedId]?.published
+            published: state[publishedId]?.published,
           }
         : {
-            draft: state[publishedId]?.draft
-          }
+            draft: state[publishedId]?.draft,
+          },
     }
   }
 
@@ -70,14 +66,17 @@ function allItemsReducer(state: AllItems, action: ACTIONTYPE): AllItems {
   return state
 }
 
-export default function useAllItems(options: TreeInputOptions): {
+export default function useAllItems(options: any): {
   status: Status
   allItems: AllItems
 } {
+  const client = useClient({
+    apiVersion: '2021-09-01',
+  })
   const [status, setStatus] = React.useState<Status>('loading')
   const [allItems, dispatch] = React.useReducer(allItemsReducer, {})
 
-  function handleListener(event: MutationEvent<unknown>) {
+  function handleListener(event: MutationEvent<any>) {
     if (event.type !== 'mutation') {
       return
     }
@@ -116,6 +115,6 @@ export default function useAllItems(options: TreeInputOptions): {
 
   return {
     status,
-    allItems
+    allItems,
   }
 }

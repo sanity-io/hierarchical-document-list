@@ -45,7 +45,7 @@ const suppressedMonitor: DragDropMonitor = {
   isOverTarget: monitor.isOverTarget.bind(monitor),
   isSourcePublic: monitor.isSourcePublic.bind(monitor),
   subscribeToOffsetChange: monitor.subscribeToOffsetChange.bind(monitor),
-  subscribeToStateChange: monitor.subscribeToStateChange.bind(monitor)
+  subscribeToStateChange: monitor.subscribeToStateChange.bind(monitor),
 }
 
 export const suppressedDnDManager: DragDropManager = {
@@ -55,5 +55,5 @@ export const suppressedDnDManager: DragDropManager = {
   getBackend: manager.getBackend.bind(manager),
   getRegistry: manager.getRegistry.bind(manager),
   getActions: manager.getActions.bind(manager),
-  dispatch: manager.dispatch.bind(manager)
+  dispatch: manager.dispatch.bind(manager),
 }

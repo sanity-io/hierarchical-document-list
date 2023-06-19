@@ -1,4 +1,3 @@
-import {ArraySchemaType} from '@sanity/types'
 import * as React from 'react'
 import {DEFAULT_FIELD_KEY} from './TreeDeskStructure'
 import TreeInputComponent from './TreeInputComponent'
@@ -7,7 +6,7 @@ import {
   getSchemaTypeName,
   INTERNAL_NODE_ARRAY_TYPE,
   INTERNAL_NODE_TYPE,
-  INTERNAL_NODE_VALUE_TYPE
+  INTERNAL_NODE_VALUE_TYPE,
 } from './utils/injectNodeTypeInPatches'
 import throwError from './utils/throwError'
 
@@ -16,7 +15,7 @@ type SchemaOptions = Omit<TreeDeskStructureProps, 'documentId' | 'maxDepth'>
 function createHierarchicalNodeValueType({
   referenceTo,
   referenceOptions,
-  documentType
+  documentType,
 }: SchemaOptions) {
   return {
     // when used inside the field, name & type are overwritten by createHierarchicalNodeType
@@ -31,9 +30,9 @@ function createHierarchicalNodeValueType({
         type: 'reference',
         weak: true,
         to: referenceTo.map((type) => ({type})),
-        options: referenceOptions
-      }
-    ]
+        options: referenceOptions,
+      },
+    ],
   }
 }
 
@@ -55,9 +54,9 @@ function createHierarchicalNodeType(options: SchemaOptions) {
           {
             ...createHierarchicalNodeValueType(options),
             name: 'value',
-            type: 'object'
-          }
-    ]
+            type: 'object',
+          },
+    ],
   }
 }
 
@@ -72,13 +71,13 @@ function createHierarchicalArrayType(options: SchemaOptions) {
     of: [
       options.documentType
         ? {type: getSchemaTypeName(options.documentType, 'node')}
-        : createHierarchicalNodeType(options)
-    ]
+        : createHierarchicalNodeType(options),
+    ],
   }
 }
 
 export function createHierarchicalField({name, title, options, ...rest}: TreeFieldSchema): Omit<
-  ArraySchemaType,
+  any,
   'type' | 'jsonType' | 'of'
 > & {
   type: string
@@ -99,8 +98,8 @@ export function createHierarchicalField({name, title, options, ...rest}: TreeFie
       ? {type: getSchemaTypeName(options.documentType, 'array')}
       : {
           ...createHierarchicalArrayType(options),
-          name
-        })
+          name,
+        }),
   }
 }
 
@@ -116,21 +115,21 @@ function createHierarchicalDocType(options: SchemaOptions) {
       createHierarchicalField({
         name: options.fieldKeyInDocument || DEFAULT_FIELD_KEY,
         title: 'Hierarchical Tree',
-        options
-      })
+        options,
+      }),
     ],
     preview: {
       select: {
         id: '_id',
-        tree: 'tree'
+        tree: 'tree',
       },
       prepare({id, tree}: {id: string; tree: unknown[]}): Record<string, string> {
         return {
           title: `Hierarchical documents (ID: ${id})`,
-          subtitle: `${tree?.length || 0} document(s) in its list.`
+          subtitle: `${tree?.length || 0} document(s) in its list.`,
         }
-      }
-    }
+      },
+    },
   }
 }
 
@@ -146,6 +145,6 @@ export default function createHierarchicalSchemas(options: SchemaOptions) {
     createHierarchicalDocType(options),
     createHierarchicalArrayType(options),
     createHierarchicalNodeType(options),
-    createHierarchicalNodeValueType(options)
+    createHierarchicalNodeValueType(options),
   ]
 }

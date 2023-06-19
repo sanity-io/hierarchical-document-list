@@ -1,3 +1,7 @@
-.eslintrc.cjs
-.prettierrc
-src
+# Ignore All
+*
+
+# But this
+!dist/*
+!package.json
+!img.png

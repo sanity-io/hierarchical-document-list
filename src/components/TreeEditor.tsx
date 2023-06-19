@@ -2,13 +2,7 @@ import {AddCircleIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import * as React from 'react'
 import {useCallback, useMemo} from 'react'
-import {
-  FullTree,
-  NodeData,
-  OnDragPreviousAndNextLocation,
-  OnMovePreviousAndNextLocation,
-  SortableTreeWithoutDndContext as SortableTree
-} from 'react-sortable-tree'
+import SortableTree, {FullTree, NodeData} from '@nosferatu500/react-sortable-tree'
 import {StoredTreeItem, TreeInputOptions} from '../types'
 import getCommonTreeProps from '../utils/getCommonTreeProps'
 import getTreeHeight from '../utils/getTreeHeight'
@@ -33,19 +27,19 @@ const TreeEditor: React.FC<{
   patchPrefix?: string
 }> = (props) => {
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
-  const unaddedItems = getUnaddedItems({tree: props.tree, allItems})
+  const unAddedItems = getUnaddedItems({tree: props.tree, allItems})
   const {localTree, handleVisibilityToggle} = useLocalTree({
     tree: props.tree,
-    allItems
+    allItems,
   })
   const operations = useTreeOperationsProvider({
     patchPrefix: props.patchPrefix,
     onChange: props.onChange,
-    localTree
+    localTree,
   })
 
   const onMoveNode = useCallback(
-    (data: NodeData & FullTree & OnMovePreviousAndNextLocation) =>
+    (data: NodeData & FullTree & any) =>
       operations.handleMovedNode(data as unknown as HandleMovedNodeData),
     [operations]
   )
@@ -54,8 +48,8 @@ const TreeEditor: React.FC<{
     () =>
       getCommonTreeProps({
         placeholder: {
-          title: 'Add items from the list below'
-        }
+          title: 'Add items from the list below',
+        },
       }),
     []
   )
@@ -73,11 +67,11 @@ const TreeEditor: React.FC<{
             <Card
               style={{minHeight: getTreeHeight(localTree)}}
               // Only include borderBottom if there's something to show in unadded items
-              borderBottom={allItemsStatus !== 'success' || unaddedItems?.length > 0}
+              borderBottom={allItemsStatus !== 'success' || unAddedItems?.length > 0}
             >
               <SortableTree
                 maxDepth={props.options.maxDepth}
-                onChange={doNothingOnChange}
+                onChange={() => {}}
                 onVisibilityToggle={handleVisibilityToggle}
                 canDrop={canDrop}
                 onMoveNode={onMoveNode}
@@ -86,7 +80,7 @@ const TreeEditor: React.FC<{
               />
             </Card>
 
-            {allItemsStatus === 'success' && unaddedItems?.length > 0 && (
+            {allItemsStatus === 'success' && unAddedItems?.length > 0 && (
               <Stack space={1} paddingX={2} paddingTop={3}>
                 <Stack space={2} paddingX={2} paddingBottom={3}>
                   <Text size={2} as="h2" weight="semibold">
@@ -96,7 +90,7 @@ const TreeEditor: React.FC<{
                     Only published documents are shown.
                   </Text>
                 </Stack>
-                {unaddedItems.map((item) => (
+                {unAddedItems.map((item) => (
                   <DocumentInNode
                     key={item.publishedId || item.draftId}
                     item={item}
@@ -143,15 +137,11 @@ const TreeEditor: React.FC<{
   )
 }
 
-function canDrop({nextPath, prevPath}: OnDragPreviousAndNextLocation & NodeData) {
+function canDrop({nextPath, prevPath}: any & NodeData) {
   const insideItself =
     nextPath.length >= prevPath.length &&
-    prevPath.every((pathIndex, index) => nextPath[index] === pathIndex)
+    prevPath.every((pathIndex: any, index: string | number) => nextPath[index] === pathIndex)
   return !insideItself
-}
-
-const doNothingOnChange = () => {
-  // Do nothing. onMoveNode will do all the work
 }
 
 export default TreeEditor

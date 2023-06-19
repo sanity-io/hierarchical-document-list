@@ -1,7 +1,5 @@
-import {FormField} from '@sanity/base/components'
-import {FormFieldPresence} from '@sanity/base/presence'
-import PatchEvent from '@sanity/form-builder/PatchEvent'
-import {Marker, Path} from '@sanity/types'
+import {FormField} from 'sanity'
+import {PatchEvent} from 'sanity'
 import * as React from 'react'
 import TreeEditor from './components/TreeEditor'
 import {StoredTreeItem, TreeFieldSchema} from './types'
@@ -11,17 +9,19 @@ export interface TreeInputComponentProps {
   type: TreeFieldSchema
   value: StoredTreeItem[]
   compareValue: StoredTreeItem[]
-  markers: Marker[]
+  markers: any[]
   level: number
   onChange: (event: unknown) => void
-  onFocus: (path: Path) => void
+  onFocus: (path: any) => void
   onBlur: () => void
-  focusPath: Path
+  focusPath: any
   readOnly: boolean
-  presence: FormFieldPresence[]
+  presence: any
 }
 
-const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((props) => {
+const TreeInputComponent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<any> & React.RefAttributes<unknown>
+> = React.forwardRef((props: any) => {
   const documentType = props.type.options.documentType || DEFAULT_DOC_TYPE
 
   const onChange = React.useCallback(
@@ -36,9 +36,9 @@ const TreeInputComponent: React.FC<TreeInputComponentProps> = React.forwardRef((
     <FormField
       description={props.type.description} // Creates description from schema
       title={props.type.title} // Creates label from schema title
-      __unstable_markers={props.markers} // Handles all markers including validation
+      //__unstable_markers={props.markers} // Handles all markers including validation
       __unstable_presence={props.presence} // Handles presence avatars
-      compareValue={props.compareValue} // Handles "edited" status
+      // compareValue={props.compareValue} // Handles "edited" status
     >
       <TreeEditor options={props.type.options} tree={props.value || []} onChange={onChange} />
     </FormField>

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import {OnVisibilityToggleData} from 'react-sortable-tree'
 import {AllItems, LocalTreeItem, StoredTreeItem, VisibilityMap} from '../types'
 import {dataToEditorTree} from '../utils/treeData'
 
@@ -13,20 +12,20 @@ import {dataToEditorTree} from '../utils/treeData'
  */
 export default function useLocalTree({
   tree,
-  allItems
+  allItems,
 }: {
   tree: StoredTreeItem[]
   allItems: AllItems
 }): {
-  handleVisibilityToggle: (data: OnVisibilityToggleData) => void
+  handleVisibilityToggle: (data: any) => void
   localTree: LocalTreeItem[]
 } {
   const [visibilityMap, setVisibilityMap] = React.useState<VisibilityMap>({})
 
-  function handleVisibilityToggle(data: OnVisibilityToggleData) {
+  function handleVisibilityToggle(data: any) {
     setVisibilityMap({
       ...visibilityMap,
-      [data.node._key]: data.expanded
+      [data.node._key]: data.expanded,
     })
   }
 
@@ -34,8 +33,8 @@ export default function useLocalTree({
     localTree: dataToEditorTree({
       tree,
       allItems,
-      visibilityMap
+      visibilityMap,
     }),
-    handleVisibilityToggle
+    handleVisibilityToggle,
   }
 }

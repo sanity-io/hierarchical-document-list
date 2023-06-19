@@ -1,6 +1,5 @@
-import {PublishIcon} from '@sanity/icons'
-import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
-import {Box, Button, Flex, Spinner, useToast} from '@sanity/ui'
+import {useDocumentOperation, useEditState} from 'sanity'
+import {Box, Flex, Spinner} from '@sanity/ui'
 import * as React from 'react'
 import DeskWarning from './components/DeskWarning'
 import TreeEditor from './components/TreeEditor'
@@ -18,16 +17,12 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
   const treeDocType = props.options.documentType || DEFAULT_DOC_TYPE
   const treeFieldKey = props.options.fieldKeyInDocument || DEFAULT_FIELD_KEY
   const {published, draft, liveEdit} = useEditState(props.options.documentId, treeDocType)
-  const {patch, ...ops} = useDocumentOperation(
-    props.options.documentId,
-    treeDocType
-  ) as DocumentOperations
-  const {push} = useToast()
+  const {patch} = useDocumentOperation(props.options.documentId, treeDocType) as DocumentOperations
 
   const treeValue = (published?.[treeFieldKey] || []) as StoredTreeItem[]
 
   const handleChange = React.useCallback(
-    (patchEvent) => {
+    (patchEvent: any) => {
       if (!patch?.execute) {
         return
       }
@@ -52,27 +47,14 @@ const TreeDeskStructure: React.FC<ComponentProps> = (props) => {
     )
   }
 
+  // @ts-ignore
   if (draft?._id) {
     return (
       <DeskWarning
         title="This hierarchy tree contains a draft"
         subtitle="Click on the button below to publish your draft in order to continue editing the live
       published document."
-      >
-        <Button
-          fontSize={1}
-          tone="positive"
-          text="Publish draft"
-          icon={PublishIcon}
-          onClick={() => {
-            ops.publish?.execute?.()
-            push({
-              status: 'info',
-              title: 'Publishing draft...'
-            })
-          }}
-        />
-      </DeskWarning>
+      />
     )
   }
 

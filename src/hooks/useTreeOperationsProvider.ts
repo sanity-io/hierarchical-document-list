@@ -1,5 +1,5 @@
-import * as Patch from '@sanity/form-builder/lib/patch/patches'
-import PatchEvent from '@sanity/form-builder/PatchEvent'
+import * as Patch from 'sanity'
+import {PatchEvent} from 'sanity'
 import {LocalTreeItem, NodeProps} from '../types'
 import {
   getAddItemPatch,
@@ -8,11 +8,11 @@ import {
   getMoveItemPatch,
   getRemoveItemPatch,
   HandleMovedNode,
-  HandleMovedNodeData
+  HandleMovedNodeData,
 } from '../utils/treePatches'
 
 export default function useTreeOperationsProvider(props: {
-  patchPrefix?: string
+  patchPrefix?: any
   onChange: (patch: unknown) => void
   localTree: LocalTreeItem[]
 }): {
@@ -25,11 +25,11 @@ export default function useTreeOperationsProvider(props: {
 } {
   const {localTree} = props
 
-  function runPatches(patches: unknown[]) {
+  function runPatches(patches: any) {
     const finalPatches = [
       // Ensure tree array exists before any operation
       Patch.setIfMissing([]),
-      ...(patches || [])
+      ...(patches || []),
     ]
     let patchEvent = PatchEvent.from(finalPatches)
     if (props.patchPrefix) {
@@ -61,7 +61,7 @@ export default function useTreeOperationsProvider(props: {
       getMoveItemPatch({
         nodeProps,
         localTree,
-        direction: 'up'
+        direction: 'up',
       })
     )
   }
@@ -71,7 +71,7 @@ export default function useTreeOperationsProvider(props: {
       getMoveItemPatch({
         nodeProps,
         localTree,
-        direction: 'down'
+        direction: 'down',
       })
     )
   }
@@ -82,6 +82,6 @@ export default function useTreeOperationsProvider(props: {
     removeItem,
     moveItemUp,
     moveItemDown,
-    duplicateItem
+    duplicateItem,
   }
 }

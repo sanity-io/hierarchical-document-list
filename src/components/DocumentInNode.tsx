@@ -1,14 +1,11 @@
-import {TextWithTone} from '@sanity/base/components'
-import {SanityDocument} from '@sanity/client'
-import {usePaneRouter} from '@sanity/desk-tool'
+import {Preview, SanityDocument, SchemaType, TextWithTone, useSchema} from 'sanity'
 import {HelpCircleIcon} from '@sanity/icons'
 import {Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
-import Preview from 'part:@sanity/base/preview'
-import schema from 'part:@sanity/base/schema'
 import * as React from 'react'
 import {LocalTreeItem} from '../types'
 import useTreeOperations from '../hooks/useTreeOperations'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
+import {usePaneRouter} from 'sanity/desk'
 
 /**
  * Renders a preview for each referenced document.
@@ -21,13 +18,16 @@ const DocumentInNode: React.FC<{
   const {value: {reference, docType} = {}, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {allItemsStatus} = useTreeOperations()
-
+  const schema = useSchema()
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
-    return routerPanesState.some((pane) => pane.some((group) => group.id === reference?._ref))
+    return routerPanesState.some((pane: any[]) =>
+      pane.some((group) => group.id === reference?._ref)
+    )
   }, [routerPanesState])
 
-  const schemaType = React.useMemo(() => schema.get(docType), [docType])
+  // @ts-ignore
+  const type = React.useMemo(() => schema.get(docType), [docType])
 
   const LinkComponent = React.useMemo(
     () =>
@@ -37,7 +37,7 @@ const DocumentInNode: React.FC<{
           childId={reference?._ref}
           ref={ref}
           childParameters={{
-            type: docType
+            type: docType,
           }}
         />
       )),
@@ -65,7 +65,7 @@ const DocumentInNode: React.FC<{
         >
           <Preview
             layout="default"
-            type={schemaType}
+            schemaType={type as SchemaType}
             value={{_ref: draftId || reference?._ref}}
             status={
               <DocumentPreviewStatus
@@ -74,7 +74,7 @@ const DocumentInNode: React.FC<{
                     ? ({
                         _id: draftId,
                         _type: docType,
-                        _updatedAt: props.item.draftUpdatedAt
+                        _updatedAt: props.item.draftUpdatedAt,
                       } as SanityDocument)
                     : undefined
                 }
@@ -82,7 +82,7 @@ const DocumentInNode: React.FC<{
                   {
                     _id: reference?._ref,
                     _type: docType,
-                    _updatedAt: props.item.publishedUpdatedAt
+                    _updatedAt: props.item.publishedUpdatedAt,
                   } as SanityDocument
                 }
               />

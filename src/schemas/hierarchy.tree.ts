@@ -1,4 +1,6 @@
-export default {
+import {defineType} from 'sanity'
+
+export default defineType({
   name: 'hierarchy.tree',
   title: 'Hierarchical tree',
   type: 'document',
@@ -11,7 +13,7 @@ export default {
       name: 'unusedField',
       title: 'Unused field',
       type: 'string',
-      hidden: true
-    }
-  ]
-}
+      hidden: true,
+    },
+  ],
+})
