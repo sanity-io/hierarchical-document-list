@@ -1,4 +1,4 @@
-import {getVisibleNodeCount, TreeItem} from 'react-sortable-tree'
+import {getVisibleNodeCount, TreeItem} from '@nosferatu500/react-sortable-tree'
 
 export const ROW_HEIGHT = 51
 

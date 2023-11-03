@@ -46,13 +46,13 @@ export default function injectNodeTypeInPatches(patchData: any, documentType: st
           [key]: getSchemaTypeName(
             documentType,
             value === INTERNAL_NODE_TYPE ? 'node' : 'nodeValue'
-          )
+          ),
         }
       }
 
       return {
         ...newObject,
-        [key]: injectNodeTypeInPatches(value, documentType)
+        [key]: injectNodeTypeInPatches(value, documentType),
       }
     }, {})
   }

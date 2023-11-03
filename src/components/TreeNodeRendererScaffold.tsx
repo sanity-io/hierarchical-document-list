@@ -1,6 +1,5 @@
 import {blue} from '@sanity/color'
 import * as React from 'react'
-import {TreeRendererProps} from 'react-sortable-tree'
 import {createGlobalStyle} from 'styled-components'
 
 // Adapted from react-sortable-tree/src/tree-node.js
@@ -133,7 +132,7 @@ const ScaffoldStyles = createGlobalStyle`
   }
 `
 
-const TreeNodeRendererScaffold: React.FC<TreeRendererProps> = (props) => {
+const TreeNodeRendererScaffold: React.FC<any> = (props) => {
   const {
     lowerSiblingCounts,
     scaffoldBlockPxWidth,
@@ -141,45 +140,47 @@ const TreeNodeRendererScaffold: React.FC<TreeRendererProps> = (props) => {
     swapDepth,
     swapFrom,
     swapLength,
-    treeIndex
+    treeIndex,
   } = props
 
   // Construct the scaffold representing the structure of the tree
-  const scaffold: React.ReactNode[] = lowerSiblingCounts.map((lowerSiblingCount, i) => {
-    if (lowerSiblingCount < 0 || treeIndex === listIndex || i !== swapDepth) {
-      return null
+  const scaffold: React.ReactNode[] = lowerSiblingCounts.map(
+    (lowerSiblingCount: number, i: any) => {
+      if (lowerSiblingCount < 0 || treeIndex === listIndex || i !== swapDepth) {
+        return null
+      }
+
+      // This row has been shifted, and is at the depth of
+      // the line pointing to the new destination
+      let highlightLineClass = ''
+
+      if (listIndex === (swapFrom || 0) + (swapLength || 0) - 1) {
+        // This block is on the bottom (target) line
+        // This block points at the target block (where the row will go when released)
+        highlightLineClass = 'rst__highlightBottomLeftCorner'
+      } else if (treeIndex === swapFrom) {
+        // This block is on the top (source) line
+        highlightLineClass = 'rst__highlightTopLeftCorner'
+      } else {
+        // This block is between the bottom and top
+        highlightLineClass = 'rst__highlightLineVertical'
+      }
+
+      const style = {
+        width: scaffoldBlockPxWidth,
+        left: scaffoldBlockPxWidth * i,
+      }
+
+      return (
+        <div
+          key={i}
+          style={style}
+          className={`rst__unclickable rst__absoluteLineBlock ${highlightLineClass || ''}`}
+          tabIndex={-1}
+        />
+      )
     }
-
-    // This row has been shifted, and is at the depth of
-    // the line pointing to the new destination
-    let highlightLineClass = ''
-
-    if (listIndex === (swapFrom || 0) + (swapLength || 0) - 1) {
-      // This block is on the bottom (target) line
-      // This block points at the target block (where the row will go when released)
-      highlightLineClass = 'rst__highlightBottomLeftCorner'
-    } else if (treeIndex === swapFrom) {
-      // This block is on the top (source) line
-      highlightLineClass = 'rst__highlightTopLeftCorner'
-    } else {
-      // This block is between the bottom and top
-      highlightLineClass = 'rst__highlightLineVertical'
-    }
-
-    const style = {
-      width: scaffoldBlockPxWidth,
-      left: scaffoldBlockPxWidth * i
-    }
-
-    return (
-      <div
-        key={i}
-        style={style}
-        className={`rst__unclickable rst__absoluteLineBlock ${highlightLineClass || ''}`}
-        tabIndex={-1}
-      />
-    )
-  })
+  )
 
   return (
     <>

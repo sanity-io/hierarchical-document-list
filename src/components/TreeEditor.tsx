@@ -1,39 +1,34 @@
+import SortableTree, {FullTree, NodeData} from '@nosferatu500/react-sortable-tree'
 import {AddCircleIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import * as React from 'react'
 import {useCallback, useMemo} from 'react'
-import {
-  FullTree,
-  NodeData,
-  OnDragPreviousAndNextLocation,
-  OnMovePreviousAndNextLocation,
-  SortableTreeWithoutDndContext as SortableTree
-} from 'react-sortable-tree'
+import {DndProvider} from 'react-dnd'
+import {HTML5Backend} from 'react-dnd-html5-backend'
+import {PatchEvent} from 'sanity'
+import useAllItems from '../hooks/useAllItems'
+import useLocalTree from '../hooks/useLocalTree'
+import {TreeOperationsContext} from '../hooks/useTreeOperations'
+import useTreeOperationsProvider from '../hooks/useTreeOperationsProvider'
 import {StoredTreeItem, TreeInputOptions} from '../types'
 import getCommonTreeProps from '../utils/getCommonTreeProps'
 import getTreeHeight from '../utils/getTreeHeight'
 import {getUnaddedItems} from '../utils/treeData'
 import {HandleMovedNodeData} from '../utils/treePatches'
-import useAllItems from '../hooks/useAllItems'
-import useLocalTree from '../hooks/useLocalTree'
-import {TreeOperationsContext} from '../hooks/useTreeOperations'
-import useTreeOperationsProvider from '../hooks/useTreeOperationsProvider'
 import DocumentInNode from './DocumentInNode'
-import {DndProvider} from 'react-dnd'
 import {TreeEditorErrorBoundary} from './TreeEditorErrorBoundary'
-import {suppressedDnDManager} from './SuppressedDnDManager'
 
 /**
  * The loaded tree users interact with
  */
 const TreeEditor: React.FC<{
   tree: StoredTreeItem[]
-  onChange: (patch: unknown) => void
+  onChange: (patch: PatchEvent) => void
   options: TreeInputOptions
   patchPrefix?: string
 }> = (props) => {
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
-  const unaddedItems = getUnaddedItems({tree: props.tree, allItems})
+  const unAddedItems = getUnaddedItems({tree: props.tree, allItems})
   const {localTree, handleVisibilityToggle} = useLocalTree({
     tree: props.tree,
     allItems
@@ -45,7 +40,7 @@ const TreeEditor: React.FC<{
   })
 
   const onMoveNode = useCallback(
-    (data: NodeData & FullTree & OnMovePreviousAndNextLocation) =>
+    (data: NodeData & FullTree & any) =>
       operations.handleMovedNode(data as unknown as HandleMovedNodeData),
     [operations]
   )
@@ -67,13 +62,14 @@ const TreeEditor: React.FC<{
 
   return (
     <TreeEditorErrorBoundary>
-      <DndProvider manager={suppressedDnDManager}>
+      <DndProvider backend={HTML5Backend}>
+        {/* <DndProvider manager={suppressedDnDManager}> */}
         <TreeOperationsContext.Provider value={operationContext}>
           <Stack space={4} paddingTop={4}>
             <Card
               style={{minHeight: getTreeHeight(localTree)}}
               // Only include borderBottom if there's something to show in unadded items
-              borderBottom={allItemsStatus !== 'success' || unaddedItems?.length > 0}
+              borderBottom={allItemsStatus !== 'success' || unAddedItems?.length > 0}
             >
               <SortableTree
                 maxDepth={props.options.maxDepth}
@@ -86,7 +82,7 @@ const TreeEditor: React.FC<{
               />
             </Card>
 
-            {allItemsStatus === 'success' && unaddedItems?.length > 0 && (
+            {allItemsStatus === 'success' && unAddedItems?.length > 0 && (
               <Stack space={1} paddingX={2} paddingTop={3}>
                 <Stack space={2} paddingX={2} paddingBottom={3}>
                   <Text size={2} as="h2" weight="semibold">
@@ -96,7 +92,7 @@ const TreeEditor: React.FC<{
                     Only published documents are shown.
                   </Text>
                 </Stack>
-                {unaddedItems.map((item) => (
+                {unAddedItems.map((item) => (
                   <DocumentInNode
                     key={item.publishedId || item.draftId}
                     item={item}
@@ -143,10 +139,10 @@ const TreeEditor: React.FC<{
   )
 }
 
-function canDrop({nextPath, prevPath}: OnDragPreviousAndNextLocation & NodeData) {
+function canDrop({nextPath, prevPath}: any & NodeData) {
   const insideItself =
     nextPath.length >= prevPath.length &&
-    prevPath.every((pathIndex, index) => nextPath[index] === pathIndex)
+    prevPath.every((pathIndex: any, index: string | number) => nextPath[index] === pathIndex)
   return !insideItself
 }
 

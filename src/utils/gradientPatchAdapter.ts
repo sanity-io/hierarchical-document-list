@@ -16,14 +16,14 @@ function toGradientPatch(patch: Patch): GradientPatch {
     return {
       insert: {
         [position]: matchPath,
-        items: items
-      }
+        items: items,
+      },
     }
   }
 
   if (patch.type === 'unset') {
     return {
-      unset: [matchPath]
+      unset: [matchPath],
     }
   }
 
@@ -33,11 +33,11 @@ function toGradientPatch(patch: Patch): GradientPatch {
   if (matchPath) {
     return {
       [patch.type]: {
-        [matchPath]: patch.value
-      }
+        [matchPath]: patch.value,
+      },
     }
   }
   return {
-    [patch.type]: patch.value
+    [patch.type]: patch.value,
   }
 }

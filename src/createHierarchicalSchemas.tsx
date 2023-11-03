@@ -1,13 +1,13 @@
-import {ArraySchemaType} from '@sanity/types'
 import * as React from 'react'
+import {ArraySchemaType} from 'sanity'
 import {DEFAULT_FIELD_KEY} from './TreeDeskStructure'
 import TreeInputComponent from './TreeInputComponent'
 import {TreeDeskStructureProps, TreeFieldSchema} from './types'
 import {
-  getSchemaTypeName,
   INTERNAL_NODE_ARRAY_TYPE,
   INTERNAL_NODE_TYPE,
-  INTERNAL_NODE_VALUE_TYPE
+  INTERNAL_NODE_VALUE_TYPE,
+  getSchemaTypeName
 } from './utils/injectNodeTypeInPatches'
 import throwError from './utils/throwError'
 

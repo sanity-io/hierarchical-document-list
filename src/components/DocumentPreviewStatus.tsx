@@ -1,9 +1,7 @@
-import {TextWithTone} from '@sanity/base/components'
-import {useTimeAgo} from '@sanity/base/hooks'
 import {EditIcon, PublishIcon} from '@sanity/icons'
-import {SanityDocument} from '@sanity/types'
 import {Box, Inline, Text, Tooltip} from '@sanity/ui'
 import * as React from 'react'
+import {SanityDocument, TextWithTone, useTimeAgo} from 'sanity'
 import {DocumentPair} from '../types'
 
 export function TimeAgo({time}: {time: string | Date}) {

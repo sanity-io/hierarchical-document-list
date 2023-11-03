@@ -17,7 +17,7 @@ export const TreeOperationsContext = React.createContext<ContextValue>({
   handleMovedNode: placeholder,
   moveItemDown: placeholder,
   moveItemUp: placeholder,
-  allItemsStatus: 'loading'
+  allItemsStatus: 'loading',
 })
 
 export default function useTreeOperations(): ContextValue {

@@ -1,20 +1,19 @@
-import * as Patch from '@sanity/form-builder/lib/patch/patches'
-import {randomKey} from '@sanity/util/content'
 import {
   FlatDataItem,
   FullTree,
   getFlatDataFromTree,
   NodeData,
-  OnMovePreviousAndNextLocation,
   TreeItem
-} from 'react-sortable-tree'
+} from '@nosferatu500/react-sortable-tree'
+import {randomKey} from '@sanity/util/content'
+import * as Patch from 'sanity'
 import {LocalTreeItem, NodeProps} from '../types'
 import getAdjescentNodes from './getAdjescentNodes'
 import moveItemInArray from './moveItemInArray'
 import {normalizeNodeForStorage} from './treeData'
 
 export type HandleMovedNodeData = Omit<
-  NodeData & FullTree & OnMovePreviousAndNextLocation,
+  NodeData & FullTree & any,
   'prevPath' | 'prevTreeIndex' | 'path' | 'treeIndex' | 'node'
 > & {node: LocalTreeItem}
 
@@ -119,7 +118,7 @@ export function getMoveItemPatch({
   localTree,
   direction = 'up'
 }: {
-  nodeProps: NodeProps
+  nodeProps: any
   localTree: TreeItem[]
   direction: 'up' | 'down'
 }): unknown[] {

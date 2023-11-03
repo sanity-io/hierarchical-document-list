@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 /**
  * react-sortable-tree emits a lot of random errors when dragging to invalid states,
  * even when drag-targets are disabled.
@@ -11,12 +9,6 @@ import * as React from 'react'
  * event handlers, so there is addtional workarounds in the
  * DnDManager.
  *  */
-export class TreeEditorErrorBoundary extends React.Component {
-  // eslint-disable-next-line class-methods-use-this
-  componentDidCatch() {
-    // do nothing
-  }
-  render() {
-    return this.props.children
-  }
+export const TreeEditorErrorBoundary = (props: any) => {
+  return props.children
 }

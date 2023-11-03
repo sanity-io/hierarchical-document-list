@@ -1,12 +1,8 @@
-import {MutationEvent, SanityClient, SanityDocument} from '@sanity/client'
-import sanityClient from 'part:@sanity/base/client'
+import {SanityDocument} from '@sanity/client'
 import * as React from 'react'
+import {useClient} from 'sanity'
 import {AllItems, TreeInputOptions} from '../types'
 import {isDraft, unprefixId} from '../utils/idUtils'
-
-const client = sanityClient.withConfig({
-  apiVersion: '2021-09-01'
-}) as SanityClient
 
 function getDeskFilter({referenceTo, referenceOptions}: TreeInputOptions): {
   filter: string
@@ -74,10 +70,13 @@ export default function useAllItems(options: TreeInputOptions): {
   status: Status
   allItems: AllItems
 } {
+  const client = useClient({
+    apiVersion: '2021-09-01'
+  })
   const [status, setStatus] = React.useState<Status>('loading')
   const [allItems, dispatch] = React.useReducer(allItemsReducer, {})
 
-  function handleListener(event: MutationEvent<unknown>) {
+  function handleListener(event: any) {
     if (event.type !== 'mutation') {
       return
     }

@@ -1,6 +1,6 @@
+import {TreeItem} from '@nosferatu500/react-sortable-tree'
 import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType, ObjectSchemaType} from '@sanity/types'
-import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
+import {ArraySchemaType, ObjectSchemaType} from 'sanity'
 import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './utils/injectNodeTypeInPatches'
 
 interface SanityReference {
@@ -142,6 +142,6 @@ export interface VisibilityMap {
   [_key: string]: boolean
 }
 
-export interface NodeProps extends NodeRendererProps {
+export interface NodeProps {
   node: LocalTreeItem
 }

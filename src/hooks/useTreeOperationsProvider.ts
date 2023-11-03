@@ -1,19 +1,18 @@
-import * as Patch from '@sanity/form-builder/lib/patch/patches'
-import PatchEvent from '@sanity/form-builder/PatchEvent'
+import {PatchEvent, PathSegment, prefixPath, setIfMissing} from 'sanity'
 import {LocalTreeItem, NodeProps} from '../types'
 import {
+  HandleMovedNode,
+  HandleMovedNodeData,
   getAddItemPatch,
   getDuplicateItemPatch,
-  getMovedNodePatch,
   getMoveItemPatch,
-  getRemoveItemPatch,
-  HandleMovedNode,
-  HandleMovedNodeData
+  getMovedNodePatch,
+  getRemoveItemPatch
 } from '../utils/treePatches'
 
 export default function useTreeOperationsProvider(props: {
-  patchPrefix?: string
-  onChange: (patch: unknown) => void
+  patchPrefix?: PathSegment
+  onChange: (patch: PatchEvent) => void
   localTree: LocalTreeItem[]
 }): {
   handleMovedNode: HandleMovedNode
@@ -25,16 +24,16 @@ export default function useTreeOperationsProvider(props: {
 } {
   const {localTree} = props
 
-  function runPatches(patches: unknown[]) {
+  function runPatches(patches: any) {
     const finalPatches = [
       // Ensure tree array exists before any operation
-      Patch.setIfMissing([]),
+      setIfMissing([]),
       ...(patches || [])
     ]
     let patchEvent = PatchEvent.from(finalPatches)
     if (props.patchPrefix) {
       patchEvent = PatchEvent.from(
-        finalPatches.map((patch) => Patch.prefixPath(patch, props.patchPrefix))
+        finalPatches.map((patch) => prefixPath(patch, props.patchPrefix as PathSegment))
       )
     }
     props.onChange(patchEvent)
