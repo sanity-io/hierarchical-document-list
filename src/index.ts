@@ -20,6 +20,6 @@ export {createDeskHierarchy, createHierarchicalSchemas, flatDataToTree, hierarch
  * ```
  */
 
-export const sanityHDL = definePlugin({
-  name: 'sanity-plugin-hdl'
+export const hierarchicalDocumentList = definePlugin({
+  name: 'sanity-plugin-hierarchical-document-list'
 })
