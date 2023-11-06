@@ -1,7 +1,7 @@
-import type {ConfigContext} from 'sanity'
 import {AddIcon} from '@sanity/icons'
-import {StructureBuilder} from 'sanity/desk'
 import * as React from 'react'
+import type {ConfigContext} from 'sanity'
+import {StructureBuilder} from 'sanity/desk'
 
 import TreeDeskStructure from './TreeDeskStructure'
 import {TreeDeskStructureProps} from './types'
@@ -31,6 +31,7 @@ const deskTreeValidator = (props: TreeProps): React.FC => {
   if (!Array.isArray(referenceTo)) {
     throwError('invalidReferenceTo', `(documentId "${documentId}")`)
   }
+
   return (deskProps) => <TreeDeskStructure {...deskProps} options={props} />
 }
 
@@ -55,7 +56,7 @@ export default function createDeskHierarchy(props: TreeProps) {
         S.menuItem()
           .intent({
             type: 'create',
-            params: {type: schemaType},
+            params: {type: schemaType}
           })
           .title(`Create ${schema.get(schemaType)?.title}`)
           .icon(schema.get(schemaType)?.icon || AddIcon)
@@ -92,7 +93,7 @@ export default function createDeskHierarchy(props: TreeProps) {
           type: 'component',
           component: deskTreeValidator(props),
           options: props,
-          __preserveInstance: true,
+          __preserveInstance: true
         },
         props.title ? {title: props.title} : {}
       )

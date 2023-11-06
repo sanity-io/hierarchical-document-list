@@ -10,7 +10,7 @@ import useAllItems from '../hooks/useAllItems'
 import useLocalTree from '../hooks/useLocalTree'
 import {TreeOperationsContext} from '../hooks/useTreeOperations'
 import useTreeOperationsProvider from '../hooks/useTreeOperationsProvider'
-import {StoredTreeItem, TreeInputOptions} from '../types'
+import {Optional, StoredTreeItem, TreeDeskStructureProps} from '../types'
 import getCommonTreeProps from '../utils/getCommonTreeProps'
 import getTreeHeight from '../utils/getTreeHeight'
 import {getUnaddedItems} from '../utils/treeData'
@@ -24,20 +24,30 @@ import {TreeEditorErrorBoundary} from './TreeEditorErrorBoundary'
 const TreeEditor: React.FC<{
   tree: StoredTreeItem[]
   onChange: (patch: PatchEvent) => void
-  options: TreeInputOptions
+  options: Optional<TreeDeskStructureProps, 'documentId'>
   patchPrefix?: string
 }> = (props) => {
   const {status: allItemsStatus, allItems} = useAllItems(props.options)
   const unAddedItems = getUnaddedItems({tree: props.tree, allItems})
+
   const {localTree, handleVisibilityToggle} = useLocalTree({
     tree: props.tree,
     allItems
   })
+
   const operations = useTreeOperationsProvider({
     patchPrefix: props.patchPrefix,
     onChange: props.onChange,
     localTree
   })
+
+  const [context, setContext] = React.useState<HTMLElement | null>(null)
+
+  React.useEffect(() => {
+    if (props.options.documentId) {
+      setContext(document.getElementById(props.options.documentId))
+    }
+  }, [props.options.documentId])
 
   const onMoveNode = useCallback(
     (data: NodeData & FullTree & any) =>
@@ -62,79 +72,83 @@ const TreeEditor: React.FC<{
 
   return (
     <TreeEditorErrorBoundary>
-      <DndProvider backend={HTML5Backend}>
-        {/* <DndProvider manager={suppressedDnDManager}> */}
-        <TreeOperationsContext.Provider value={operationContext}>
-          <Stack space={4} paddingTop={4}>
-            <Card
-              style={{minHeight: getTreeHeight(localTree)}}
-              // Only include borderBottom if there's something to show in unadded items
-              borderBottom={allItemsStatus !== 'success' || unAddedItems?.length > 0}
-            >
-              <SortableTree
-                maxDepth={props.options.maxDepth}
-                onChange={doNothingOnChange}
-                onVisibilityToggle={handleVisibilityToggle}
-                canDrop={canDrop}
-                onMoveNode={onMoveNode}
-                treeData={localTree}
-                {...treeProps}
-              />
-            </Card>
-
-            {allItemsStatus === 'success' && unAddedItems?.length > 0 && (
-              <Stack space={1} paddingX={2} paddingTop={3}>
-                <Stack space={2} paddingX={2} paddingBottom={3}>
-                  <Text size={2} as="h2" weight="semibold">
-                    Add more items
-                  </Text>
-                  <Text size={1} muted>
-                    Only published documents are shown.
-                  </Text>
-                </Stack>
-                {unAddedItems.map((item) => (
-                  <DocumentInNode
-                    key={item.publishedId || item.draftId}
-                    item={item}
-                    action={
-                      <Tooltip
-                        portal
-                        placement="left"
-                        content={
-                          <Box padding={2}>
-                            <Text size={1}>Add to list</Text>
-                          </Box>
-                        }
-                      >
-                        <Button
-                          onClick={() => {
-                            operations.addItem(item)
-                          }}
-                          mode="bleed"
-                          icon={AddCircleIcon}
-                          style={{cursor: 'pointer'}}
-                        />
-                      </Tooltip>
-                    }
+      {/*Use this Box-wrapper to get a context Element to prevent DndProvider to have to HTML% backend at the same time https://github.com/react-dnd/react-dnd/issues/186#issuecomment-978206387 */}
+      <Box id={props.options.documentId}>
+        {context ? (
+          <DndProvider backend={HTML5Backend} options={{rootElement: context}}>
+            <TreeOperationsContext.Provider value={operationContext}>
+              <Stack space={4} paddingTop={4}>
+                <Card
+                  style={{minHeight: getTreeHeight(localTree)}}
+                  // Only include borderBottom if there's something to show in unadded items
+                  borderBottom={allItemsStatus !== 'success' || unAddedItems?.length > 0}
+                >
+                  <SortableTree
+                    maxDepth={props.options.maxDepth}
+                    onChange={doNothingOnChange}
+                    onVisibilityToggle={handleVisibilityToggle}
+                    canDrop={canDrop}
+                    onMoveNode={onMoveNode}
+                    treeData={localTree}
+                    {...treeProps}
                   />
-                ))}
+                </Card>
+
+                {allItemsStatus === 'success' && unAddedItems?.length > 0 && (
+                  <Stack space={1} paddingX={2} paddingTop={3}>
+                    <Stack space={2} paddingX={2} paddingBottom={3}>
+                      <Text size={2} as="h2" weight="semibold">
+                        Add more items
+                      </Text>
+                      <Text size={1} muted>
+                        Only published documents are shown.
+                      </Text>
+                    </Stack>
+                    {unAddedItems.map((item) => (
+                      <DocumentInNode
+                        key={item.publishedId || item.draftId}
+                        item={item}
+                        action={
+                          <Tooltip
+                            portal
+                            placement="left"
+                            content={
+                              <Box padding={2}>
+                                <Text size={1}>Add to list</Text>
+                              </Box>
+                            }
+                          >
+                            <Button
+                              onClick={() => {
+                                operations.addItem(item)
+                              }}
+                              mode="bleed"
+                              icon={AddCircleIcon}
+                              style={{cursor: 'pointer'}}
+                            />
+                          </Tooltip>
+                        }
+                      />
+                    ))}
+                  </Stack>
+                )}
+                {allItemsStatus === 'loading' && (
+                  <Flex padding={4} align={'center'} justify={'center'}>
+                    <Spinner size={3} muted />
+                  </Flex>
+                )}
+                {allItemsStatus === 'error' && (
+                  <Flex padding={4} align={'center'} justify={'center'}>
+                    <Text size={2} weight="semibold">
+                      Something went wrong when loading documents
+                    </Text>
+                  </Flex>
+                )}
               </Stack>
-            )}
-            {allItemsStatus === 'loading' && (
-              <Flex padding={4} align={'center'} justify={'center'}>
-                <Spinner size={3} muted />
-              </Flex>
-            )}
-            {allItemsStatus === 'error' && (
-              <Flex padding={4} align={'center'} justify={'center'}>
-                <Text size={2} weight="semibold">
-                  Something went wrong when loading documents
-                </Text>
-              </Flex>
-            )}
-          </Stack>
-        </TreeOperationsContext.Provider>
-      </DndProvider>
+            </TreeOperationsContext.Provider>
+          </DndProvider>
+        ) : null}
+      </Box>
     </TreeEditorErrorBoundary>
   )
 }
