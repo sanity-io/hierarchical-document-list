@@ -1,8 +1,4 @@
-## ⚠️ This plugin is DEPRECATED
 
-We regret to inform you that this project is no longer maintained and is deprecated.
-
----
 
 # sanity-plugin-hierarchical-document-list
 
@@ -14,7 +10,7 @@ Plugin for visually organizing documents as hierarchies in the [Sanity studio](h
 
 ![Screenshot of the plugin](/screenshot-1.jpg)
 
-⚠️ **Compatibility:** This plugin requires Sanity Studio [version 2.25.0](https://github.com/sanity-io/sanity/releases/tag/v2.25.0) or higher.
+⚠️ **Compatibility:** This plugin requires Sanity Studio [version 3.3.0](https://github.com/sanity-io/sanity/releases/tag/v3.3.0) or higher.
 
 If you're looking for a way to order documents on a flat list, refer to [@sanity/orderable-document-list](https://github.com/sanity-io/orderable-document-list).
 
@@ -24,8 +20,28 @@ If you're looking for a way to order documents on a flat list, refer to [@sanity
 # From the root of your sanity project
 sanity install @sanity/hierarchical-document-list
 ```
+Once you've installed the pplugin the next steps are:
 
-Once you've installed the plugin the next step is to add one or more hierarchy documents to your Structure Builder.
+### 1. Add the plugin and the default documentType to the sanity.config.ts
+
+```js
+// sanity.config.js
+import {defineConfig} from 'sanity'
+import {hierarchicalDocumentList, hierarchyTree} from '@sanity/hierarchical-document-list'
+ 
+export default defineConfig({
+   // ...
+   plugins: [hierarchicalDocumentList()],
+   schema: {
+    types: [
+      //...,
+      hierarchyTree
+    ]
+   }
+
+})
+```
+### 2. Add one or more hierarchy documents to your Structure Builder.
 
 💡 _To learn about custom desk structures, refer to the [Structure Builder docs](https://www.sanity.io/docs/overview-structure-builder)._
 
