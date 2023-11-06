@@ -20,7 +20,7 @@ If you're looking for a way to order documents on a flat list, refer to [@sanity
 # From the root of your sanity project
 sanity install @sanity/hierarchical-document-list
 ```
-Once you've installed the pplugin the next steps are:
+Once you've installed the plugin the next steps are:
 
 ### 1. Add the plugin and the default documentType to the sanity.config.ts
 
