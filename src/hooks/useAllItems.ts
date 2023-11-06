@@ -1,6 +1,5 @@
-import {SanityDocument} from '@sanity/client'
 import * as React from 'react'
-import {useClient} from 'sanity'
+import {SanityDocument, useClient} from 'sanity'
 import {AllItems, TreeInputOptions} from '../types'
 import {isDraft, unprefixId} from '../utils/idUtils'
 

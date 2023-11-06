@@ -1,6 +1,6 @@
-import {SanityDocument} from '@sanity/client'
-import {randomKey} from '@sanity/util/content'
 import {TreeItem} from '@nosferatu500/react-sortable-tree'
+import {randomKey} from '@sanity/util/content'
+import {SanityDocument} from 'sanity'
 import DocumentInNode from '../components/DocumentInNode'
 import NodeActions from '../components/NodeActions'
 import {
@@ -10,7 +10,7 @@ import {
   LocalTreeItem,
   NodeProps,
   StoredTreeItem,
-  VisibilityMap,
+  VisibilityMap
 } from '../types'
 import flatDataToTree from './flatDataToTree'
 import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './injectNodeTypeInPatches'
@@ -18,7 +18,7 @@ import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './injectNodeTypeInPa
 export const dataToEditorTree = ({
   tree,
   allItems,
-  visibilityMap,
+  visibilityMap
 }: {
   tree: StoredTreeItem[]
   allItems: AllItems
@@ -38,7 +38,7 @@ export const dataToEditorTree = ({
         draftId: draftDoc?._id,
         publishedId: publishedDoc?._id,
         draftUpdatedAt: draftDoc?._updatedAt,
-        publishedUpdatedAt: publishedDoc?._updatedAt,
+        publishedUpdatedAt: publishedDoc?._updatedAt
       }
 
       return {
@@ -46,7 +46,7 @@ export const dataToEditorTree = ({
         title: (nodeProps: NodeProps) => (
           <DocumentInNode item={enhancedItem} action={<NodeActions nodeProps={nodeProps} />} />
         ),
-        children: [],
+        children: []
       }
     })
   return flatDataToTree(itemsWithTitle)
@@ -69,10 +69,10 @@ const documentPairToNode = (doc?: DocumentPair): EnhancedTreeItem | undefined =>
       reference: {
         _ref: doc.published._id,
         _type: 'reference',
-        _weak: true,
+        _weak: true
       },
-      docType: doc.published._type,
-    },
+      docType: doc.published._type
+    }
   }
 }
 
@@ -114,6 +114,6 @@ export function normalizeNodeForStorage(item: LocalTreeItem): StoredTreeItem {
     _key: item._key,
     _type: item._type || INTERNAL_NODE_TYPE,
     value: item.value,
-    parent: item.parent,
+    parent: item.parent
   }
 }

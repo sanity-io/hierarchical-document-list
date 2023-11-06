@@ -1,6 +1,5 @@
 import {TreeItem} from '@nosferatu500/react-sortable-tree'
-import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType, ObjectSchemaType} from 'sanity'
+import {ArraySchemaType, ObjectSchemaType, SanityDocument} from 'sanity'
 import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './utils/injectNodeTypeInPatches'
 
 interface SanityReference {
