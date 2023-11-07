@@ -6,7 +6,7 @@
     "sanity",
     "sanity-plugin"
   ],
-  "homepage": "https://github.com/tine-krueger/hierarchical-document-list/tree/feature/migrateToV3",
+  "homepage": "https://github.com/tine-krueger/hierarchical-document-list/tree/feature/melting-npm",
   "license": "MIT",
   "author": "Melting Elements <christine.krueger@meltingelements.com>",
   "exports": {

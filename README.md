@@ -1,5 +1,3 @@
-
-
 # sanity-plugin-hierarchical-document-list
 
 Plugin for visually organizing documents as hierarchies in the [Sanity studio](https://www.sanity.io/docs/sanity-studio). Applications include:
@@ -20,6 +18,7 @@ If you're looking for a way to order documents on a flat list, refer to [@sanity
 # From the root of your sanity project
 npm i sanity-plugin-melting-hierarchical-document-list
 ```
+
 Once you've installed the plugin the next steps are:
 
 ### 1. Add the plugin and the default documentType to the sanity.config.ts
@@ -27,20 +26,23 @@ Once you've installed the plugin the next steps are:
 ```js
 // sanity.config.js
 import {defineConfig} from 'sanity'
-import {hierarchicalDocumentList, hierarchyTree} from '@sanity/hierarchical-document-list'
- 
+import {
+  hierarchicalDocumentList,
+  hierarchyTree
+} from 'sanity-plugin-melting-hierarchical-document-list'
+
 export default defineConfig({
-   // ...
-   plugins: [hierarchicalDocumentList()],
-   schema: {
+  // ...
+  plugins: [hierarchicalDocumentList()],
+  schema: {
     types: [
       //...,
       hierarchyTree
     ]
-   }
-
+  }
 })
 ```
+
 ### 2. Add one or more hierarchy documents to your Structure Builder.
 
 💡 _To learn about custom desk structures, refer to the [Structure Builder docs](https://www.sanity.io/docs/overview-structure-builder)._
@@ -48,7 +50,7 @@ export default defineConfig({
 ```js
 // deskStructure.js
 import S from '@sanity/desk-tool/structure-builder'
-import {createDeskHierarchy} from '@sanity/hierarchical-document-list'
+import {createDeskHierarchy} from 'sanity-plugin-melting-hierarchical-document-list'
 
 export default () => {
   return S.list()
@@ -326,26 +328,27 @@ the Studio.
 
 The most consistent workflow is:
 
-1.Install [yalc](https://github.com/wclr/yalc)
-2. Run `npm run build && yalc publish` in this repo
-3. In Sanity Studio:
-   1. Run `yalc link @sanity/hierarchical-document-list`
-   2. Run `yarn install` (installs the dependencies for the plugin)
-   3. Ensure `"@sanity/hierarchical-document-list"` is present in `sanity.json` plugins array.
-   4. Configure the plugin for structure as documented above
+1.Install [yalc](https://github.com/wclr/yalc) 2. Run `npm run build && yalc publish` in this repo 3. In Sanity Studio:
+
+1.  Run `yalc link @sanity/hierarchical-document-list`
+2.  Run `yarn install` (installs the dependencies for the plugin)
+3.  Ensure `"@sanity/hierarchical-document-list"` is present in `sanity.json` plugins array.
+4.  Configure the plugin for structure as documented above
 
 Rerun steps 2. and 3.1 after making edits to the plugin (or automate it).
 
 ### Publishing
 
-Test publish command safely: 
-* `yalc publish`
+Test publish command safely:
+
+- `yalc publish`
 
 To go live with a new version, run:
-* `npm run release`
-  * runs [standard-version](https://www.npmjs.com/package/standard-version) which will bump version according to semver, commit and tag
-  * feel free to inspect the results in package.json and git log before continuing
-* `npm publish`
-  * Will clean, lint and build before finally publishing to npm.
-* After publishing, you should push with tags: 
-  * `git push --follow-tags`
+
+- `npm run release`
+  - runs [standard-version](https://www.npmjs.com/package/standard-version) which will bump version according to semver, commit and tag
+  - feel free to inspect the results in package.json and git log before continuing
+- `npm publish`
+  - Will clean, lint and build before finally publishing to npm.
+- After publishing, you should push with tags:
+  - `git push --follow-tags`
