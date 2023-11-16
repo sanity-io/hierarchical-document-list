@@ -21,6 +21,10 @@ export interface TreeProps extends TreeDeskStructureProps {
 
   context?: ConfigContext | any
   S?: StructureBuilder | any
+  /**
+   * Restrict document types that can be created.
+   */
+  creatableTypes?: string[]
 }
 
 const deskTreeValidator = (props: TreeProps): React.FC => {
@@ -36,19 +40,18 @@ const deskTreeValidator = (props: TreeProps): React.FC => {
 }
 
 export default function createDeskHierarchy(props: TreeProps) {
-  const {documentId, referenceTo, referenceOptions, context, S} = props
+  const {documentId, referenceTo, referenceOptions, context, S, creatableTypes} = props
   const {schema} = context
-  /**
-   * Context: With multiple referenced document types we can’t set S.documentList().schemaType(),
-   * which only accepts one type. So the desk doesn’t have an expanded schemaType to access and
-   * try creating a new document without that, which breaks resolveEnabledActions (and probably more)
-   * in packages\@sanity\base\src\actions\utils\legacy_documentActionUtils.js
-   */
-  const safelyCreatableTypes = referenceTo.slice(0, 1)
+
+  const safelyCreatableTypes =
+    creatableTypes && !creatableTypes.some((type) => referenceTo.indexOf(type))
+      ? creatableTypes
+      : referenceTo
+
   let mainList = (
-    safelyCreatableTypes?.length === 1
-      ? S.documentTypeList(safelyCreatableTypes[0]).schemaType(safelyCreatableTypes[0])
-      : S.documentList().filter('_type in $types').params({types: safelyCreatableTypes})
+    referenceTo?.length === 1
+      ? S.documentTypeList(referenceTo[0]).schemaType(referenceTo[0])
+      : S.documentList().filter('_type in $types').params({types: referenceTo})
   )
     .id(documentId)
     .menuItems(
