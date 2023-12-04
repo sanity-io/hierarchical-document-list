@@ -20,7 +20,7 @@ If you're looking for a way to order documents on a flat list, refer to [@sanity
 
 ```bash
 # From the root of your sanity project
-sanity install @sanity/hierarchical-document-list
+npm i @sanity/hierarchical-document-list
 ```
 
 ## Usage
