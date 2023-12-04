@@ -20,7 +20,6 @@ export default function getCommonTreeProps({
       treeNodeRenderer: TreeNodeRenderer,
       style: {height: '100%'},
       innerStyle: undefined,
-      //TODO: check if this is needed
       scaffoldBlockPxWidth: 44,
       slideRegionSize: 100
       // rowHeight: ROW_HEIGHT,

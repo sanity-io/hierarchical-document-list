@@ -20,6 +20,7 @@ const NodeActions: React.FC<{nodeProps: NodeProps}> = ({nodeProps}) => {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       React.forwardRef(function OpenLinkInner(
         restProps: React.ComponentProps<typeof IntentLink>,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _ref: React.ForwardedRef<HTMLAnchorElement>
       ) {
         return (
