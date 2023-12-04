@@ -13,22 +13,24 @@ const WrapCodeBlocks: React.FC<{text: string}> = ({text}) => {
   )
 }
 
-const DeskWarning: React.FC<{
-  title: string
-  subtitle?: string
-}> = ({subtitle, title, children}) => {
+const DeskWarning: React.FC<
+  React.PropsWithChildren<{
+    title: string
+    subtitle?: string
+  }>
+> = (props) => {
   return (
     <Container padding={5} style={{maxWidth: '25rem'}} sizing={'content'}>
       <Card padding={4} border radius={2} width={0} tone="caution">
         <Stack space={3}>
-          <Heading size={1}>{title}</Heading>
-          {subtitle &&
-            subtitle.split('\\n').map((line) => (
+          <Heading size={1}>{props.title}</Heading>
+          {props.subtitle &&
+            props.subtitle.split('\\n').map((line: string) => (
               <Text size={1}>
                 <WrapCodeBlocks text={line} />
               </Text>
             ))}
-          {children && <Box marginTop={2}>{children}</Box>}
+          {props.children && <Box marginTop={2}>{props.children}</Box>}
         </Stack>
       </Card>
     </Container>

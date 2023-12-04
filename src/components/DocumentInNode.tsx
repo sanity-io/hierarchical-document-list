@@ -1,13 +1,10 @@
-import {TextWithTone} from '@sanity/base/components'
-import {SanityDocument} from '@sanity/client'
-import {usePaneRouter} from '@sanity/desk-tool'
 import {HelpCircleIcon} from '@sanity/icons'
 import {Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
-import Preview from 'part:@sanity/base/preview'
-import schema from 'part:@sanity/base/schema'
 import * as React from 'react'
-import {LocalTreeItem} from '../types'
+import {Preview, SanityDocument, SchemaType, TextWithTone, useSchema} from 'sanity'
+import {RouterPaneGroup, usePaneRouter} from 'sanity/desk'
 import useTreeOperations from '../hooks/useTreeOperations'
+import {LocalTreeItem} from '../types'
 import DocumentPreviewStatus from './DocumentPreviewStatus'
 
 /**
@@ -21,13 +18,17 @@ const DocumentInNode: React.FC<{
   const {value: {reference, docType} = {}, draftId, publishedId} = props.item
   const {routerPanesState, ChildLink} = usePaneRouter()
   const {allItemsStatus} = useTreeOperations()
-
+  const schema = useSchema()
   const isActive = React.useMemo(() => {
     // If some pane is active with the current document `_id`, it's active
-    return routerPanesState.some((pane) => pane.some((group) => group.id === reference?._ref))
+    return routerPanesState.some((pane: RouterPaneGroup) =>
+      pane.some((group) => group.id === reference?._ref)
+    )
   }, [routerPanesState])
 
-  const schemaType = React.useMemo(() => schema.get(docType), [docType])
+  const type = React.useMemo(() => {
+    return docType ? schema.get(docType) : undefined
+  }, [docType])
 
   const LinkComponent = React.useMemo(
     () =>
@@ -65,7 +66,7 @@ const DocumentInNode: React.FC<{
         >
           <Preview
             layout="default"
-            type={schemaType}
+            schemaType={type as SchemaType}
             value={{_ref: draftId || reference?._ref}}
             status={
               <DocumentPreviewStatus

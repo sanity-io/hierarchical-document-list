@@ -1,6 +1,5 @@
-import {SanityDocument} from '@sanity/client'
-import {ArraySchemaType, ObjectSchemaType} from '@sanity/types'
-import {NodeRendererProps, TreeItem} from 'react-sortable-tree'
+import {TreeItem} from '@nosferatu500/react-sortable-tree'
+import {ArraySchemaType, ObjectSchemaType, SanityDocument} from 'sanity'
 import {INTERNAL_NODE_TYPE, INTERNAL_NODE_VALUE_TYPE} from './utils/injectNodeTypeInPatches'
 
 interface SanityReference {
@@ -142,6 +141,8 @@ export interface VisibilityMap {
   [_key: string]: boolean
 }
 
-export interface NodeProps extends NodeRendererProps {
+export interface NodeProps {
   node: LocalTreeItem
 }
+
+export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>

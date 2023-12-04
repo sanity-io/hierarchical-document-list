@@ -1,8 +1,9 @@
-import {ReactSortableTreeProps} from 'react-sortable-tree'
+import {ReactSortableTreeProps} from '@nosferatu500/react-sortable-tree/react-sortable-tree'
+import React from 'react'
 import NodeContentRenderer from '../components/NodeContentRenderer'
 import PlaceholderDropzone from '../components/PlaceholderDropzone'
 import TreeNodeRenderer from '../components/TreeNodeRenderer'
-import {ROW_HEIGHT} from './getTreeHeight'
+// import {ROW_HEIGHT} from './getTreeHeight'
 
 export default function getCommonTreeProps({
   placeholder
@@ -15,9 +16,14 @@ export default function getCommonTreeProps({
   return {
     theme: {
       nodeContentRenderer: NodeContentRenderer,
-      placeholderRenderer: (props) => <PlaceholderDropzone {...placeholder} {...props} />,
+      placeholderRenderer: (props: any) => <PlaceholderDropzone {...placeholder} {...props} />,
       treeNodeRenderer: TreeNodeRenderer,
-      rowHeight: ROW_HEIGHT
+      style: {height: '100%'},
+      innerStyle: undefined,
+      //TODO: check if this is needed
+      scaffoldBlockPxWidth: 44,
+      slideRegionSize: 100
+      // rowHeight: ROW_HEIGHT,
     }
   }
 }

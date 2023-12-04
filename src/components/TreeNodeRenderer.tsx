@@ -1,5 +1,4 @@
 import * as React from 'react'
-import {TreeRenderer} from 'react-sortable-tree'
 import TreeNodeRendererScaffold from './TreeNodeRendererScaffold'
 
 /**
@@ -8,7 +7,7 @@ import TreeNodeRendererScaffold from './TreeNodeRendererScaffold'
 const BASE_LEFT_PADDING = 10
 const NESTING_PADDING = 14
 
-const TreeNodeRenderer: TreeRenderer = (props) => {
+const TreeNodeRenderer: any = (props: any) => {
   const {children, lowerSiblingCounts, connectDropTarget, isOver, draggedNode, canDrop} = props
 
   // Construct the scaffold representing the structure of the tree

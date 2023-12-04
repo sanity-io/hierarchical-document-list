@@ -1,8 +1,8 @@
+import {isDescendant} from '@nosferatu500/react-sortable-tree'
 import {cyan, gray, red} from '@sanity/color'
 import {ChevronDownIcon, ChevronRightIcon, DragHandleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Spinner} from '@sanity/ui'
 import * as React from 'react'
-import {isDescendant, NodeRenderer} from 'react-sortable-tree'
 import styled from 'styled-components'
 
 const Root = styled.div`
@@ -35,7 +35,7 @@ const Root = styled.div`
  * Created in order to use Sanity UI for styles.
  * Reference: https://github.com/frontend-collective/react-sortable-tree/blob/master/src/node-renderer-default.js
  */
-const NodeContentRenderer: NodeRenderer = (props) => {
+const NodeContentRenderer: any = (props: any) => {
   const {node, path, treeIndex, canDrag = false} = props
   const nodeTitle = node.title
   const Handle = React.useMemo(() => {

@@ -1,13 +1,12 @@
 import {Box, Card, CardTone, Stack, Text} from '@sanity/ui'
 import * as React from 'react'
-import {PlaceholderRendererProps} from 'react-sortable-tree'
 
 const PlaceholderDropzone: React.FC<
   {
     tone?: CardTone
     title: string
     subtitle?: string
-  } & PlaceholderRendererProps
+  } & any
 > = (props) => {
   const isValid = props.isOver && props.canDrop
   const isInvalid = props.isOver && !props.canDrop
@@ -26,7 +25,7 @@ const PlaceholderDropzone: React.FC<
         border
         tone={tone}
         style={{
-          borderStyle: props.isOver ? undefined : 'dashed'
+          borderStyle: props.isOver ? undefined : 'dashed',
         }}
       >
         <Stack space={2} style={{textAlign: 'center'}}>
