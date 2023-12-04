@@ -1,14 +1,6 @@
-> This is a **Sanity Studio v3** plugin.
-
-## Installation
-
-```sh
-npm install @sanity/hierarchical-document-list
-```
-
-## Usage
-
 # sanity-plugin-hierarchical-document-list
+
+> This is a **Sanity Studio v3** plugin.
 
 Plugin for visually organizing documents as hierarchies in the [Sanity studio](https://www.sanity.io/docs/sanity-studio). Applications include:
 
@@ -22,13 +14,16 @@ Plugin for visually organizing documents as hierarchies in the [Sanity studio](h
 
 If you're looking for a way to order documents on a flat list, refer to [@sanity/orderable-document-list](https://github.com/sanity-io/orderable-document-list).
 
-## Getting started
+
+## Installation
+
 
 ```bash
 # From the root of your sanity project
 sanity install @sanity/hierarchical-document-list
 ```
-Once you've installed the plugin the next steps are:
+
+## Usage
 
 ### 1. Add the plugin and the default documentType to the sanity.config.ts
 
