@@ -42,12 +42,29 @@ const TreeEditor: React.FC<{
   })
 
   const [context, setContext] = React.useState<HTMLElement | null>(null)
+  const [treeViewHeight, setTreeViewHeight] = React.useState<string>('')
+
+  const updateTreeViewHeight = () => {
+    const el = document.querySelector(`#${props.options.documentId} [data-known-size]`) as HTMLElement | null
+    const rowHeight = Number(el?.dataset.knownSize || 51)
+    setTreeViewHeight(getTreeHeight(localTree, rowHeight))
+  }
 
   React.useEffect(() => {
     if (props.options.documentId) {
       setContext(document.getElementById(props.options.documentId))
     }
   }, [props.options.documentId])
+
+  React.useEffect(() => {
+    // Wait for dom to load before initial execution.
+    setTimeout(updateTreeViewHeight)
+  }, [])
+
+  React.useEffect(() => {
+    // Immediately update when changes are detected.
+    updateTreeViewHeight()
+  }, [props.options.documentId, localTree])
 
   const onMoveNode = useCallback(
     (data: NodeData & FullTree & any) =>
@@ -79,7 +96,7 @@ const TreeEditor: React.FC<{
             <TreeOperationsContext.Provider value={operationContext}>
               <Stack space={4} paddingTop={4}>
                 <Card
-                  style={{minHeight: getTreeHeight(localTree)}}
+                  style={{minHeight: treeViewHeight}}
                   // Only include borderBottom if there's something to show in unadded items
                   borderBottom={allItemsStatus !== 'success' || unAddedItems?.length > 0}
                 >
