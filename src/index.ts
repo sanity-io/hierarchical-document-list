@@ -11,11 +11,11 @@ export {createDeskHierarchy, createHierarchicalSchemas, flatDataToTree, hierarch
  *
  * ```ts
  * import {defineConfig} from 'sanity'
- * import {myPlugin} from 'sanity-plugin-hdl-sanity'
+ * import {hierarchicalDocumentList} from '@sanity/hierarchical-document-list'
  *
  * export default defineConfig({
  *   // ...
- *   plugins: [myPlugin()],
+ *   plugins: [hierarchicalDocumentList()],
  * })
  * ```
  */

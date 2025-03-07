@@ -37,6 +37,7 @@
     "v2-incompatible.js"
   ],
   "scripts": {
+    "dev": "sanity dev",
     "prepare": "npm run build && husky install",
     "build": "run-s clean && pkg-utils build --strict && pkg-utils --strict",
     "prepublishOnly": "run-s build",
@@ -48,10 +49,11 @@
   },
   "dependencies": {
     "@nosferatu500/react-sortable-tree": "^4.4.0",
-    "@sanity/incompatible-plugin": "^1.0.4",
-    "@sanity/mutator": "^3.19.3",
-    "@sanity/ui": "^1.9.3",
-    "@sanity/util": "^3.19.3",
+    "@sanity/icons": "^3.7.0",
+    "@sanity/incompatible-plugin": "^1.0.5",
+    "@sanity/mutator": "^3.78.1",
+    "@sanity/ui": "^2.15.2",
+    "@sanity/util": "^3.78.1",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1"
   },
@@ -61,8 +63,8 @@
     "@sanity/pkg-utils": "^3.3.2",
     "@sanity/plugin-kit": "^3.1.10",
     "@sanity/semantic-release-preset": "^4.1.6",
+    "@sanity/vision": "^3.78.1",
     "@types/react": "^18.2.41",
-    "@types/styled-components": "^5.1.32",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "eslint": "^8.55.0",
@@ -76,16 +78,16 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.1.0",
     "prettier-plugin-packagejson": "^2.4.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-is": "^18.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-is": "^18.3.0",
     "rimraf": "^5.0.5",
-    "sanity": "^3.20.2",
-    "styled-components": "^5.3.11",
-    "typescript": "^5.3.2"
+    "sanity": "^3.78.1",
+    "styled-components": "^6.1.15",
+    "typescript": "5.3.2"
   },
   "peerDependencies": {
-    "react": "^18",
+    "react": "^18.3",
     "sanity": "^3"
   },
   "engines": {
