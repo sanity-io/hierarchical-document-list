@@ -90,6 +90,11 @@
     "react": "^18.3 || ^19",
     "sanity": "^3"
   },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom",
+    "react-is": "$react-is"
+  },
   "engines": {
     "node": ">=14"
   }
