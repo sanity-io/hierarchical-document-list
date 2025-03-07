@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/sanity-io/hierarchical-document-list/compare/v2.1.0...v2.1.1) (2025-03-07)
+
+### Bug Fixes
+
+- **deps:** inline `@nosferatu500/react-sortable-tree` ([78b804a](https://github.com/sanity-io/hierarchical-document-list/commit/78b804a2a79bef520e8d3f552c7a552acb1666a5))
+
 ## [2.1.0](https://github.com/sanity-io/hierarchical-document-list/compare/v2.0.1...v2.1.0) (2025-03-07)
 
 ### Features
