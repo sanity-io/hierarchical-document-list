@@ -5,6 +5,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sanity-io/hierarchical-document-list/compare/v2.0.1...v2.1.0) (2025-03-07)
+
+### Features
+
+- add react 19 to peer deps ([fb26e2c](https://github.com/sanity-io/hierarchical-document-list/commit/fb26e2ca69be4b0f098520204748f8572a413162))
+
+### Bug Fixes
+
+- correctly calculate tree height ([3b06256](https://github.com/sanity-io/hierarchical-document-list/commit/3b06256392e866b5fcc39b70b5910990321d10d8))
+
 ## [2.0.1](https://github.com/sanity-io/hierarchical-document-list/compare/v2.0.0...v2.0.1) (2025-03-07)
 
 ### Bug Fixes
