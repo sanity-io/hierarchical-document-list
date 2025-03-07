@@ -48,7 +48,6 @@
     "watch": "pkg-utils watch --strict"
   },
   "dependencies": {
-    "@nosferatu500/react-sortable-tree": "^4.4.0",
     "@sanity/icons": "^3.7.0",
     "@sanity/incompatible-plugin": "^1.0.5",
     "@sanity/mutator": "^3.78.1",
@@ -60,6 +59,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@nosferatu500/react-sortable-tree": "^4.4.0",
     "@sanity/pkg-utils": "^3.3.2",
     "@sanity/plugin-kit": "^3.1.10",
     "@sanity/semantic-release-preset": "^4.1.6",
