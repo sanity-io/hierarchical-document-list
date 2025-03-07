@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/sanity-io/hierarchical-document-list/compare/v2.0.0...v2.0.1) (2025-03-07)
+
+### Bug Fixes
+
+- upgrade `@sanity/ui` ([8df02c0](https://github.com/sanity-io/hierarchical-document-list/commit/8df02c05cf9a69254268b307d4a0cc294c3f0a56))
+
 ## [2.0.0](https://github.com/sanity-io/hierarchical-document-list/compare/v1.1.0...v2.0.0) (2023-12-04)
 
 ### ⚠ BREAKING CHANGES
