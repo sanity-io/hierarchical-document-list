@@ -10,6 +10,7 @@
   "bugs": {
     "url": "https://github.com/sanity-io/hierarchical-document-list/issues"
   },
+  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "git@github.com:sanity-io/hierarchical-document-list.git"
@@ -18,17 +19,15 @@
   "author": "Sanity <hello@sanity.io>",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "source": "./src/index.ts",
-      "import": "./dist/index.esm.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "default": "./dist/index.esm.js"
+      "default": "./dist/index.mjs"
     },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
-  "source": "./src/index.ts",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
@@ -60,8 +59,8 @@
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
     "@nosferatu500/react-sortable-tree": "^4.4.0",
-    "@sanity/pkg-utils": "^3.3.2",
-    "@sanity/plugin-kit": "^3.1.10",
+    "@sanity/pkg-utils": "^7.0.4",
+    "@sanity/plugin-kit": "^4.0.19",
     "@sanity/semantic-release-preset": "^4.1.6",
     "@sanity/vision": "^3.78.1",
     "@types/react": "^19.0.10",
@@ -84,11 +83,14 @@
     "rimraf": "^5.0.5",
     "sanity": "^3.78.1",
     "styled-components": "^6.1.15",
-    "typescript": "5.3.2"
+    "typescript": "5.4.x"
   },
   "peerDependencies": {
     "react": "^18.3 || ^19",
-    "sanity": "^3"
+    "react-dom": "^18.3 || ^19",
+    "react-is": "^18.3 || ^19",
+    "sanity": "^3",
+    "styled-components": "^6.1"
   },
   "overrides": {
     "react": "$react",
