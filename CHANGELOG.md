@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/sanity-io/hierarchical-document-list/compare/v2.1.1...v2.1.2) (2025-07-10)
+
+### Bug Fixes
+
+- **deps:** allow studio v4 peer dep ranges ([5952cab](https://github.com/sanity-io/hierarchical-document-list/commit/5952cab90e46584df92bf1af4adb2720010e1c8a))
+
 ## [2.1.1](https://github.com/sanity-io/hierarchical-document-list/compare/v2.1.0...v2.1.1) (2025-03-07)
 
 ### Bug Fixes
