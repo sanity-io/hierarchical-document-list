@@ -1,7 +1,5 @@
 # sanity-plugin-hierarchical-document-list
 
-> This is a **Sanity Studio v3** plugin.
-
 Plugin for visually organizing documents as hierarchies in the [Sanity studio](https://www.sanity.io/docs/sanity-studio). Applications include:
 
 - Tables of content - such as a book's sections and chapters
