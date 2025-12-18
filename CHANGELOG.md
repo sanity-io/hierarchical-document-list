@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/sanity-io/hierarchical-document-list/compare/v2.1.2...v2.1.3) (2025-12-18)
+
+### Bug Fixes
+
+- **deps:** make peer dependencies include sanity 5.x ([#35](https://github.com/sanity-io/hierarchical-document-list/issues/35)) ([d8e3192](https://github.com/sanity-io/hierarchical-document-list/commit/d8e3192adfb6971c9c279d7b3d337c9b6cd933d7))
+
 ## [2.1.2](https://github.com/sanity-io/hierarchical-document-list/compare/v2.1.1...v2.1.2) (2025-07-10)
 
 ### Bug Fixes
